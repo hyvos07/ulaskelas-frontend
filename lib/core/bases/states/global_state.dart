@@ -67,6 +67,10 @@ final leaderboardRM = RM.inject(
       LeaderboardState.new,
 );
 
+final semesterRM = RM.inject(
+  SemesterState.new,
+);
+
 final calculatorRM = RM.inject(
   CalculatorState.new,
 );

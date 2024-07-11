@@ -67,7 +67,7 @@ class CalculatorState {
     await resp.fold((failure) {
       ErrorMessenger('Kalkulator gagal dihapus').show(ctx!);
     }, (result) async {
-      SuccessMessenger('Kalkulator berhasil dipahus').show(ctx!);
+      SuccessMessenger('Kalkulator berhasil dihapus').show(ctx!);
       final calcResp = await _repo.getAllCalculator();
       calcResp.fold((failure) => throw failure, (result) {
         final lessThanLimit = result.data.length < 10;

@@ -11,7 +11,10 @@ import 'package:ulaskelas/features/kalkulator/domain/repositories/_repositories.
 
 import '../../../../core/utils/util.dart';
 import '../../../../services/_services.dart';
+import '../../data/models/semester_model.dart';
+import '../../domain/entities/query_semester.dart';
 
 part 'calculator_state.dart';
 part 'component_state.dart';
 part 'component_form_state.dart';
+part 'semester_state.dart';

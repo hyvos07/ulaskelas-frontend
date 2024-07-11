@@ -6,8 +6,11 @@ import 'package:ulaskelas/features/kalkulator/domain/repositories/_repositories.
 import '../../../../core/error/_error.dart';
 import '../../../../core/extension/_extension.dart';
 import '../../domain/entities/query_calculator.dart';
+import '../../domain/entities/query_semester.dart';
 import '../models/calculator_model.dart';
 import '../models/component_model.dart';
+import '../models/semester_model.dart';
 
 part 'calculator_repository_impl.dart';
 part 'component_repository_impl.dart';
+part 'semester_repository_impl.dart';
