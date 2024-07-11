@@ -10,9 +10,11 @@ import '../../../matkul/search/presentation/states/_states.dart';
 import '../../../matkul/search/presentation/widgets/_widgets.dart';
 import '../../../matkul/search/presentation/widgets/skeleton_card_course.dart';
 import '../../data/models/calculator_model.dart';
+import '../../data/models/semester_model.dart';
 
 part 'search_list_view_simplified.dart';
 part 'card_course_simplified.dart';
 part 'card_component.dart';
 part 'simpan_button.dart';
 part 'card_calculator.dart';
+part 'card_semester.dart';
