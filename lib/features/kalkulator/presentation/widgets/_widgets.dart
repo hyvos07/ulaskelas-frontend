@@ -15,6 +15,9 @@ import '../../data/models/semester_model.dart';
 part 'search_list_view_simplified.dart';
 part 'card_course_simplified.dart';
 part 'card_component.dart';
-part 'simpan_button.dart';
 part 'card_calculator.dart';
 part 'card_semester.dart';
+
+part 'simpan_button.dart';
+part 'gradient_border_button.dart';
+part 'gradient_text.dart';

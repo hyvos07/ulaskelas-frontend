@@ -145,7 +145,11 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                           ),
                           child: Column(
                             children: [
-                              SecondaryButton(
+                              PrimaryButton(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
                                 width: double.infinity,
                                 text: 'Tambah Semester',
                                 backgroundColor: BaseColors.purpleHearth,
@@ -162,17 +166,35 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                                 },
                               ),
                               const HeightSpace(25),
-                              PrimaryButton(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 10,
-                                  horizontal: 24,
-                                ),
-                                width: double.infinity,
-                                text: 'Auto-Fill Semester',
-                                backgroundColor: BaseColors.purpleHearth,
-                                onPressed: () => {
-                                  print('Button Auto-Fill are Pressed!')
-                                }, // To Be Implemented
+                              Column(
+                                children: [
+                                  GradientBorderButton(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 10,
+                                    ),
+                                    borderWidth: 2,
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xFFD293FF),
+                                        Color(0xFF3F4FB4),
+                                      ],
+                                    ),
+                                    width: double.infinity,
+                                    borderRadius: 8,
+                                    text: 'Auto-Fill Semester',
+                                    textStyle: FontTheme.poppins14w700black(),
+                                    onPressed: () => {
+                                      print('Button Auto-Fill are Pressed!')
+                                    }, // To Be Implemented
+                                  ),
+                                  const HeightSpace(5),
+                                  Text(
+                      '*Only available for Faculty of Computer Science for now',
+                                    style: FontTheme.poppins10w400black(),
+                                  ),
+                                ],
                               )
                             ],
                           ),
