@@ -102,6 +102,7 @@ class GlobalState {
       Inject(SearchTagState.new),
       Inject(BookmarkState.new),
       Inject(CalculatorState.new),
+      Inject(SemesterState.new),
     ];
   }
 
@@ -114,6 +115,7 @@ class GlobalState {
     Inject(SearchTagState.new),
     Inject(BookmarkState.new),
     Inject(CalculatorState.new),
+    Inject(SemesterState.new),
   ];
 
   static ReactiveModel<ThemeState> theme() {
