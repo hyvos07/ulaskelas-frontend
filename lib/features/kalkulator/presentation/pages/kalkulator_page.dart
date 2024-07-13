@@ -77,36 +77,8 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                         style: Theme.of(context).textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
-                      const HeightSpace(35),
-                      SecondaryButton(
-                        width: double.infinity,
-                        text: 'Tambah Semester',
-                        backgroundColor: BaseColors.purpleHearth,
-                        onPressed: () => {
-                          semesterRM.setState(
-                            (s) => s.postSemester(
-                              <String, num>{
-                                'given_semester': 1,
-                                'semester_gpa': 3.89,
-                                'total_sks': 18,
-                              },
-                            ),
-                          )
-                        },
-                      ),
-                      const HeightSpace(25),
-                      PrimaryButton(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 24,
-                        ),
-                        width: double.infinity,
-                        text: 'Auto-Fill Semester',
-                        backgroundColor: BaseColors.purpleHearth,
-                        onPressed: () => {
-                          print('Button Auto-Fill are Pressed!')
-                        }, // To Be Implemented
-                      )
+                      const HeightSpace(20),
+                      addSemesterButton(1),
                     ],
                   ),
                 ),
@@ -139,66 +111,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                     itemCount: semesterRM.state.semesters.length + 1,
                     itemBuilder: (context, index) {
                       if (index == semesters.length) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20,
-                          ),
-                          child: Column(
-                            children: [
-                              PrimaryButton(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                                width: double.infinity,
-                                text: 'Tambah Semester',
-                                backgroundColor: BaseColors.purpleHearth,
-                                onPressed: () => {
-                                  semesterRM.setState(
-                                    (s) => s.postSemester(
-                                      <String, dynamic>{
-                                        'given_semester': index + 1,
-                                        'semester_gpa': 3.89,
-                                        'total_sks': 18,
-                                      },
-                                    ),
-                                  )
-                                },
-                              ),
-                              const HeightSpace(25),
-                              Column(
-                                children: [
-                                  GradientBorderButton(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 10,
-                                    ),
-                                    borderWidth: 2,
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Color(0xFFD293FF),
-                                        Color(0xFF3F4FB4),
-                                      ],
-                                    ),
-                                    width: double.infinity,
-                                    borderRadius: 8,
-                                    text: 'Auto-Fill Semester',
-                                    textStyle: FontTheme.poppins14w700black(),
-                                    onPressed: () => {
-                                      print('Button Auto-Fill are Pressed!')
-                                    }, // To Be Implemented
-                                  ),
-                                  const HeightSpace(5),
-                                  Text(
-                      '*Only available for Faculty of Computer Science for now',
-                                    style: FontTheme.poppins10w400black(),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        );
+                        return addSemesterButton(index + 1);
                       }
                       final semester = semesters[index];
                       return Column(
@@ -267,5 +180,70 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
 
   bool scrollCondition() {
     throw UnimplementedError();
+  }
+
+  Widget addSemesterButton(int givenSemester) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 20,
+      ),
+      child: Column(
+        children: [
+          PrimaryButton(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10,
+            ),
+            borderRadius: BorderRadius.circular(8),
+            width: double.infinity,
+            text: 'Tambah Semester',
+            backgroundColor: BaseColors.purpleHearth,
+            onPressed: () => {
+              semesterRM.setState(
+                (s) => s.postSemester(
+                  <String, dynamic>{
+                    'given_semester': givenSemester,
+                    'semester_gpa': 3.89,
+                    'total_sks': 18,
+                  },
+                ),
+              )
+            },
+          ),
+          const HeightSpace(25),
+          Column(
+            children: [
+              GradientBorderButton(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                ),
+                borderWidth: 2,
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFFD293FF),
+                    Color(0xFF3F4FB4),
+                  ],
+                ),
+                width: double.infinity,
+                borderRadius: 8,
+                text: 'Auto-Fill Semester',
+                textStyle: FontTheme.poppins14w700black(),
+                onPressed: () => {
+                  print('Button Auto-Fill are Pressed!')
+                }, // To Be Implemented
+              ),
+              const HeightSpace(7),
+              Text(
+                '*Only available for Faculty of Computer Science for now.',
+                style: FontTheme.poppins10w400black().copyWith(
+                  color: BaseColors.gray1,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

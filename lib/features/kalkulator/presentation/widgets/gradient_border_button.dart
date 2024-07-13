@@ -55,32 +55,44 @@ class GradientBorderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final enabled = onPressed != null;
+    final theme = Theme.of(context);
+
     final borderRadiusFix = borderRadius ?? 6;
     final borderWidthFix = borderWidth ?? 1;
+
     return GhostButton(
-      width: width,
       padding: EdgeInsets.zero,
       onPressed: onPressed,
       child: Container(
+        width: width,
         decoration: BoxDecoration(
           gradient: gradient,
           borderRadius: BorderRadius.circular(borderRadiusFix),
         ),
         child: Padding(
           padding: EdgeInsets.all(borderWidthFix),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
+          child: Material(
+            color: BaseColors.transparent,
+            child: InkWell(
+              onTap: onPressed,
               borderRadius:
                   BorderRadius.circular(borderRadiusFix - borderWidthFix),
-            ),
-            child: Padding(
-              padding: padding ?? const EdgeInsets.all(8),
-              child: Center(
-                child: GradientText(
-                  gradient: gradient!,
-                  text ?? '',
-                  style: textStyle,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: BaseColors.white,
+                  borderRadius:
+                      BorderRadius.circular(borderRadiusFix - borderWidthFix),
+                ),
+                child: Padding(
+                  padding: padding ?? const EdgeInsets.all(8),
+                  child: Center(
+                    child: GradientText(
+                      gradient: gradient!,
+                      text ?? '',
+                      style: textStyle,
+                    ),
+                  ),
                 ),
               ),
             ),
