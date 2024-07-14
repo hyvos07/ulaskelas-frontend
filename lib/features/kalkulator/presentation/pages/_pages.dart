@@ -20,6 +20,7 @@ import '../states/_states.dart';
 import '../widgets/_widgets.dart';
 
 part 'kalkulator_page.dart';
+part 'semester_page.dart';
 part 'search_course_calculator.dart';
 part 'komponen_kalkulator_page.dart';
 part 'komponen_form_page.dart';

@@ -78,7 +78,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                         textAlign: TextAlign.center,
                       ),
                       const HeightSpace(20),
-                      addSemesterButton(1),
+                      _addSemesterButton(1),
                     ],
                   ),
                 ),
@@ -111,7 +111,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                     itemCount: semesterRM.state.semesters.length + 1,
                     itemBuilder: (context, index) {
                       if (index == semesters.length) {
-                        return addSemesterButton(index + 1);
+                        return _addSemesterButton(index + 1);
                       }
                       final semester = semesters[index];
                       return Column(
@@ -129,12 +129,10 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                           CardSemester(
                             model: semester,
                             onTap: () => {
-                              semesterRM.setState(
-                                (s) => s.deleteSemester(
-                                  query: QuerySemester(
-                                    givenSemester: semester.givenSemester,
-                                  ),
-                                ),
+                              nav.goToSemesterPage(
+                                givenSemester: semester.givenSemester!,
+                                semesterGPA: semester.semesterGPA!,
+                                totalSKS: semester.totalSKS!,
                               )
                             },
                             // nav.goToComponentCalculatorPage(
@@ -182,7 +180,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
     throw UnimplementedError();
   }
 
-  Widget addSemesterButton(int givenSemester) {
+  Widget _addSemesterButton(int givenSemester) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 20,
@@ -201,7 +199,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
               semesterRM.setState(
                 (s) => s.postSemester(
                   <String, dynamic>{
-                    'given_semester': givenSemester,
+                    'given_semester': givenSemester.toString(),
                     'semester_gpa': 3.89,
                     'total_sks': 18,
                   },

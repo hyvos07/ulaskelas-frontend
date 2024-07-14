@@ -204,6 +204,21 @@ class NavigationServiceState implements Navigation {
     );
   }
 
+  Future<void> goToSemesterPage({
+    required String givenSemester,
+    required double semesterGPA,
+    required int totalSKS,
+  }) {
+    return nav.push<void>(
+      SemesterPage(
+        givenSemester: givenSemester,
+        semesterGPA: semesterGPA,
+        totalSKS: totalSKS,
+      ),
+      RouteName.semesterPage,
+    );
+  }
+
   Future<void> goToSearchCourseCalculatorPage() {
     MixpanelService.track('calculator_add_course');
     return nav.push<void>(
