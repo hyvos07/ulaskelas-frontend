@@ -1,5 +1,5 @@
 class QuerySemester {
-  int? givenSemester;
+  String? givenSemester;
 
   QuerySemester({
     this.givenSemester,
@@ -8,7 +8,7 @@ class QuerySemester {
   @override
   String toString() {
     final data = <String, String>{};
-    data['given_semester'] = givenSemester.toString();
+    data['given_semester'] = givenSemester!;
     return Uri(queryParameters: data).query;
   }
 }

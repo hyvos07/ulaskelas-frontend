@@ -1,5 +1,5 @@
 class SemesterModel {
-  int? givenSemester; // represents ID
+  String? givenSemester; // represents ID
   String? user;
   double? semesterGPA;
   int? totalSKS;

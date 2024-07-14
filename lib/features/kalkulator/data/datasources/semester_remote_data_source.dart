@@ -1,7 +1,7 @@
 part of '_datasources.dart';
 
 abstract class SemesterRemoteDataSource {
-  get gpa => null;
+  String? get gpa => null;
 
   Future<Parsed<List<SemesterModel>>> getAllSemester();
 
@@ -15,31 +15,7 @@ abstract class SemesterRemoteDataSource {
 }
 
 class SemesterRemoteDataSourceImpl extends SemesterRemoteDataSource {
-  // Dummy Data
-  // ignore: prefer_final_fields
-  Map<String, dynamic> _dummyData = {
-    'data': <String, dynamic>{
-      'all_semester_gpa': [
-        <String, dynamic>{
-          'given_semester': 1,
-          'semester_gpa': 4.00,
-          'total_sks': 18,
-        },
-        <String, dynamic>{
-          'given_semester': 2,
-          'semester_gpa': 3.90,
-          'total_sks': 22,
-        },
-      ],
-      'cumulative_gpa': <String, dynamic>{
-        'user': 'daniel.liman',
-        'cumulative_gpa': 3.88999999997,
-        'total_gpa': 77.80,
-        'total_sks': 40,
-      },
-    },
-    'error': null
-  };
+  final _dummyData = DummyData.getDummyData;
 
   @override
   String get gpa =>
@@ -70,7 +46,7 @@ class SemesterRemoteDataSourceImpl extends SemesterRemoteDataSource {
     // final url = '${EndpointsV1.components}?$q';
     // final resp = await getIt(url);
     // return resp.parse(SemesterModel.fromJson(resp.dataBodyAsMap));
-    final resp = getItSingle(q.givenSemester ?? 0);
+    final resp = getItSingle(q.givenSemester!);
 
     if (resp.isEmpty) {
       print('Error: ${resp['error']}');
@@ -141,7 +117,7 @@ class SemesterRemoteDataSourceImpl extends SemesterRemoteDataSource {
     };
   }
 
-  Map<String, dynamic> getItSingle(int givenSemester) {
+  Map<String, dynamic> getItSingle(String givenSemester) {
     final semester = _dummyData['data']['all_semester_gpa'].firstWhere(
       (semester) => semester['given_semester'] == givenSemester,
       orElse: () => null,
@@ -151,7 +127,7 @@ class SemesterRemoteDataSourceImpl extends SemesterRemoteDataSource {
 
   Map<String, dynamic> postIt(Map<String, dynamic> model) {
     _dummyData['data']['all_semester_gpa'].add(model);
-    
+
     calculateNewGPA();
 
     return <String, dynamic>{
@@ -176,6 +152,7 @@ class SemesterRemoteDataSourceImpl extends SemesterRemoteDataSource {
   }
 
   Map<String, dynamic> deleteIt(QuerySemester q) {
+    print(q.givenSemester);
     _dummyData['data']['all_semester_gpa'].removeWhere(
       (semester) => semester['given_semester'] == q.givenSemester,
     );

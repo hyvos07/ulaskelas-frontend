@@ -2,12 +2,20 @@ part of '_widgets.dart';
 
 class CardSemester extends StatelessWidget {
   const CardSemester({
-    required this.model, super.key,
+    required this.model,
+    super.key,
     this.onTap,
   });
 
   final SemesterModel model;
   final VoidCallback? onTap;
+
+  String get semesterName {
+    if (model.givenSemester!.contains('sp')) {
+      return 'Pendek ${model.givenSemester!.substring(3)}';
+    }
+    return model.givenSemester!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +39,7 @@ class CardSemester extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Semester ${model.givenSemester}',
+                  'Semester $semesterName',
                   style: FontTheme.poppins14w700black().copyWith(
                     fontWeight: FontWeight.w600,
                   ),

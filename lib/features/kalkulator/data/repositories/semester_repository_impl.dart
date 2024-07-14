@@ -7,7 +7,8 @@ class SemesterRepositoryImpl extends SemesterRepository {
 
   final SemesterRemoteDataSource _remoteDataSource;
   
-  String get gpa => _remoteDataSource.gpa;
+  @override
+  String get gpa => _remoteDataSource.gpa!;
 
   @override
   Future<Decide<Failure, Parsed<List<SemesterModel>>>> getAllSemester() {
