@@ -128,12 +128,12 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
                                 totalPercentage: calculator.totalPercentage!,
                               ),
                             ),
-                            const HeightSpace(35),
-                            _addButton(),
                           ],
                         );
                       },
                     ),
+                    const HeightSpace(35),
+                    _addButton(),
                   ],
                 );
               },
