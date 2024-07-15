@@ -3,4 +3,6 @@
 part of '_constants.dart';
 
 /// SVG icons
-class SvgIcons {}
+class SvgIcons {
+  static const String trash = '${Constants.iconPath}/trash.svg';
+}

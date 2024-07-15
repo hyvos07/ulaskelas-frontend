@@ -2,7 +2,8 @@ part of '_widgets.dart';
 
 class CardCalculator extends StatelessWidget {
   const CardCalculator({
-    required this.model, super.key,
+    required this.model,
+    super.key,
     this.onTap,
   });
 
@@ -27,53 +28,61 @@ class CardCalculator extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Container(
-                  height: 50,
-                  width: 50,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(.15),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      model.shortName.toString(),
-                      style: FontTheme.poppins14w700black().copyWith(
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ),
-                const WidthSpace(12),
+                // Container(
+                //   height: 50,
+                //   width: 50,
+                //   padding: const EdgeInsets.all(12),
+                //   decoration: BoxDecoration(
+                //     color: theme.colorScheme.primary.withOpacity(.15),
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                //   child: Center(
+                //     child: Text(
+                //       model.shortName.toString(),
+                //       style: FontTheme.poppins14w700black().copyWith(
+                //         color: theme.colorScheme.primary,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // const WidthSpace(12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        model.courseName.toString(),
-                        style: FontTheme.poppins14w700black().copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      Text(model.courseName.toString(),
+                          style: FontTheme.poppins14w500black()),
                       const HeightSpace(4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            _getFinalScoreAndGrade(model.totalScore!),
-                            style: FontTheme.poppins12w400black(),
-                          ),
-                          Text(
-                            '${model.totalPercentage?.toStringAsFixed(2)}%',
-                            style: FontTheme.poppins12w400black().copyWith(
-                              color: BaseColors.gray2,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        _getFinalScoreAndGrade(model.totalScore!),
+                        style: FontTheme.poppins12w400black(),
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Text(
+                      //       '${model.totalPercentage?.toStringAsFixed(2)}%',
+                      //       style: FontTheme.poppins12w400black().copyWith(
+                      //         color: BaseColors.gray2,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
+                ),
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: () => _deleteCard(),
+                  icon: SvgPicture.asset(
+                    SvgIcons.trash,
+                    width: 16,
+                    height: 18,
+                  ),
+                  color: BaseColors.danger,
                 ),
               ],
             ),
@@ -82,6 +91,17 @@ class CardCalculator extends StatelessWidget {
       ),
     );
   }
+
+  void _deleteCard() {
+    calculatorRM.setState(
+      (s) => s.deleteCalculator(
+        query: QueryCalculator(id: model.id),
+        courseName: model.courseName!,
+        totalScore: model.totalScore!,
+      ),
+    );
+  }
+
   String _getFinalScoreAndGrade(double score) {
     var grade = 'E';
     if (score >= 85) {
