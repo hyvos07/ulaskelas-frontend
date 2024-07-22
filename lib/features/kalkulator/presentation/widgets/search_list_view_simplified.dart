@@ -84,12 +84,14 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
                     final course = courses[i];
                     return CardCourseSimplified(
                       model: course,
-                      onTap: () {
-                        nav.pop();
-                        calculatorRM.setState(
-                          (s) => s.postCalculator(course.code!),
-                        );
-                      },
+                      isChecked: searchCourseRM.state.selectedCourses
+                          .contains(course),
+                      // onTap: () {
+                      //   nav.pop();
+                      //   calculatorRM.setState(
+                      //     (s) => s.postCalculator(course.code!),
+                      //   );
+                      // },
                     );
                   },
                 );

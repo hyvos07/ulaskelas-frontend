@@ -75,7 +75,7 @@ class _SearchCourseCalculatorState
                   vertical: 10,
                 ),
                 child: Text(
-                  'Pilih Mata Kuliah',
+                  'Pilih Mata Kuliah yang kamu cari!',
                   style: FontTheme.poppins12w600black(),
                 ),
               ),
@@ -98,19 +98,30 @@ class _SearchCourseCalculatorState
           ),
         ),
         Expanded(
-          child: OnReactive(() {
-            if (focusNode.hasFocus &&
-                searchCourseRM.state.controller.text.isEmpty) {
-              return _buildHistory();
-            } else {
-              return SearchListViewSimplified(
-                refreshIndicatorKey: refreshIndicatorKey,
-                scrollController: scrollController,
-                onScroll: onScroll,
-                onRefresh: retrieveData,
-              );
-            }
-          }),
+          child: OnReactive(
+            () {
+              if (focusNode.hasFocus &&
+                  searchCourseRM.state.controller.text.isEmpty) {
+                return _buildHistory();
+              } else {
+                return SearchListViewSimplified(
+                  refreshIndicatorKey: refreshIndicatorKey,
+                  scrollController: scrollController,
+                  onScroll: onScroll,
+                  onRefresh: retrieveData,
+                );
+              }
+            },
+          ),
+        ),
+        SimpanButton(
+          text: 'Tambahkan',
+          onTap: () {
+            calculatorRM.state.postMultipleCalculator(
+              searchCourseRM.state.selectedCourses,
+            );
+            nav.pop();
+          },
         ),
       ],
     );
@@ -128,6 +139,7 @@ class _SearchCourseCalculatorState
   @override
   Future<bool> onBackPressed() async {
     focusNode.unfocus();
+    await searchCourseRM.setState((s) => s.selectedCourses.clear());
     return true;
   }
 

@@ -50,6 +50,49 @@ class CalculatorState {
     calculatorRM.notify();
   }
 
+  Future<void> postMultipleCalculator(
+    List<CourseModel> selectedCourse,
+  ) async {
+    final failedResponse = <String>[];
+    // Sementara hit API satu per satu dulu yah hehe
+    for (final course in selectedCourse) {
+      final resp = await _repo.postCalculator(course.code!);
+      await resp.fold((failure) {
+        // ErrorMessenger('Kalkulator dengan Mata Kuliah tersebut sudah ada')
+        //     .show(ctx!);
+        failedResponse.add(course.name!);
+      }, (result) async {
+        if (kDebugMode) {
+          print('Successfully created calculator for ${course.name}');
+        }
+      });
+      await Future.delayed(const Duration(milliseconds: 10));
+    }
+
+    if (failedResponse.isEmpty) {
+      SuccessMessenger('Semua kalkulator berhasil dibuat').show(ctx!);
+      final calcResp = await _repo.getAllCalculator();
+      calcResp.fold((failure) => throw failure, (result) {
+        final lessThanLimit = result.data.length < 10;
+        hasReachedMax = result.data.isEmpty || lessThanLimit;
+        _calculators = result.data;
+        print(_calculators);
+      });
+    } else if (failedResponse.length < selectedCourse.length) {
+      final failedMessage = _joinAll(failedResponse);
+      ErrorMessenger('Kalkulator $failedMessage sudah pernah dibuat')
+          .show(ctx!);
+    } else {
+      ErrorMessenger(
+        'Semua kalkulator yang dipilih sudah pernah dibuat sebelumnya',
+      ).show(ctx!);
+    }
+
+    await searchCourseRM.setState((s) => s.clearSelectedCourses());
+
+    calculatorRM.notify();
+  }
+
   Future<void> deleteCalculator({
     required QueryCalculator query,
     required String courseName,
@@ -77,5 +120,18 @@ class CalculatorState {
       });
     });
     calculatorRM.notify();
+  }
+
+  String _joinAll(List<String> list) {
+    final buffer = StringBuffer();
+    for (var i = 0; i < list.length; i++) {
+      buffer.write(list[i]);
+      if (i < list.length - 1) {
+        buffer.write(', ');
+      } else {
+        buffer.write(', dan ');
+      }
+    }
+    return buffer.toString();
   }
 }

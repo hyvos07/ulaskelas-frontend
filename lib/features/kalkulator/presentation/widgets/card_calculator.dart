@@ -47,7 +47,7 @@ class CardCalculator extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
-                // const WidthSpace(12),
+                // const WidthSpace(20),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,10 +73,14 @@ class CardCalculator extends StatelessWidget {
                     ],
                   ),
                 ),
+                const WidthSpace(20),
                 IconButton(
-                  padding: EdgeInsets.zero,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 3,
+                  ),
                   constraints: const BoxConstraints(),
-                  onPressed: () => _deleteCard(),
+                  onPressed: _deleteCard,
                   icon: SvgPicture.asset(
                     SvgIcons.trash,
                     width: 16,

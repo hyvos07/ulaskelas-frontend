@@ -48,98 +48,104 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
 
   @override
   Widget buildNarrowLayout(BuildContext context, SizingInformation sizeInfo) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          RefreshIndicator(
-            onRefresh: retrieveData,
-            key: refreshIndicatorKey,
-            child: OnBuilder<CalculatorState>.all(
-              listenTo: calculatorRM,
-              onIdle: () => const CircleLoading(),
-              onWaiting: () => const CircleLoading(),
-              onError: (dynamic error, refresh) => Text(error.toString()),
-              onData: (data) {
-                final calculators = data.calculators;
-                if (calculators.isEmpty) {
-                  return SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        HeightSpace(sizeInfo.screenSize.height * .05),
-                        Image.asset(
-                          Ilustration.notfound,
-                          width: sizeInfo.screenSize.width * .6,
-                        ),
-                        const HeightSpace(20),
-                        Text(
-                          'Belum Ada Mata Kuliah yang Tersimpan',
-                          style: FontTheme.poppins14w700black().copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        const HeightSpace(10),
-                        Text(
-                          'Kamu belum menambahkan satupun mata kuliah. '
-                          '\nSilakan tambahkan terlebih dahulu.',
-                          style: Theme.of(context).textTheme.bodySmall,
-                          textAlign: TextAlign.center,
-                        ),
-                        const HeightSpace(50),
-                        _addButton(),
-                      ],
-                    ),
-                  );
-                }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return SafeArea(
+      child: RefreshIndicator(
+        onRefresh: retrieveData,
+        key: refreshIndicatorKey,
+        child: OnBuilder<CalculatorState>.all(
+          listenTo: calculatorRM,
+          onWaiting: WaitingView.new,
+          onIdle: WaitingView.new,
+          onError: (dynamic error, refresh) => Text(error.toString()),
+          onData: (data) {
+            final calculators = data.calculators;
+            if (calculators.isEmpty) {
+              return SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          semesterName,
-                          style: FontTheme.poppins14w700black(),
-                        ),
-                        Text(
-                          widget.semesterGPA!.toStringAsFixed(2),
-                          style: FontTheme.poppins14w700black(),
-                        ),
-                      ],
+                    HeightSpace(sizeInfo.screenSize.height * .05),
+                    Image.asset(
+                      Ilustration.notfound,
+                      width: sizeInfo.screenSize.width * .6,
                     ),
-                    const HeightSpace(28),
-                    ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: calculators.length,
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const SizedBox(height: 16),
-                      itemBuilder: (context, index) {
-                        final calculator = calculators[index];
-                        return Column(
-                          children: [
-                            CardCalculator(
-                              model: calculator,
-                              onTap: () => nav.goToComponentCalculatorPage(
-                                calculatorId: calculator.id!,
-                                courseName: calculator.courseName!,
-                                totalScore: calculator.totalScore!,
-                                totalPercentage: calculator.totalPercentage!,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                    const HeightSpace(20),
+                    Text(
+                      'Belum Ada Mata Kuliah yang Tersimpan',
+                      style: FontTheme.poppins14w700black().copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                    const HeightSpace(35),
+                    const HeightSpace(10),
+                    Text(
+                      'Kamu belum menambahkan satupun mata kuliah. '
+                      '\nSilakan tambahkan terlebih dahulu.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                      textAlign: TextAlign.center,
+                    ),
+                    const HeightSpace(50),
                     _addButton(),
                   ],
-                );
-              },
-            ),
-          ),
-        ],
+                ),
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    top: 27.5,
+                    bottom: 15,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        semesterName,
+                        style: FontTheme.poppins14w700black(),
+                      ),
+                      Text(
+                        widget.semesterGPA!.toStringAsFixed(2),
+                        style: FontTheme.poppins14w700black(),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    shrinkWrap: true,
+                    itemCount: calculatorRM.state.calculators.length + 1,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const SizedBox(height: 16),
+                    itemBuilder: (context, index) {
+                      if (index == calculators.length) {
+                        return _addButton();
+                      }
+                      final calculator = calculators[index];
+                      return CardCalculator(
+                        model: calculator,
+                        onTap: () => nav.goToComponentCalculatorPage(
+                          calculatorId: calculator.id!,
+                          courseName: calculator.courseName!,
+                          totalScore: calculator.totalScore!,
+                          totalPercentage: calculator.totalPercentage!,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -167,6 +173,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
   Widget _addButton() {
     return Column(
       children: [
+        const HeightSpace(25),
         SecondaryButton(
           width: double.infinity,
           text: 'Tambah Mata Kuliah',
@@ -198,6 +205,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
             ),
           ),
         ),
+        const HeightSpace(30),
       ],
     );
   }

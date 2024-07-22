@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:ulaskelas/core/_core.dart';
 import 'package:ulaskelas/features/kalkulator/data/datasources/_datasources.dart';
@@ -11,6 +12,7 @@ import 'package:ulaskelas/features/kalkulator/domain/repositories/_repositories.
 
 import '../../../../core/utils/util.dart';
 import '../../../../services/_services.dart';
+import '../../../matkul/search/data/models/_models.dart';
 import '../../data/models/semester_model.dart';
 import '../../domain/entities/query_semester.dart';
 

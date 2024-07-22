@@ -175,4 +175,34 @@ class SearchCourseState
     _history?.clear();
     // TODO(pawpaw): clear from local storage
   }
+
+  //////////////////////////////
+  /// For Calculator Feature ///
+  //////////////////////////////
+  
+  final List<CourseModel> _selectedCourses = [];
+  
+  List<CourseModel> get selectedCourses => _selectedCourses;
+  
+  void addCourse(CourseModel course) {
+    if (_selectedCourses.contains(course)) {
+      return;
+    }
+    _selectedCourses.add(course);
+
+    searchCourseRM.notify();
+  }
+
+  void removeCourse(CourseModel course) {
+    if (!_selectedCourses.contains(course)) {
+      return;
+    }
+    _selectedCourses.removeWhere((element) => element.id == course.id);
+    
+    searchCourseRM.notify();
+  }
+
+  void clearSelectedCourses() {
+    _selectedCourses.clear();
+  }
 }
