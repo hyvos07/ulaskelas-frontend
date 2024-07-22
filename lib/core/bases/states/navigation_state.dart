@@ -126,8 +126,7 @@ class NavigationServiceState implements Navigation {
         'course_id': course.code.toString(),
         'course_name': course.name.toString(),
         'review_count': course.reviewCount.toString(),
-        'course_rating_avg':
-        course.ratingAverage.toString(),
+        'course_rating_avg': course.ratingAverage.toString(),
       },
     );
     return nav.push<void>(

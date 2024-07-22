@@ -39,7 +39,7 @@ class ComponentState{
       ErrorMessenger('Komponen gagal dihapus')
           .show(ctx!);
     }, (result) async {
-      SuccessMessenger('Komponen berhasil dipahus').show(ctx!);
+      SuccessMessenger('Komponen berhasil dihapus').show(ctx!);
     });
   }
 }
