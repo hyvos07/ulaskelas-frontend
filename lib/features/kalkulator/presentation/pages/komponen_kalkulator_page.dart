@@ -183,7 +183,9 @@ class _CalculatorComponentPageState
                     nav.pop();
                     calculatorRM.setState(
                       (s) => s.deleteCalculator(
-                        query: QueryCalculator(id: widget.calculatorId,),
+                        query: QueryCalculator(
+                          id: widget.calculatorId,
+                        ),
                         courseName: widget.courseName,
                         totalScore: widget.totalScore,
                       ),
@@ -216,7 +218,7 @@ class _CalculatorComponentPageState
   @override
   Future<bool> onBackPressed() async {
     nav.pop();
-    await nav.replaceToMainPage();
+    await calculatorRM.state.retrieveData();
     return true;
   }
 

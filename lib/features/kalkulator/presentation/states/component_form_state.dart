@@ -6,16 +6,21 @@ class ComponentFormState {
     _repo = ComponentRepositoryImpl(
       remoteDataSource,
     );
+    _frequency.text = '1';
   }
 
   late ComponentRepository _repo;
   final formKey = GlobalKey<FormState>();
   var _formData = ComponentData();
   final _nameController = TextEditingController();
-  final _scoreController = TextEditingController();
+  final _scoreControllers = <TextEditingController>[TextEditingController()];
   final _weightController = TextEditingController();
+  final _frequency = TextEditingController();
 
+  String _previousFrequency = '1';
   bool isLoading = false;
+  bool isEmptyScoreDetected = false;
+  bool justVisited = true;
 
   /// Submitting form data
   Future<void> submitForm(int calculatorId) async {
@@ -25,7 +30,7 @@ class ComponentFormState {
 
     result['calculator_id'] = calculatorId;
     result['name'] = _formData.name;
-    result['score'] = _formData.score;
+    result['score'] = averageScore();
     result['weight'] = _formData.weight;
 
     final resp = await _repo.createComponent(result);
@@ -47,7 +52,7 @@ class ComponentFormState {
     result['id'] = id;
     result['calculator_id'] = calculatorId;
     result['name'] = _formData.name;
-    result['score'] = _formData.score;
+    result['score'] = averageScore();
     result['weight'] = _formData.weight;
 
     final resp = await _repo.editComponent(result);
@@ -64,15 +69,22 @@ class ComponentFormState {
   ComponentData get formData => _formData;
 
   TextEditingController get nameController => _nameController;
-  TextEditingController get scoreController => _scoreController;
+  List<TextEditingController> get scoreControllers => _scoreControllers;
   TextEditingController get weightController => _weightController;
+  TextEditingController get frequency => _frequency;
+
+  set previousFrequency(String value) => _previousFrequency = value;
 
   void setName() {
     _formData.name = nameController.text;
   }
 
-  void setScore() {
-    _formData.score = double.parse(scoreController.text);
+  void setScore(int index) {
+    _formData.score![index] = double.parse(scoreControllers[index - 1].text);
+
+    if (kDebugMode) {
+      print('Form Data: ${_formData.score}');
+    }
   }
 
   void setWeight() {
@@ -82,15 +94,117 @@ class ComponentFormState {
   /// Cleaning form when success submitting form
   void cleanForm() {
     _formData = ComponentData();
+    _formData.score = <int, double>{};
+
     _nameController.text = '';
-    _scoreController.text = '';
     _weightController.text = '';
+
+    setFrequency(1, false);
+    for (final element in _scoreControllers) {
+      element.clear();
+    }
+
+    justVisited = true;
+  }
+
+  void decreaseFrequency() {
+    final currentLength = int.parse(_frequency.text);
+
+    _formData.score!.remove(currentLength);
+
+    _frequency.text = (currentLength - 1).toString();
+    _scoreControllers.removeLast();
+
+    if (kDebugMode) {
+      print('Frequency: ${_frequency.text}');
+      print('Form Data: ${_formData.score}');
+    }
+
+    _previousFrequency = _frequency.text;
+
+    componentFormRM.notify();
+  }
+
+  void increaseFrequency() {
+    _frequency.text = (int.parse(_frequency.text) + 1).toString();
+    _scoreControllers.add(TextEditingController());
+
+    _formData.score![int.parse(_frequency.text)] = 0;
+
+    if (kDebugMode) {
+      print('Frequency: ${_frequency.text}');
+      print('Form Data: ${_formData.score}');
+    }
+
+    _previousFrequency = _frequency.text;
+
+    componentFormRM.notify();
+  }
+
+  void setFrequency(int value, bool isExceed) {
+    if (isExceed) {
+      _frequency.text = _previousFrequency;
+    } else {
+      _frequency.text = value.toString();
+
+      if (_scoreControllers.length != value) {
+        if (_scoreControllers.length > value) {
+          _scoreControllers.removeRange(value, _scoreControllers.length);
+          _formData.score!.removeWhere((key, _) => key > value);
+        } else {
+          _scoreControllers.addAll(
+            List.generate(
+              value - _scoreControllers.length,
+              (_) => TextEditingController(),
+            ),
+          );
+        }
+      }
+
+      for (var i = 1; i < value + 1; i++) {
+        _formData.score!.putIfAbsent(i, () => 0);
+      }
+    }
+
+    if (kDebugMode) {
+      print('Frequency: ${_frequency.text}');
+      print('Form Data: ${_formData.score}');
+    }
+
+    _previousFrequency = _frequency.text;
+
+    componentFormRM.notify();
+  }
+
+  double averageScore() {
+    var sum = 0.0;
+    var valid = 0;
+
+    final length = int.tryParse(_frequency.text) ?? 1;
+
+    for (var i = 0; i < length; i++) {
+      sum += double.tryParse(_scoreControllers[i].text) ?? 0;
+      if (_scoreControllers[i].text.isNotEmpty) {
+        valid++;
+      }
+    }
+    return sum != 0 && valid != 0 ? sum / valid : 0;
+  }
+
+  void emptyScoreDetect() {
+    if (_scoreControllers.length == 1 && justVisited) {
+      isEmptyScoreDetected = false;
+    } else {
+      isEmptyScoreDetected =
+          _scoreControllers.any((element) => element.text.isEmpty);
+    }
+
+    componentFormRM.notify();
   }
 }
 
 class ComponentData {
-
   String? name;
-  double? score;
+  Map<int, double>? score;
   double? weight;
 }

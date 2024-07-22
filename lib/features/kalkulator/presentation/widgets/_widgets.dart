@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
@@ -23,4 +25,6 @@ part 'card_semester.dart';
 
 part 'simpan_button.dart';
 part 'gradient_border_button.dart';
+part 'frequency_controller.dart';
+part 'scores_field_input.dart';
 part 'gradient_text.dart';
