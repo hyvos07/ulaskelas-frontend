@@ -27,4 +27,5 @@ part 'simpan_button.dart';
 part 'gradient_border_button.dart';
 part 'frequency_controller.dart';
 part 'scores_field_input.dart';
+part 'recommended_score_box.dart';
 part 'gradient_text.dart';

@@ -26,7 +26,7 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
     componentFormRM.state.frequency.text = '1';
     componentFormRM.state.justVisited = true;
 
-    print(componentFormRM.state.scoreControllers);
+    // print(componentFormRM.state.scoreControllers);
   }
 
   @override
@@ -132,36 +132,95 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
 
       return;
     }
-    WarningMessenger('Harap isi semua field').show(context);
+
+
+
+    WarningMessenger('Pastikan semua field sudah terisi dengan benar!').show(context);
     componentFormRM.state.emptyScoreDetect();
   }
 
-  TextFormField _buildNameField() {
-    return TextFormField(
-      controller: componentFormRM.state.nameController,
-      minLines: 1,
-      style: FontTheme.poppins12w400black(),
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(16),
-        // constraints: const BoxConstraints(maxHeight: 12.5 * 20),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+  Widget _buildNameField() {
+    final recommendation = [
+      'Tugas Individu',
+      'Tugas Kelompok',
+      'UTS',
+      'UAS',
+      'Kuis',
+      'Partisipasi',
+      'Refleksi'
+    ];
+
+    return Stack(
+      alignment: Alignment.centerRight,
+      children: [
+        TextFormField(
+          controller: componentFormRM.state.nameController,
+          minLines: 1,
+          style: FontTheme.poppins12w400black(),
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(16),
+            // constraints: const BoxConstraints(maxHeight: 12.5 * 20),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            hintText: 'Nama Komponen',
+          ),
+          textInputAction: TextInputAction.newline,
+          onChanged: (value) {
+            if (value.trim().isEmpty) {
+              componentFormRM.state.nameController.text = '';
+            }
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'This field is required.';
+            }
+            componentFormRM.setState((s) => s.setName());
+            return null;
+          },
         ),
-        hintText: 'Nama Komponen',
-      ),
-      textInputAction: TextInputAction.newline,
-      onChanged: (value) {
-        if (value.trim().isEmpty) {
-          componentFormRM.state.nameController.text = '';
-        }
-      },
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'This field is required.';
-        }
-        componentFormRM.setState((s) => s.setName());
-        return null;
-      },
+        Positioned(
+          right: 18,
+          top: 15,
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton2(
+              customButton: SvgPicture.asset(
+                SvgIcons.dropdown,
+                width: 20,
+                height: 20,
+              ),
+              items: List.generate(
+                7,
+                (index) => DropdownMenuItem(
+                  value: recommendation[index],
+                  child: Text(
+                    recommendation[index],
+                    style: FontTheme.poppins12w400black(),
+                  ),
+                ),
+              ),
+              onChanged: (value) {
+                componentFormRM.state.nameController.text = value.toString();
+                if (kDebugMode) {
+                  print('You Choosed $value!');
+                }
+              },
+              dropdownStyleData: DropdownStyleData(
+                width: 135,
+                direction: DropdownDirection.left,
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: BaseColors.white,
+                ),
+              ),
+              menuItemStyleData: const MenuItemStyleData(
+                height: 38,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -202,7 +261,7 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
       children: [
         Padding(
           padding: const EdgeInsets.only(
-            left: 5,
+            left: 12,
             top: 5,
             bottom: 5,
           ),
@@ -225,34 +284,96 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
             ],
           ),
         ),
-        const HeightSpace(10),
         OnBuilder<ComponentFormState>.all(
           listenTo: componentFormRM,
           onIdle: () => const CircleLoading(),
           onWaiting: () => const CircleLoading(),
           onError: (error, refresh) => Text(error.toString()),
           onData: (data) {
-            return ScoresFieldInput(
-              averageScoreCalculation: () =>
-                  componentFormRM.state.averageScore(),
-              onControllerEmpty: () => componentFormRM.state.scoreControllers
-                  .add(TextEditingController()),
-              subtitle: componentFormRM.state.isEmptyScoreDetected
-                  ? Text(
-                      'Terdapat nilai yang belum diisi',
-                      style: FontTheme.poppins10w400black().copyWith(
-                        color: BaseColors.error,
-                        fontSize: 11,
+            return Column(
+              children: [
+                HeightSpace(
+                  componentFormRM.state.scoreControllers.length == 1 ? 25 : 10,
+                ),
+                if (data.scoreControllers.length == 1)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: data.scoreControllers.first,
+                          minLines: 1,
+                          style: FontTheme.poppins12w400black(),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(
+                              RegExp('[0-9]+[,.]{0,1}[0-9]*'),
+                            ),
+                          ],
+                          onFieldSubmitted: (value) => {
+                            data.justVisited = false,
+                            data.emptyScoreDetect(),
+                            data.setScore(1),
+                          },
+                          onChanged: (value) {
+                            if (value.trim().isEmpty) {
+                              data.scoreControllers.first.clear();
+                            }
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'This field is required.';
+                            } else if (double.tryParse(value)! > 200) {
+                              return "Score can't be more than 200";
+                            }
+                            componentFormRM.setState((s) => s.setScore(1));
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(16),
+                            // constraints: const BoxConstraints(maxHeight: 12.5 * 20),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            hintText: 'Nilai',
+                          ),
+                        ),
                       ),
-                    )
-                  : null,
-              onFieldSubmitted: (value, index) => {
-                componentFormRM.state.justVisited = false,
-                componentFormRM.state.emptyScoreDetect(),
-                componentFormRM.state.setScore(index),
-              },
-              controllers: componentFormRM.state.scoreControllers,
-              length: int.tryParse(componentFormRM.state.frequency.text) ?? 1,
+                      const WidthSpace(12),
+                      RecommendedScoreBox(
+                        value: componentFormRM.state.recommendedScore,
+                        score:
+                            componentFormRM.state.scoreControllers.first.text,
+                      ),
+                    ],
+                  )
+                else
+                  ScoresFieldInput(
+                    recommendedScore: componentFormRM.state.recommendedScore,
+                    averageScoreCalculation: () => data.averageScore(),
+                    onControllerEmpty: () =>
+                        data.scoreControllers.add(TextEditingController()),
+                    subtitle: data.isEmptyScoreDetected
+                        ? Text(
+                            'Terdapat nilai yang belum diisi',
+                            style: FontTheme.poppins10w400black().copyWith(
+                              color: BaseColors.error,
+                              fontSize: 11,
+                            ),
+                          )
+                        : null,
+                    onFieldSubmitted: (value, index) => {
+                      data.justVisited = false,
+                      data.emptyScoreDetect(),
+                      data.setScore(index),
+                    },
+                    controllers: data.scoreControllers,
+                    length: int.tryParse(data.frequency.text) ?? 1,
+                  ),
+              ],
             );
           },
         ),

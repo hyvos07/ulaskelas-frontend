@@ -18,6 +18,7 @@ class ComponentFormState {
   final _frequency = TextEditingController();
 
   String _previousFrequency = '1';
+  double _recommendedScore = 85;
   bool isLoading = false;
   bool isEmptyScoreDetected = false;
   bool justVisited = true;
@@ -67,6 +68,7 @@ class ComponentFormState {
   }
 
   ComponentData get formData => _formData;
+  double get recommendedScore => _recommendedScore;
 
   TextEditingController get nameController => _nameController;
   List<TextEditingController> get scoreControllers => _scoreControllers;

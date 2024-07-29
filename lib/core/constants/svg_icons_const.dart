@@ -5,4 +5,5 @@ part of '_constants.dart';
 /// SVG icons
 class SvgIcons {
   static const String trash = '${Constants.iconPath}/trash.svg';
+  static const String dropdown = '${Constants.iconPath}/dropdown.svg';
 }
