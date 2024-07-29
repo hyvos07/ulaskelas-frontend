@@ -218,10 +218,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                 gradient: const LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFFD293FF),
-                    Color(0xFF3F4FB4),
-                  ],
+                  colors: BaseColors.autoSystemColor,
                 ),
                 width: double.infinity,
                 borderRadius: 8,
