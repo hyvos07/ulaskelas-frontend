@@ -87,6 +87,8 @@ class _SearchCourseCalculatorState
                   onClear: () {
                     focusNode.unfocus();
                     searchCourseRM.state.controller.clear();
+                    onQueryChanged('');
+                    searchCourseRM.notify();
                   },
                   onFieldSubmitted: (val) {
                     searchCourseRM.state.addToHistory(val);
