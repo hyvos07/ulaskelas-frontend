@@ -31,7 +31,7 @@ dependencies:
   url_launcher: ^6.0.17
   flutter_switch: ^0.3.2
   universal_html: ^2.0.8
-  dio: ^4.0.6
+  dio: ^5.0.0
   material_design_icons_flutter: ^7.0.7296
   flutter_vector_icons: ^2.0.0
   package_info: ^2.0.2

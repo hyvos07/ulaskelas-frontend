@@ -12,8 +12,8 @@ Future<Response> getIt(
     url,
     options: Options(
       headers: getHeaders,
-      receiveTimeout: 5000,
-      sendTimeout: 6000,
+      receiveTimeout: const Duration(milliseconds: 5000),
+      sendTimeout: const Duration(milliseconds: 6000),
     ),
   );
   if (kDebugMode) {
@@ -41,8 +41,8 @@ Future<Response> postIt(
     data: json.encode(model),
     options: Options(
       headers: getHeaders,
-      receiveTimeout: 5000,
-      sendTimeout: 6000,
+      receiveTimeout: const Duration(milliseconds: 5000),
+      sendTimeout: const Duration(milliseconds: 6000),
     ),
   );
   if (kDebugMode) {
@@ -70,8 +70,8 @@ Future<Response> putIt(
     data: model,
     options: Options(
       headers: getHeaders,
-      receiveTimeout: 5000,
-      sendTimeout: 6000,
+      receiveTimeout: const Duration(milliseconds: 5000),
+      sendTimeout: const Duration(milliseconds: 6000),
     ),
   );
   if (kDebugMode) {
@@ -99,8 +99,8 @@ Future<Response> deleteIt(
     data: model,
     options: Options(
       headers: getHeaders,
-      receiveTimeout: 5000,
-      sendTimeout: 6000,
+      receiveTimeout: const Duration(milliseconds: 5000),
+      sendTimeout: const Duration(milliseconds: 6000),
     ),
   );
   if (kDebugMode) {
@@ -108,4 +108,64 @@ Future<Response> deleteIt(
         .i({'response': '${resp.data}', 'statusCode': '${resp.statusCode}'});
   }
   return resp;
+}
+
+Future<Response> sendCustomRequest(
+  String url, {
+  required String method,
+  Map<String, String>? headers,
+  Map<String, dynamic>? body,
+}) async {
+  final getHeaders = headers ?? Pref.getHeaders();
+
+  if (kDebugMode) {
+    Logger().i({
+      'url': url,
+      'headers': '$getHeaders',
+      'body': '$body',
+    });
+  }
+
+  try {
+    final resp = await Dio().request(
+      url,
+      options: Options(
+        method: method,
+        headers: getHeaders,
+      ),
+      data: body,
+    );
+    if (kDebugMode) {
+      Logger().i({
+        'response': '${resp.data}',
+        'statusCode': '${resp.statusCode}',
+      });
+    }
+    return resp;
+  } catch (e) {
+    if (e is DioException && e.response != null) {
+      Logger().e(e.response!.toString());
+    }
+    Logger().e(e);
+  }
+
+  if (kDebugMode) {
+    Logger().i({
+      'response': "{error: Something's Wrong, I Can Feel It}",
+      'statusCode': '500'
+    });
+  }
+
+  // Fake Error Response (even if it is intended to indicate an error)
+  return Response(
+    requestOptions: RequestOptions(
+      path: url,
+      method: method,
+    ),
+    statusCode: 500,
+    statusMessage: 'Error',
+    data: {
+      'error': "Something's Wrong, I Can Feel It ",
+    },
+  );
 }
