@@ -17,20 +17,24 @@ abstract class Failure implements Exception {
 }
 
 class DioFailure implements Exception {
-  DioFailure.fromDioError(DioError dioError) {
-    switch (dioError.type) {
-      case DioErrorType.cancel:
+  DioFailure.fromDioError(DioException dioException) {
+    switch (dioException.type) {
+      case DioExceptionType.cancel:
         message = 'Request to API server was cancelled';
-      case DioErrorType.connectTimeout:
+      case DioExceptionType.connectionTimeout:
         message = 'Connection timeout with API server';
-      case DioErrorType.other:
+      case DioExceptionType.connectionError:
         message = 'Connection to API server failed due to internet connection';
-      case DioErrorType.receiveTimeout:
+      case DioExceptionType.receiveTimeout:
         message = 'Receive timeout in connection with API server';
-      case DioErrorType.sendTimeout:
+      case DioExceptionType.sendTimeout:
         message = 'Send timeout in connection with API server';
-      case DioErrorType.response:
-        message = _handleResponseError(dioError.response);
+      case DioExceptionType.badCertificate:
+        message = 'Invalid certificate from client';
+      case DioExceptionType.badResponse:
+        message = 'Bad response output from API server';
+      case DioExceptionType.unknown:
+        message = _handleResponseError(dioException.response);
     }
   }
 

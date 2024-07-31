@@ -10,7 +10,7 @@ class SemesterState {
   List<SemesterModel>? _semesters;
 
   List<SemesterModel> get semesters => _semesters ?? [];
-  String get gpa => _repo.gpa;
+  String get cumulativeGPA => _repo.gpa;
 
   bool hasReachedMax = false;
   int page = 1;
@@ -23,7 +23,7 @@ class SemesterState {
   }
 
   Future<void> retrieveData() async {
-    final resp = await _repo.getAllSemester();
+    final resp = await _repo.getSemesters();
     resp.fold((failure) => throw failure, (result) {
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
@@ -33,14 +33,13 @@ class SemesterState {
     semesterRM.notify();
   }
 
-  Future<void> postSemester(Map<String, dynamic> model) async {
-    final resp = await _repo.postSemester(model);
+  Future<void> postSemester(List<String> givenSemesters) async {
+    final resp = await _repo.postSemester(givenSemesters);
     await resp.fold((failure) {
-      ErrorMessenger('Data Semester tersebut sudah pernah dibuat')
-          .show(ctx!);
+      ErrorMessenger('Data Semester tersebut sudah pernah dibuat').show(ctx!);
     }, (result) async {
       SuccessMessenger('Data Semester berhasil dibuat').show(ctx!);
-      final calcResp = await _repo.getAllSemester();
+      final calcResp = await _repo.getSemesters();
       calcResp.fold((failure) => throw failure, (result) {
         final lessThanLimit = result.data.length < 10;
         hasReachedMax = result.data.isEmpty || lessThanLimit;
@@ -69,7 +68,7 @@ class SemesterState {
       ErrorMessenger('Data Semester gagal dihapus').show(ctx!);
     }, (result) async {
       SuccessMessenger('Data Semester berhasil dihapus').show(ctx!);
-      final calcResp = await _repo.getAllSemester();
+      final calcResp = await _repo.getSemesters();
       calcResp.fold((failure) => throw failure, (result) {
         final lessThanLimit = result.data.length < 10;
         hasReachedMax = result.data.isEmpty || lessThanLimit;

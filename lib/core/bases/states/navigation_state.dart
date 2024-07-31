@@ -218,16 +218,18 @@ class NavigationServiceState implements Navigation {
     );
   }
 
-  Future<void> goToSearchCourseCalculatorPage() {
+  Future<void> goToSearchCourseCalculatorPage(String givenSemester) {
     MixpanelService.track('calculator_add_course');
     return nav.push<void>(
-      const SearchCourseCalculator(),
+      SearchCourseCalculator(givenSemester: givenSemester),
       RouteName.searchCourseCalculator,
     );
   }
 
   Future<void> goToComponentCalculatorPage({
     required int calculatorId,
+    required int courseId,
+    required String givenSemester,
     required String courseName,
     required double totalScore,
     required double totalPercentage,
@@ -244,7 +246,9 @@ class NavigationServiceState implements Navigation {
     );
     return nav.push<void>(
       CalculatorComponentPage(
+        givenSemester: givenSemester,
         calculatorId: calculatorId,
+        courseId: courseId,
         courseName: courseName,
         totalScore: totalScore,
         totalPercentage: totalPercentage,
@@ -254,13 +258,17 @@ class NavigationServiceState implements Navigation {
   }
 
   Future<void> goToComponentFormPage({
+    required String givenSemester,
     required int calculatorId,
+    required int courseId,
     required String courseName,
     required double totalScore,
     required double totalPercentage,
   }) {
     return nav.push<void>(
       ComponentFormPage(
+        givenSemester: givenSemester,
+        courseId: courseId,
         calculatorId: calculatorId,
         courseName: courseName,
         totalScore: totalScore,
@@ -272,13 +280,17 @@ class NavigationServiceState implements Navigation {
 
   Future<void> replaceToComponentPage({
     required int calculatorId,
+    required int courseId,
+    required String givenSemester,
     required String courseName,
     required double totalScore,
     required double totalPercentage,
   }) {
     return nav.pushReplacement<void, void>(
       CalculatorComponentPage(
+        givenSemester: givenSemester,
         calculatorId: calculatorId,
+        courseId: courseId,
         courseName: courseName,
         totalScore: totalScore,
         totalPercentage: totalPercentage,
@@ -289,6 +301,8 @@ class NavigationServiceState implements Navigation {
 
   Future<void> goToEditComponentPage({
     required int id,
+    required String givenSemester,
+    required int courseId,
     required int calculatorId,
     required String courseName,
     required double totalScore,
@@ -300,6 +314,8 @@ class NavigationServiceState implements Navigation {
     return nav.push<void>(
       EditComponentPage(
         id: id,
+        givenSemester: givenSemester,
+        courseId: courseId,
         calculatorId: calculatorId,
         courseName: courseName,
         totalScore: totalScore,

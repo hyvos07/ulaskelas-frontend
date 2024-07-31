@@ -1,39 +1,82 @@
 part of '_datasources.dart';
 
 abstract class CalculatorRemoteDataSource {
-  Future<Parsed<List<CalculatorModel>>> getAllCalculator();
-  Future<Parsed<void>> postCalculator(String courseCode);
-  Future<Parsed<void>> deleteCalculator(QueryCalculator q);
+  String gpa = 0.toStringAsFixed(2);
+  Future<Parsed<List<CalculatorModel>>> getAllCalculator(String givenSemester);
+  Future<Parsed<Map<String, List<dynamic>>>> postCalculator(
+    List<int> courseIds,
+    String givenSemester,
+  );
+  Future<Parsed<void>> deleteCalculator(
+    QueryCalculator q,
+    String givenSemester,
+  );
 }
 
 class CalculatorRemoteDataSourceImpl extends CalculatorRemoteDataSource {
   @override
-  Future<Parsed<List<CalculatorModel>>> getAllCalculator() async {
+  Future<Parsed<List<CalculatorModel>>> getAllCalculator(
+    String givenSemester,
+  ) async {
     final list = <CalculatorModel>[];
-    final url = EndpointsV1.calculators;
-    final resp = await getIt(url);
-    for (final data in resp.dataBodyIterable) {
-      list.add(CalculatorModel.fromJson(data));
+    final url = EndpointsRevamp.courses;
+    final resp = await sendCustomRequest(
+      url,
+      method: 'GET',
+      body: {
+        'given_semester': givenSemester,
+      },
+    );
+    for (final data in resp.dataBodyIterable['courses_calculator']) {
+      list.add(CalculatorModel.fromJson(data, givenSemester));
+    }
+    if (resp.responseData['semester'] != null) {
+      final semesterData = resp.responseData['semester'];
+      super.gpa = '${semesterData['semester_gpa'].toStringAsFixed(2)}'
+          ' in sem $givenSemester';
     }
     return resp.parse(list);
   }
 
   @override
-  Future<Parsed<void>> postCalculator(String courseCode) async {
-    final url = EndpointsV1.calculators;
+  Future<Parsed<Map<String, List<dynamic>>>> postCalculator(
+    List<int> courseIds,
+    String givenSemester,
+  ) async {
+    final url = EndpointsRevamp.courses;
     final resp = await postIt(
       url,
-      model: <String, dynamic>{
-        'course_code': courseCode,
+      model: {
+        'course_ids': courseIds,
+        'given_semester': givenSemester,
       },
     );
-    return resp.parse(null);
+
+    if (resp.responseData != null) {
+      final dataResponse = <String, List<dynamic>>{
+        'success': resp.responseData['inserted_course_ids'],
+        'nonexist': resp.responseData['nonexistent_course_ids'],
+        'duplicate':
+            resp.responseData['duplicated_course_semester_ids'],
+      };
+      return resp.parse(dataResponse);
+    }
+
+    return resp.parse(resp.responseData);
   }
 
   @override
-  Future<Parsed<void>> deleteCalculator(QueryCalculator q) async {
-    final url = '${EndpointsV1.calculators}?$q';
-    final resp = await deleteIt(url);
+  Future<Parsed<void>> deleteCalculator(
+    QueryCalculator q,
+    String givenSemester,
+  ) async {
+    final url = '${EndpointsRevamp.courses}/${q.courseId}';
+    final resp = await deleteIt(
+      url,
+      model: {
+        'given_semester': givenSemester,
+      },
+    );
     return resp.parse(null);
   }
 }

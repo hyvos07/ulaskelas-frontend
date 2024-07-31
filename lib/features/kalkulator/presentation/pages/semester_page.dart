@@ -109,7 +109,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
                         style: FontTheme.poppins14w700black(),
                       ),
                       Text(
-                        widget.semesterGPA!.toStringAsFixed(2),
+                        calculatorRM.state.gpa,
                         style: FontTheme.poppins14w700black(),
                       ),
                     ],
@@ -132,7 +132,10 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
                       final calculator = calculators[index];
                       return CardCalculator(
                         model: calculator,
+                        givenSemester: widget.givenSemester!,
                         onTap: () => nav.goToComponentCalculatorPage(
+                          givenSemester: widget.givenSemester!,
+                          courseId: calculator.courseId!,
                           calculatorId: calculator.id!,
                           courseName: calculator.courseName!,
                           totalScore: calculator.totalScore!,
@@ -161,12 +164,13 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
   @override
   Future<bool> onBackPressed() async {
     nav.pop();
+    calculatorRM.state.calculators.clear();
     return true;
   }
 
   Future<void> retrieveData() async {
     await calculatorRM.setState(
-      (s) => s.retrieveData(),
+      (s) => s.retrieveData(widget.givenSemester!),
     );
   }
 
@@ -178,16 +182,24 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
           width: double.infinity,
           text: 'Tambah Mata Kuliah',
           backgroundColor: BaseColors.purpleHearth,
-          onPressed: () => nav.goToSearchCourseCalculatorPage(),
+          onPressed: () =>
+              nav.goToSearchCourseCalculatorPage(widget.givenSemester!),
         ),
         const HeightSpace(25),
         Center(
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: InkWell(
-              onTap: () {
+              onTap: () async {
+                /* 
+                Based on my 'investigation', these Flushbars are conflicting 
+                with the navigation state, so for now the only solution that I 
+                can think of is to use this delay to wait for the flushbar to 
+                disappear before navigating to the previous page 😭
+                */
+                await Future.delayed(const Duration(milliseconds: 1500));
                 nav.pop();
-                semesterRM.setState(
+                await semesterRM.setState(
                   (s) => s.deleteSemester(
                     query: QuerySemester(
                       givenSemester: widget.givenSemester,

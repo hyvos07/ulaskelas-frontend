@@ -1,31 +1,31 @@
 class SemesterModel {
   String? givenSemester; // represents ID
-  String? user;
+  double? semesterMutu;
   double? semesterGPA;
   int? totalSKS;
 
   SemesterModel(
       {
         this.givenSemester,
-        this.user, // Will this ever be used..?
-        this.semesterGPA,
         this.totalSKS,
+        this.semesterGPA,
+        this.semesterMutu,
       });
 
   SemesterModel.fromJson(Map<String, dynamic> json) {
     givenSemester = json['given_semester'];
-    // user = json['user'];
-    semesterGPA = json['semester_gpa'];
     totalSKS = json['total_sks'];
+    semesterGPA = json['semester_gpa'];
+    semesterMutu = json['semester_mutu'];
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
 
     data['given_semester'] = givenSemester;
-    // data['user'] = user;
-    data['semester_gpa'] = semesterGPA;
     data['total_sks'] = totalSKS;
+    data['semester_gpa'] = semesterGPA;
+    data['semester_mutu'] = semesterMutu;
     
     return data;
   }

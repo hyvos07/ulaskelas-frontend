@@ -1,14 +1,14 @@
 class QueryCalculator {
-  int? id;
+  int? courseId;
 
   QueryCalculator({
-    this.id,
+    this.courseId,
   });
 
   @override
   String toString() {
     final data = <String, String>{};
-    data['id'] = id.toString();
+    data['id'] = courseId.toString();
     return Uri(queryParameters: data).query;
   }
 }

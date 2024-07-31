@@ -4,14 +4,18 @@ part of '_pages.dart';
 
 class CalculatorComponentPage extends StatefulWidget {
   const CalculatorComponentPage({
+    required this.givenSemester,
     required this.calculatorId,
+    required this.courseId,
     required this.courseName,
     required this.totalScore,
     required this.totalPercentage,
     super.key,
   });
 
+  final String givenSemester;
   final int calculatorId;
+  final int courseId;
   final String courseName;
   final double totalScore;
   final double totalPercentage;
@@ -145,6 +149,8 @@ class _CalculatorComponentPageState
                           onTap: () {
                             nav.goToEditComponentPage(
                               id: component.id!,
+                              givenSemester: component.givenSemester!,
+                              courseId: component.courseId!,
                               calculatorId: widget.calculatorId,
                               courseName: widget.courseName,
                               totalScore: widget.totalScore,
@@ -169,6 +175,8 @@ class _CalculatorComponentPageState
                 backgroundColor: BaseColors.purpleHearth,
                 onPressed: () {
                   nav.goToComponentFormPage(
+                    givenSemester: widget.givenSemester,
+                    courseId: widget.courseId,
                     calculatorId: widget.calculatorId,
                     courseName: widget.courseName,
                     totalScore: widget.totalScore,
@@ -184,8 +192,9 @@ class _CalculatorComponentPageState
                     calculatorRM.setState(
                       (s) => s.deleteCalculator(
                         query: QueryCalculator(
-                          id: widget.calculatorId,
+                          courseId: widget.courseId,
                         ),
+                        givenSemester: widget.givenSemester,
                         courseName: widget.courseName,
                         totalScore: widget.totalScore,
                       ),
@@ -218,7 +227,7 @@ class _CalculatorComponentPageState
   @override
   Future<bool> onBackPressed() async {
     nav.pop();
-    await calculatorRM.state.retrieveData();
+    await calculatorRM.state.retrieveData(widget.givenSemester);
     return true;
   }
 

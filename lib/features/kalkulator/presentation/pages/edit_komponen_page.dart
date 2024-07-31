@@ -3,6 +3,8 @@ part of '_pages.dart';
 class EditComponentPage extends StatefulWidget {
   const EditComponentPage({
     required this.id,
+    required this.givenSemester,
+    required this.courseId,
     required this.calculatorId,
     required this.courseName,
     required this.totalScore,
@@ -14,6 +16,8 @@ class EditComponentPage extends StatefulWidget {
   });
 
   final int id;
+  final String givenSemester;
+  final int courseId;
   final int calculatorId;
   final String courseName;
   final double totalScore;
@@ -96,6 +100,8 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
               );
 
               nav.replaceToComponentPage(
+                givenSemester: widget.givenSemester,
+                courseId: widget.courseId,
                 calculatorId: widget.calculatorId,
                 courseName: widget.courseName,
                 totalScore: widget.totalScore -
@@ -155,6 +161,8 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
       }
 
       await nav.replaceToComponentPage(
+        givenSemester: widget.givenSemester,
+        courseId: widget.courseId,
         calculatorId: widget.calculatorId,
         courseName: widget.courseName,
         totalScore: _temporaryUpdateScore(
@@ -168,9 +176,8 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
       return;
     }
 
-    
-
-    WarningMessenger('Pastikan semua field sudah terisi dengan benar!').show(context);
+    WarningMessenger('Pastikan semua field sudah terisi dengan benar!')
+        .show(context);
     componentFormRM.state.emptyScoreDetect();
   }
 

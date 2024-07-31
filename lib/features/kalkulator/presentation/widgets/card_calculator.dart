@@ -3,16 +3,17 @@ part of '_widgets.dart';
 class CardCalculator extends StatelessWidget {
   const CardCalculator({
     required this.model,
+    required this.givenSemester,
     super.key,
     this.onTap,
   });
 
   final CalculatorModel model;
+  final String givenSemester;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Stack(
@@ -99,7 +100,8 @@ class CardCalculator extends StatelessWidget {
   void _deleteCard() {
     calculatorRM.setState(
       (s) => s.deleteCalculator(
-        query: QueryCalculator(id: model.id),
+        query: QueryCalculator(courseId: model.courseId),
+        givenSemester: givenSemester,
         courseName: model.courseName!,
         totalScore: model.totalScore!,
       ),

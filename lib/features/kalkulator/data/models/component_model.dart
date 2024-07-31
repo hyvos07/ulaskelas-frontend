@@ -1,4 +1,6 @@
 class ComponentModel {
+  String? givenSemester;
+  int? courseId;
   int? id;
   int? calculatorId;
   String? name;

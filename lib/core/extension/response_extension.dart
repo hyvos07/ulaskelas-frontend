@@ -27,6 +27,15 @@ class Parsed<T> {
 extension ResponseExtension<T> on Response {
   //ignore:avoid_shadowing_type_parameters
   Parsed<T> parse<T>(T t) {
+    // This is for delete response that doesn't return any data
+    if (statusCode == 204) {
+      return Parsed.fromJson(
+        <String, dynamic>{},
+        statusCode!,
+        t,
+      );
+    }
+
     return Parsed.fromJson(
       data as Map<String, dynamic>,
       statusCode!,
@@ -38,6 +47,7 @@ extension ResponseExtension<T> on Response {
 
   /// Get iterable data
   dynamic get dataBodyIterable => (data as Map<String, dynamic>)['data'];
+  double get userGPA => dataBodyIterable['cumulative_gpa']['cumulative_gpa'];
   Map<String, dynamic> get bodyAsMap => data as Map<String, dynamic>;
   Map<String, dynamic> get dataBodyAsMap => responseData ?? <String, dynamic>{};
   Map<String, dynamic> get bodyMap => data as Map<String, dynamic>;

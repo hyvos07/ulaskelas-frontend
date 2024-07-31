@@ -99,7 +99,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                         style: FontTheme.poppins16w400black(),
                       ),
                       Text(
-                        semesterRM.state.gpa,
+                        semesterRM.state.cumulativeGPA,
                         style: FontTheme.poppins16w700black(),
                       )
                     ],
@@ -116,16 +116,6 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                       final semester = semesters[index];
                       return Column(
                         children: [
-                          // CardCalculator(
-                          //   model: calculator,
-                          //   onTap: () => nav.goToComponentCalculatorPage(
-                          //     calculatorId: calculator.id!,
-                          //     courseName: calculator.courseName!,
-                          //     totalScore: calculator.totalScore!,
-                          //     totalPercentage: calculator.totalPercentage!,
-                          //   ),
-                          // ),
-                          // const HeightSpace(10),
                           CardSemester(
                             model: semester,
                             onTap: () => {
@@ -135,12 +125,6 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                                 totalSKS: semester.totalSKS!,
                               )
                             },
-                            // nav.goToComponentCalculatorPage(
-                            //   calculatorId: calculator.id!,
-                            //   courseName: calculator.courseName!,
-                            //   totalScore: calculator.totalScore!,
-                            //   totalPercentage: calculator.totalPercentage!,
-                            // ),
                           )
                         ],
                       );
@@ -197,13 +181,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
             backgroundColor: BaseColors.purpleHearth,
             onPressed: () => {
               semesterRM.setState(
-                (s) => s.postSemester(
-                  <String, dynamic>{
-                    'given_semester': givenSemester.toString(),
-                    'semester_gpa': 3.89,
-                    'total_sks': 18,
-                  },
-                ),
+                (s) => s.postSemester([givenSemester.toString()]),
               )
             },
           ),

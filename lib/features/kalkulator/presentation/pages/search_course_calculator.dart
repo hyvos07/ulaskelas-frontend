@@ -2,8 +2,11 @@ part of '_pages.dart';
 
 class SearchCourseCalculator extends StatefulWidget {
   const SearchCourseCalculator({
+    required this.givenSemester,
     super.key,
   });
+
+  final String givenSemester;
 
   @override
   _SearchCourseCalculatorState createState() => _SearchCourseCalculatorState();
@@ -119,9 +122,17 @@ class _SearchCourseCalculatorState
         SimpanButton(
           text: 'Tambahkan',
           onTap: () {
-            calculatorRM.state.postMultipleCalculator(
-              searchCourseRM.state.selectedCourses,
+            if (searchCourseRM.state.selectedCourses.isEmpty) {
+              ErrorMessenger('Pilih minimal satu mata kuliah').show(context);
+              return;
+            }
+            final selectedCourses =
+                List<CourseModel>.from(searchCourseRM.state.selectedCourses);
+            calculatorRM.state.postCalculator(
+              selectedCourses,
+              widget.givenSemester,
             );
+            searchCourseRM.state.clearSelectedCourses();
             nav.pop();
           },
         ),

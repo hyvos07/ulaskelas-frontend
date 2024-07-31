@@ -13,3 +13,4 @@ part 'environment.dart';
 part 'flavor.dart';
 part 'endpoints/v1/endpoints.dart';
 part 'endpoints/v2/endpoints.dart';
+part 'endpoints/v3_revamp/endpoints.dart';

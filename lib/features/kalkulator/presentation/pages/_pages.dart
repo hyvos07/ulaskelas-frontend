@@ -13,6 +13,7 @@ import 'package:ulaskelas/core/theme/_theme.dart';
 import 'package:ulaskelas/core/utils/util.dart';
 import 'package:ulaskelas/features/kalkulator/data/models/semester_model.dart';
 import 'package:ulaskelas/features/kalkulator/domain/entities/query_calculator.dart';
+import 'package:ulaskelas/features/matkul/search/data/models/_models.dart';
 import 'package:ulaskelas/services/_services.dart';
 import '../../../matkul/main/domain/entities/query_search_course.dart';
 import '../../../matkul/search/presentation/states/_states.dart';

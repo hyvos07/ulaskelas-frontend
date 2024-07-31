@@ -1,6 +1,7 @@
 import 'dart:math';
 
 class CalculatorModel {
+  String? givenSemester;
   int? id;
   String? user;
   int? courseId;
@@ -9,17 +10,19 @@ class CalculatorModel {
   double? totalPercentage;
   String? shortName;
 
-  CalculatorModel(
-      {this.id,
-        this.user,
-        this.courseId,
-        this.courseName,
-        this.totalScore,
-        this.totalPercentage,
-        this.shortName,
-      });
+  CalculatorModel({
+    this.givenSemester,
+    this.id,
+    this.user,
+    this.courseId,
+    this.courseName,
+    this.totalScore,
+    this.totalPercentage,
+    this.shortName,
+  });
 
-  CalculatorModel.fromJson(Map<String, dynamic> json) {
+  CalculatorModel.fromJson(Map<String, dynamic> json, String givenSemester) {
+    givenSemester = givenSemester;
     id = json['id'];
     user = json['user'];
     courseId = json['course_id'];
@@ -28,10 +31,10 @@ class CalculatorModel {
     totalPercentage = json['total_percentage'];
     if (courseName?.isNotEmpty ?? false) {
       shortName = courseName?.split(' ').fold<String>(
-        '',
+            '',
             (previousValue, element) =>
-        previousValue + element.substring(0, min(element.length, 1)),
-      );
+                previousValue + element.substring(0, min(element.length, 1)),
+          );
       shortName = shortName!.substring(0, min(shortName!.length, 2));
     }
   }
