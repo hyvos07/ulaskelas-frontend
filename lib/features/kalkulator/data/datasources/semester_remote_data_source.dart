@@ -8,6 +8,12 @@ abstract class SemesterRemoteDataSource {
   Future<Parsed<List<SemesterModel>>> postSemester(List<String> givenSemesters);
 
   Future<Parsed<void>> deleteSemester(QuerySemester q);
+
+  Future<Parsed<List<SemesterModel>>> getAutoFillSemester();
+
+  Future<Parsed<SemesterModel>> postAutoFillSemester(
+    Map<String, dynamic> model,
+  );
 }
 
 class SemesterRemoteDataSourceImpl extends SemesterRemoteDataSource {
@@ -164,5 +170,45 @@ class SemesterRemoteDataSourceImpl extends SemesterRemoteDataSource {
     _dummyData['data']['cumulative_gpa']['cumulative_gpa'] = _dummyData['data']
             ['cumulative_gpa']['total_gpa'] /
         _dummyData['data']['cumulative_gpa']['total_sks'];
+  }
+
+  @override
+  Future<Parsed<List<SemesterModel>>> getAutoFillSemester() async {
+    final list = <SemesterModel>[];
+    final url = EndpointsRevamp.semesters;
+    final resp = await getIt(url);
+    final datasNeeded = resp.bodyAsMap['data']['courses'];
+    for (var index = 0; index < datasNeeded.length ; index++) {
+      final data = datasNeeded[index];
+      if (data.isNotEmpty) {
+        final givenSemester = index.toString();
+        final courseList = <String>[];
+        for (final course in data) {
+          courseList.add(course['name']);
+        }
+        list.add(SemesterModel.forAutofill(givenSemester, courseList));
+      }
+    }
+    return Parsed.fromJson(
+      resp.bodyMap,
+      200,
+      list,
+    );
+  }
+
+  @override
+  Future<Parsed<SemesterModel>> postAutoFillSemester(
+    Map<String, dynamic> model,
+  ) async {
+    // final url = EndpointsV1.components;
+    // final resp = await postIt(url, model: model);
+    // return resp.parse(SemesterModel.fromJson(resp.dataBodyAsMap));
+    final url = EndpointsRevamp.autofill;
+    final resp = await postIt(url, model: model);
+    return Parsed.fromJson(
+      resp.bodyAsMap,
+      200,
+      SemesterModel.fromJson(resp.data as Map<String, dynamic>),
+    );
   }
 }

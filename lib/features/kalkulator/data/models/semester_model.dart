@@ -3,6 +3,7 @@ class SemesterModel {
   double? semesterMutu;
   double? semesterGPA;
   int? totalSKS;
+  List<String>? courseList;
 
   SemesterModel(
       {
@@ -10,6 +11,7 @@ class SemesterModel {
         this.totalSKS,
         this.semesterGPA,
         this.semesterMutu,
+        this.courseList,
       });
 
   SemesterModel.fromJson(Map<String, dynamic> json) {
@@ -29,4 +31,9 @@ class SemesterModel {
     
     return data;
   }
+
+  SemesterModel.forAutofill(
+    String this.givenSemester, 
+    List<String> this.courseList,
+  );
 }

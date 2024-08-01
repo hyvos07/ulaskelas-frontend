@@ -3,6 +3,14 @@
 part of '_theme.dart';
 
 class FontTheme {
+  static TextStyle poppins6w400black() {
+    return GoogleFonts.poppins(
+      fontSize: 6,
+      fontWeight: FontWeight.w400,
+      color: BaseColors.mineShaft,
+    );
+  }
+
   static TextStyle poppins10w400black() {
     return GoogleFonts.poppins(
       fontSize: 10,

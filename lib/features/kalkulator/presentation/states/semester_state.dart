@@ -8,8 +8,23 @@ class SemesterState {
 
   late SemesterRepository _repo;
   List<SemesterModel>? _semesters;
+  List<SemesterModel>? _autoFillSemesters;
 
   List<SemesterModel> get semesters => _semesters ?? [];
+  List<SemesterModel> get autoFillSemesters => _autoFillSemesters ?? [];
+  List<SemesterModel> get avaibleSemestersToFill => 
+    (_semesters?.isEmpty ?? true)
+      ? (_autoFillSemesters ?? [])
+      : (_autoFillSemesters ?? []).where(
+          (autoFillSemester) {
+            return !semesters.any(
+              (semester) {
+                return semester.givenSemester == autoFillSemester.givenSemester;
+              },
+            );
+          },
+        ).toList();
+
   String get cumulativeGPA => _repo.gpa;
 
   bool hasReachedMax = false;
@@ -77,5 +92,34 @@ class SemesterState {
       });
     });
     semesterRM.notify();
+  }
+
+  Future<void> retrieveDataForAutoFillSemesters() async {
+    final resp = await _repo.getAutoFillSemester();
+
+    resp.fold((failure) => throw failure, (result) {
+      _autoFillSemesters = result.data;
+      print(_autoFillSemesters);
+    });
+    semesterRM.notify();
+  }
+
+  Future<void> postAutoFillSemester(Map<String, dynamic> model) async {
+    final resp = await _repo.postAutoFillSemester(model);
+    await resp.fold((failure) {
+      ErrorMessenger('Data Semester gagal dibuat')
+          .show(ctx!);
+    }, (result) async {
+      SuccessMessenger('Data Semester berhasil dibuat').show(ctx!);
+      final calcResp = await _repo.getSemesters();
+      calcResp.fold((failure) => throw failure, (result) {
+        final lessThanLimit = result.data.length < 10;
+        hasReachedMax = result.data.isEmpty || lessThanLimit;
+        _semesters = result.data;
+        print(_semesters);
+      });
+    });
+    semesterRM.notify();
+
   }
 }

@@ -84,6 +84,9 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                 ),
               );
             }
+            semesters.sort(
+              (a,b) => a.givenSemester!.compareTo(b.givenSemester!),
+            );
             return Column(
               children: [
                 Padding(
@@ -158,10 +161,23 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
 
   Future<void> retrieveData() async {
     await semesterRM.setState((s) => s.retrieveData());
+    if (semesterRM.state.autoFillSemesters.isEmpty) {
+      await semesterRM.setState((s) => s.retrieveDataForAutoFillSemesters());
+    }
   }
 
   bool scrollCondition() {
     throw UnimplementedError();
+  }
+
+  Future<void> showAutoFillSemesterDialog(BuildContext context) async {
+    final avaibleSemesters = semesterRM.state.avaibleSemestersToFill;
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AutoFillSemesterDialog(avaibleSemesters: avaibleSemesters,);
+      },
+    );
   }
 
   Widget _addSemesterButton(int givenSemester) {
@@ -186,7 +202,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
             },
           ),
           const HeightSpace(25),
-          Column(
+          if (semesterRM.state.avaibleSemestersToFill.isNotEmpty) Column(
             children: [
               GradientBorderButton(
                 padding: const EdgeInsets.symmetric(
@@ -203,7 +219,8 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                 text: 'Auto-Fill Semester',
                 textStyle: FontTheme.poppins14w700black(),
                 onPressed: () => {
-                  print('Button Auto-Fill are Pressed!')
+                  print('Button Auto-Fill are Pressed!'),
+                  showAutoFillSemesterDialog(context),
                 }, // To Be Implemented
               ),
               const HeightSpace(7),
@@ -214,7 +231,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                 ),
               ),
             ],
-          )
+          ) else Container()
         ],
       ),
     );

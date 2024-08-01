@@ -7,4 +7,8 @@ abstract class SemesterRepository {
     List<String> givenSemesters,
   );
   Future<Decide<Failure, Parsed<void>>> deleteSemester(QuerySemester q);
+  Future<Decide<Failure, Parsed<List<SemesterModel>>>> getAutoFillSemester();
+  Future<Decide<Failure, Parsed<SemesterModel>>> postAutoFillSemester(
+    Map<String, dynamic> model,
+  );
 }
