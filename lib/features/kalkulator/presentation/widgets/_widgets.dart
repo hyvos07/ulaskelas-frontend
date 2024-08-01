@@ -33,3 +33,4 @@ part 'gradient_text.dart';
 part 'card_expansion.dart';
 part 'autofill_dialog.dart';
 part 'add_semester_dialog.dart';
+
