@@ -2,11 +2,11 @@ part of '_widgets.dart';
 
 class AutoFillSemesterDialog extends StatefulWidget {
   const AutoFillSemesterDialog({
-    required this.avaibleSemesters,
+    required this.availableSemesters,
     super.key,
   });
 
-  final List<SemesterModel> avaibleSemesters;
+  final List<SemesterModel> availableSemesters;
 
   @override
   _AutoFillSemesterDialogState createState() => _AutoFillSemesterDialogState();
@@ -38,11 +38,11 @@ class _AutoFillSemesterDialogState extends State<AutoFillSemesterDialog> {
                 right: -15,
                 top: -15,
                 child: IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => nav.pop(),
                   icon: const Icon(
                     Icons.close_rounded, 
                     size: 30,
-                    color: Color(0xFF828282),
+                    color: BaseColors.gray2,
                   ),
                 ),
               ),
@@ -55,6 +55,7 @@ class _AutoFillSemesterDialogState extends State<AutoFillSemesterDialog> {
                 'Rekomendasi Mata kuliah untuk jurusan kamu!', 
                 style: FontTheme.poppins12w400black(),
               ),
+              const HeightSpace(5),
               Text(
                 '*Only available for Faculty of Computer Science for now.',
                 style: FontTheme.poppins6w400black()
@@ -72,8 +73,8 @@ class _AutoFillSemesterDialogState extends State<AutoFillSemesterDialog> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: List.generate(
-                  widget.avaibleSemesters.length, (index) {
-                  final semester = widget.avaibleSemesters[index];
+                  widget.availableSemesters.length, (index) {
+                  final semester = widget.availableSemesters[index];
                   return ExpansionCard(
                     title: 'Semester ${semester.givenSemester}',
                     children: semester.courseList,

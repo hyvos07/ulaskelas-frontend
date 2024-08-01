@@ -12,7 +12,7 @@ class SemesterState {
 
   List<SemesterModel> get semesters => _semesters ?? [];
   List<SemesterModel> get autoFillSemesters => _autoFillSemesters ?? [];
-  List<SemesterModel> get avaibleSemestersToFill => 
+  List<SemesterModel> get availableSemestersToFill => 
     (_semesters?.isEmpty ?? true)
       ? (_autoFillSemesters ?? [])
       : (_autoFillSemesters ?? []).where(

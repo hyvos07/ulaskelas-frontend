@@ -10,6 +10,8 @@ class CalculatorPage extends StatefulWidget {
 }
 
 class _CalculatorPageState extends BaseStateful<CalculatorPage> {
+  final userGen = int.parse(profileRM.state.profile.generation!);
+
   @override
   void init() {
     StateInitializer(
@@ -85,7 +87,10 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
               );
             }
             semesters.sort(
-              (a,b) => a.givenSemester!.compareTo(b.givenSemester!),
+              (a, b) => _semesterPendekValueChanger(a.givenSemester!, userGen)
+                  .compareTo(
+                _semesterPendekValueChanger(b.givenSemester!, userGen),
+              ),
             );
             return Column(
               children: [
@@ -171,11 +176,31 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
   }
 
   Future<void> showAutoFillSemesterDialog(BuildContext context) async {
-    final avaibleSemesters = semesterRM.state.avaibleSemestersToFill;
+    final availableSemesters = semesterRM.state.availableSemestersToFill;
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AutoFillSemesterDialog(avaibleSemesters: avaibleSemesters,);
+        return AutoFillSemesterDialog(
+          availableSemesters: availableSemesters,
+        );
+      },
+    );
+  }
+
+  Future<void> showAddSemesterDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AddSemesterDialog(
+          userGen: int.parse(profileRM.state.profile.generation!),
+          semesters: semesterRM.state.semesters,
+          onPressed: (selectedSemester) {
+            nav.pop();
+            semesterRM.setState(
+              (s) => s.postSemester(selectedSemester),
+            );
+          },
+        );
       },
     );
   }
@@ -196,44 +221,53 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
             text: 'Tambah Semester',
             backgroundColor: BaseColors.purpleHearth,
             onPressed: () => {
-              semesterRM.setState(
-                (s) => s.postSemester([givenSemester.toString()]),
-              )
+              showAddSemesterDialog(context),
             },
           ),
           const HeightSpace(25),
-          if (semesterRM.state.avaibleSemestersToFill.isNotEmpty) Column(
-            children: [
-              GradientBorderButton(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
+          if (semesterRM.state.availableSemestersToFill.isNotEmpty)
+            Column(
+              children: [
+                GradientBorderButton(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                  ),
+                  borderWidth: 2,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: BaseColors.autoSystemColor,
+                  ),
+                  width: double.infinity,
+                  borderRadius: 8,
+                  text: 'Auto-Fill Semester',
+                  textStyle: FontTheme.poppins14w700black(),
+                  onPressed: () => {
+                    print('Button Auto-Fill are Pressed!'),
+                    showAutoFillSemesterDialog(context),
+                  }, // To Be Implemented
                 ),
-                borderWidth: 2,
-                gradient: const LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: BaseColors.autoSystemColor,
+                const HeightSpace(7),
+                Text(
+                  '*Only available for Faculty of Computer Science for now.',
+                  style: FontTheme.poppins10w400black().copyWith(
+                    color: BaseColors.gray1,
+                  ),
                 ),
-                width: double.infinity,
-                borderRadius: 8,
-                text: 'Auto-Fill Semester',
-                textStyle: FontTheme.poppins14w700black(),
-                onPressed: () => {
-                  print('Button Auto-Fill are Pressed!'),
-                  showAutoFillSemesterDialog(context),
-                }, // To Be Implemented
-              ),
-              const HeightSpace(7),
-              Text(
-                '*Only available for Faculty of Computer Science for now.',
-                style: FontTheme.poppins10w400black().copyWith(
-                  color: BaseColors.gray1,
-                ),
-              ),
-            ],
-          ) else Container()
+              ],
+            )
+          else
+            Container()
         ],
       ),
     );
+  }
+
+  String _semesterPendekValueChanger(String semester, int userGen) {
+    if (semester.contains('sp')) {
+      final val = int.tryParse(semester.split('_').last) ?? userGen + 1;
+      return ((val - userGen) * 2 + 0.5).toString();
+    }
+    return semester;
   }
 }
