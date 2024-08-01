@@ -65,14 +65,22 @@ class _ExpansionCardState extends State<ExpansionCard> {
             value: _isCheck,
           ),
         ),
-        childrenPadding: const EdgeInsets.only(left: 17.5, bottom: 10),
+        childrenPadding: const EdgeInsets.only(
+          left: 17.5, 
+          bottom: 10, 
+          right: 17,
+        ),
         children: widget.children!.map((e) {
           return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                Icons.fiber_manual_record, 
-                size: 5,
-                color: BaseColors.mineShaft.withOpacity(0.78),
+              Container(
+                margin: const EdgeInsets.only(top: 5.5),
+                child: Icon(
+                  Icons.fiber_manual_record, 
+                  size: 5,
+                  color: BaseColors.mineShaft.withOpacity(0.78),
+                ),
               ),
               const SizedBox(width: 5),
               Expanded(
