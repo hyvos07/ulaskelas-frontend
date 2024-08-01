@@ -6,14 +6,16 @@ class CardCompononent extends StatelessWidget {
     required this.name,
     required this.score,
     required this.weight,
+    required this.hope,
     super.key,
     this.onTap,
   });
 
   final int id;
   final String name;
-  final double score;
+  final double? score;
   final double weight;
+  final double? hope;
   final VoidCallback? onTap;
 
   @override
@@ -48,8 +50,11 @@ class CardCompononent extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  score.toStringAsFixed(2),
-                  style: FontTheme.poppins12w400black(),
+                  score == null ? 'Kosong' : score!.toStringAsFixed(2),
+                  style: score == null
+                    ? FontTheme.poppins12w400black().copyWith(
+                      color: BaseColors.gray1.withOpacity(0.4),)
+                    : FontTheme.poppins12w400black(),
                   textAlign: TextAlign.right,
                 ),
               ),
@@ -59,6 +64,28 @@ class CardCompononent extends StatelessWidget {
                   style: FontTheme.poppins12w400black(),
                   textAlign: TextAlign.right,
                 ),
+              ),
+              Expanded(
+                child: score == 0 || score == null
+                  ? GradientText(  // kalo gaada score (tunjukin hope)
+                    componentRM.state.hasReachedMax
+                      ? hope!.toStringAsFixed(2)
+                      : '', 
+                    gradient: const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: BaseColors.autoSystemColor,
+                    ),
+                    style:FontTheme.poppins12w400black(),
+                    textAlign: TextAlign.right,
+                  )
+                  : Text(  // kalo ada score
+                    componentRM.state.hasReachedMax
+                      ? score!.toStringAsFixed(2) 
+                      : '',
+                    style: FontTheme.poppins12w400black(),
+                    textAlign: TextAlign.right,
+                  ),
               ),
             ],
           ),

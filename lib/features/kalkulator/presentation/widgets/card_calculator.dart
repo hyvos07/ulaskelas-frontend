@@ -54,7 +54,7 @@ class CardCalculator extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(model.courseName.toString(),
-                          style: FontTheme.poppins14w500black()),
+                          style: FontTheme.poppins14w500black(),),
                       const HeightSpace(4),
                       Text(
                         _getFinalScoreAndGrade(model.totalScore!),

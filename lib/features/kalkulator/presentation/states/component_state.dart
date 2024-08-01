@@ -11,6 +11,8 @@ class ComponentState{
   List<ComponentModel> get components => _components ?? [];
 
   bool hasReachedMax = false;
+  double totalScore = 0;
+  int totalWeight = 0;
   int page = 1;
 
   String? cacheKey = 'component-state';
@@ -30,6 +32,14 @@ class ComponentState{
       _components = result.data;
       print(components);
     },);
+    /////////////////////////////////////////////////////
+    totalWeight = _components!.fold(
+      0, (int num, e) => num + e.weight!.toInt(),);
+    hasReachedMax = totalWeight >= 100;
+    totalScore = _components!.fold(
+      // ignore: prefer_int_literals
+      0.0, (double num, e) => num + (e.weight!.toInt() / 100 * e.score!),);
+    /////////////////////////////////////////////////////
     componentRM.notify();
   }
 
