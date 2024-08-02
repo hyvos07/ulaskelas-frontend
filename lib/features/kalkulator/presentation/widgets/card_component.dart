@@ -34,58 +34,34 @@ class CardCompononent extends StatelessWidget {
             boxShadow: BoxShadowDecorator().defaultShadow(context),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: FontTheme.poppins12w400black(),
-                    ),
-                  ],
-                ),
+          child: CustomTableRow(
+            style: FontTheme.poppins12w400black(),
+            components: [
+              CustomTableRowComponent(
+                flexRatio: 50, 
+                text: name,
               ),
-              Expanded(
-                child: Text(
-                  score == null ? 'Kosong' : score!.toStringAsFixed(2),
-                  style: score == null
-                    ? FontTheme.poppins12w400black().copyWith(
-                      color: BaseColors.gray1.withOpacity(0.4),)
-                    : FontTheme.poppins12w400black(),
-                  textAlign: TextAlign.right,
-                ),
+              CustomTableRowComponent(
+                flexRatio: 20, 
+                text: score == null ? 'Kosong' : score!.toStringAsFixed(2),
+                textAlign: TextAlign.right,
               ),
-              Expanded(
-                child: Text(
-                  '${weight.toStringAsFixed(1)}%',
-                  style: FontTheme.poppins12w400black(),
-                  textAlign: TextAlign.right,
-                ),
+              CustomTableRowComponent(
+                flexRatio: 18, 
+                text: '${weight.toStringAsFixed(0)}%',
+                textAlign: TextAlign.right,
               ),
-              Expanded(
-                child: score == 0 || score == null
-                  ? GradientText(  // kalo gaada score (tunjukin hope)
-                    componentRM.state.hasReachedMax
+              CustomTableRowComponent(
+                flexRatio: 18, 
+                isGradient: score == 0 || score == null,
+                text: score == 0 || score == null
+                  ? componentRM.state.hasReachedMax
                       ? hope!.toStringAsFixed(2)
-                      : '', 
-                    gradient: const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: BaseColors.autoSystemColor,
-                    ),
-                    style:FontTheme.poppins12w400black(),
-                    textAlign: TextAlign.right,
-                  )
-                  : Text(  // kalo ada score
-                    componentRM.state.hasReachedMax
+                      : ''
+                  : componentRM.state.hasReachedMax
                       ? score!.toStringAsFixed(2) 
                       : '',
-                    style: FontTheme.poppins12w400black(),
-                    textAlign: TextAlign.right,
-                  ),
+                textAlign: TextAlign.right,
               ),
             ],
           ),

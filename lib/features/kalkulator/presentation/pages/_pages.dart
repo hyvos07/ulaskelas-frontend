@@ -18,6 +18,7 @@ import 'package:ulaskelas/services/_services.dart';
 import '../../../matkul/main/domain/entities/query_search_course.dart';
 import '../../../matkul/search/presentation/states/_states.dart';
 import '../../../matkul/search/presentation/widgets/_widgets.dart';
+import '../../data/models/component_model.dart';
 import '../../domain/entities/query_component.dart';
 import '../../domain/entities/query_semester.dart';
 import '../states/_states.dart';
