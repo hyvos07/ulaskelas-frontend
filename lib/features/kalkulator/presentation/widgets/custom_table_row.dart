@@ -43,7 +43,7 @@ class CustomTableRowComponent implements CustomTableRowComponentProp {
     this.isGradient,
     this.componentStyle,
     this.gradientColors,
-    this.textAlign
+    this.textAlign,
   });
 }
 

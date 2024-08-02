@@ -253,9 +253,9 @@ class _CalculatorComponentPageState
                             ? null
                             : FontTheme.poppins12w600black().copyWith(
                                 color: BaseColors.gray1.withOpacity(0.3),
-                            )
-                        )
-                      ]),
+                            ),
+                        )],
+                      ),
                     ),
                     if (components.isEmpty) 
                       Padding(
@@ -281,7 +281,7 @@ class _CalculatorComponentPageState
                           hope: componentRM.state.hasReachedMax
                             ? 85
                             : null,
-                          onTap: () => goToEditComponentPage(component)
+                          onTap: () => goToEditComponentPage(component),
                         );
                       },
                       separatorBuilder: (BuildContext context, int index) =>
@@ -308,9 +308,9 @@ class _CalculatorComponentPageState
                               ? '55.87'
                               : '', 
                           isGradient: true,
-                          textAlign: TextAlign.center
+                          textAlign: TextAlign.center,
                         )
-                      ]
+                      ],
                     ),
                     const HeightSpace(30),
                     SecondaryButton(
