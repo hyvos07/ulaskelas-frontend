@@ -6,11 +6,11 @@ Future<Decide<Failure, T>> apiCall<T>(Future<T> t) async {
   try {
     final futureCall = await t;
     return Right(futureCall);
-  } on DioError catch (e) {
+  } on DioException catch (e) {
     Logger().f(e.error.runtimeType);
     Logger().f(e.error.toString());
     if (e.error is ArgumentError) {
-      final error = e.error as ArgumentError;
+      final error = e.error! as ArgumentError;
       return Left(GeneralFailure(message: error.message));
     } else if (e.error is SocketException) {
       Logger().e('Error: No Internet Connection');
