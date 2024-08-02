@@ -143,72 +143,79 @@ class _CalculatorComponentPageState
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(4.5),
                                 ),
-                                child: DropdownButton<String>(
-                                  borderRadius: BorderRadius.circular(10),
-                                  value: _selectedItem,
-                                  onChanged: componentRM.state.hasReachedMax
-                                    ? (String? newValue) {
-                                        setState(() {
-                                          _selectedItem = newValue!;
-                                        });
-                                      }
-                                    : null
-                                  ,
-                                  selectedItemBuilder: (BuildContext context) {
-                                    return _nilaiHarapanList.map<Widget>((String value) {
-                                      return Center(
-                                        child: GradientText(
-                                          value,
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: componentRM.state.hasReachedMax
-                                              ? BaseColors.autoSystemColor
-                                              : [BaseColors.gray1.withOpacity(0.3), 
-                                                BaseColors.gray1.withOpacity(0.3)],
-                                          ),
-                                          style: FontTheme.poppins14w500black(),
-                                        ),
-                                      );
-                                    }).toList();
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (!componentRM.state.hasReachedMax) {
+                                       ErrorMessenger('Total bobot harus mencapai 100%').show(context);
+                                    }
                                   },
-                                  items: _nilaiHarapanList.map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Center(
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 7.5, vertical: 2.5),
-                                          decoration: BoxDecoration(
-                                            color: _selectedItem == value
-                                              ? BaseColors.mineShaft.withOpacity(0.125)
-                                              : Colors.transparent,
-                                            borderRadius: BorderRadius.circular(4),
-                                          ),
-                                          child: Text(
+                                  child: DropdownButton<String>(
+                                    borderRadius: BorderRadius.circular(10),
+                                    value: _selectedItem,
+                                    onChanged: componentRM.state.hasReachedMax
+                                      ? (String? newValue) {
+                                          setState(() {
+                                            _selectedItem = newValue!;
+                                          });
+                                        }
+                                      : null
+                                    ,
+                                    selectedItemBuilder: (BuildContext context) {
+                                      return _nilaiHarapanList.map<Widget>((String value) {
+                                        return Center(
+                                          child: GradientText(
                                             value,
-                                            style: FontTheme.poppins14w500black().copyWith(
-                                              fontSize: 13.5,
-                                              color: BaseColors.mineShaft.withOpacity(0.85),
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                              colors: componentRM.state.hasReachedMax
+                                                ? BaseColors.autoSystemColor
+                                                : [BaseColors.gray1.withOpacity(0.3), 
+                                                  BaseColors.gray1.withOpacity(0.3)],
+                                            ),
+                                            style: FontTheme.poppins14w500black(),
+                                          ),
+                                        );
+                                      }).toList();
+                                    },
+                                    items: _nilaiHarapanList.map((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Center(
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 7.5, vertical: 2.5),
+                                            decoration: BoxDecoration(
+                                              color: _selectedItem == value
+                                                ? BaseColors.mineShaft.withOpacity(0.125)
+                                                : Colors.transparent,
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              value,
+                                              style: FontTheme.poppins14w500black().copyWith(
+                                                fontSize: 13.5,
+                                                color: BaseColors.mineShaft.withOpacity(0.85),
+                                              ),
                                             ),
                                           ),
                                         ),
+                                      );
+                                    }).toList(),
+                                    icon: ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: componentRM.state.hasReachedMax
+                                            ? BaseColors.autoSystemColor
+                                            : [BaseColors.gray1.withOpacity(0.3), 
+                                              BaseColors.gray1.withOpacity(0.3)],
+                                        ).createShader(bounds);
+                                      },
+                                      child: const Icon(
+                                        Icons.arrow_drop_down_rounded,
+                                        color: Colors.white,
                                       ),
-                                    );
-                                  }).toList(),
-                                  icon: ShaderMask(
-                                    shaderCallback: (Rect bounds) {
-                                      return LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: componentRM.state.hasReachedMax
-                                          ? BaseColors.autoSystemColor
-                                          : [BaseColors.gray1.withOpacity(0.3), 
-                                            BaseColors.gray1.withOpacity(0.3)],
-                                      ).createShader(bounds);
-                                    },
-                                    child: const Icon(
-                                      Icons.arrow_drop_down_rounded,
-                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
