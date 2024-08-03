@@ -9,6 +9,7 @@ import 'features/home/presentation/pages/_pages.dart';
 import 'features/leaderboard/presentation/pages/_pages.dart';
 import 'features/matkul/search/presentation/pages/_pages.dart';
 import 'features/profile/presentation/pages/profile_page.dart';
+import 'features/tanyateman/presentation/pages/_pages.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -31,7 +32,8 @@ class _MainPageState extends BaseStateful<MainPage> {
         },
       ),
       const SearchCoursePage(),
-      const LeaderboardPage(),
+      // const LeaderboardPage(),   this page has been shut down
+      const TanyaTemanPage(),
       const CalculatorPage(),
       const ProfilePage(),
     ];
@@ -79,7 +81,7 @@ class _MainPageState extends BaseStateful<MainPage> {
           case 1:
             MixpanelService.track('open_courses');
           case 2:
-            MixpanelService.track('open_klasemen');
+            MixpanelService.track('open_askfriends');
           case 3:
             MixpanelService.track('open_calculator');
           case 4:
@@ -96,9 +98,13 @@ class _MainPageState extends BaseStateful<MainPage> {
           icon: Icons.list_alt,
           text: 'Matkul',
         ),
+        // RistekBotNavItem(            this page has been shut down
+        //   icon: Icons.leaderboard,      for ulaskelas revamp 
+        //   text: 'Klasemen',               changed into tanya teman
+        // ),
         RistekBotNavItem(
-          icon: Icons.leaderboard,
-          text: 'Klasemen',
+          svgIcon: 'assets/icons/tanyateman.svg',
+          text: 'Tanya Teman',
         ),
         RistekBotNavItem(
           icon: Icons.calculate,
