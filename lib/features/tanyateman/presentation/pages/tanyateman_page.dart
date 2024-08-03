@@ -42,7 +42,7 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
     SizingInformation sizeInfo,
   ) {
     return SafeArea(
-      child: Container()
+      child: Container(),
     );
   }
 

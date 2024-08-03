@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:ulaskelas/features/kalkulator/presentation/pages/_pages.dart';
 import 'package:ulaskelas/services/_services.dart';
+import 'package:ulaskelas/src/bar/_bar.dart';
 import 'core/bases/states/_states.dart';
 import 'features/home/presentation/pages/_pages.dart';
 import 'features/leaderboard/presentation/pages/_pages.dart';
@@ -74,7 +75,7 @@ class _MainPageState extends BaseStateful<MainPage> {
   }
 
   Widget? _convexNavigation() {
-    return RistekBotNavBar(
+    return NewRistekBotNavBar(
       initialActiveIndex: _selectedIndex,
       onTap: (int index) {
         switch (index) {
@@ -90,11 +91,11 @@ class _MainPageState extends BaseStateful<MainPage> {
         setState(() => _selectedIndex = index);
       },
       items: const [
-        RistekBotNavItem(
+        NewRistekBotNavItem(
           icon: Icons.home,
           text: 'Beranda',
         ),
-        RistekBotNavItem(
+        NewRistekBotNavItem(
           icon: Icons.list_alt,
           text: 'Matkul',
         ),
@@ -102,15 +103,15 @@ class _MainPageState extends BaseStateful<MainPage> {
         //   icon: Icons.leaderboard,      for ulaskelas revamp 
         //   text: 'Klasemen',               changed into tanya teman
         // ),
-        RistekBotNavItem(
+        NewRistekBotNavItem(
           svgIcon: 'assets/icons/tanyateman.svg',
           text: 'Tanya Teman',
         ),
-        RistekBotNavItem(
+        NewRistekBotNavItem(
           icon: Icons.calculate,
           text: 'Kalkulator',
         ),
-        RistekBotNavItem(
+        NewRistekBotNavItem(
           icon: Icons.account_circle,
           text: 'Profil',
         ),
