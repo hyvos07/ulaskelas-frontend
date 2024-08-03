@@ -12,6 +12,7 @@ class BaseAppBar extends AppBar {
     bool super.centerTitle = true,
     double? elevation,
     Color? color,
+    TextStyle? style,
   }) : super(
           elevation: elevation ?? 1,
           shadowColor: Colors.grey[300],
@@ -20,16 +21,18 @@ class BaseAppBar extends AppBar {
           automaticallyImplyLeading: false,
           leading: hasLeading
               ? IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_back,
-                    color: Colors.black,
+                    color: Colors.grey.shade700,
                   ),
                   onPressed: onBackPress ?? () => nav.pop<void>(),
                 )
               : null,
-          title: Text(
+          title: label == null 
+            ? null
+            : Text(
             label.toString(),
-            style: FontTheme.poppins14w700black(),
+            style: style ?? FontTheme.poppins14w700black(),
           ),
         );
 }

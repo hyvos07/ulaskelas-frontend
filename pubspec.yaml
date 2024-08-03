@@ -41,6 +41,7 @@ dependencies:
   html: ^0.15.4
   mixpanel_flutter: ^2.2.0
   dropdown_button2: ^2.3.9
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:

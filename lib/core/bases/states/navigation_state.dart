@@ -327,4 +327,16 @@ class NavigationServiceState implements Navigation {
       RouteName.editComponent,
     );
   }
+
+  Future<void> goToNewQuestionFormPage() {
+    return nav.push<void>(
+      const NewQuestionFormPage()
+    );
+  }
+
+  Future<void> goToQuestionDetailPage() {
+    return nav.push<void>(
+      const QuestionDetailPage()
+    );
+  }
 }
