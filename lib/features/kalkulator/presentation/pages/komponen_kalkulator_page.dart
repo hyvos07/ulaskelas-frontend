@@ -385,8 +385,8 @@ class _CalculatorComponentPageState
   void goToEditComponentPage(ComponentModel component) {
     nav.goToEditComponentPage(
       id: component.id!,
-      givenSemester: component.givenSemester!,
-      courseId: component.courseId!,
+      givenSemester: widget.givenSemester,
+      courseId: widget.courseId,
       calculatorId: widget.calculatorId,
       courseName: widget.courseName,
       totalScore: widget.totalScore,

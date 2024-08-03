@@ -31,7 +31,7 @@ class ComponentFormState {
 
     result['calculator_id'] = calculatorId;
     result['name'] = _formData.name;
-    result['score'] = averageScore();
+    result['score'] = averageScore() ?? -1;
     result['weight'] = _formData.weight;
 
     final resp = await _repo.createComponent(result);
@@ -82,7 +82,8 @@ class ComponentFormState {
   }
 
   void setScore(int index) {
-    _formData.score![index] = double.parse(scoreControllers[index - 1].text);
+    _formData.score![index] =
+        double.tryParse(scoreControllers[index - 1].text) ?? -1;
 
     if (kDebugMode) {
       print('Form Data: ${_formData.score}');
@@ -131,7 +132,7 @@ class ComponentFormState {
     _frequency.text = (int.parse(_frequency.text) + 1).toString();
     _scoreControllers.add(TextEditingController());
 
-    _formData.score![int.parse(_frequency.text)] = 0;
+    _formData.score![int.parse(_frequency.text)] = -1;
 
     if (kDebugMode) {
       print('Frequency: ${_frequency.text}');
@@ -164,7 +165,7 @@ class ComponentFormState {
       }
 
       for (var i = 1; i < value + 1; i++) {
-        _formData.score!.putIfAbsent(i, () => 0);
+        _formData.score!.putIfAbsent(i, () => -1);
       }
     }
 
@@ -178,7 +179,7 @@ class ComponentFormState {
     componentFormRM.notify();
   }
 
-  double averageScore() {
+  double? averageScore() {
     var sum = 0.0;
     var valid = 0;
 
@@ -190,14 +191,14 @@ class ComponentFormState {
         valid++;
       }
     }
-    return sum != 0 && valid != 0 ? sum / valid : 0;
+    return sum != 0 && valid != 0 ? sum / valid : null;
   }
 
   void emptyScoreDetect() {
     if (_scoreControllers.length == 1 && justVisited) {
       isEmptyScoreDetected = false;
     } else {
-      isEmptyScoreDetected =
+      isEmptyScoreDetected = !(averageScore() == null) &&
           _scoreControllers.any((element) => element.text.isEmpty);
     }
 

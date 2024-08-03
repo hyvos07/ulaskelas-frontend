@@ -95,7 +95,6 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
   Future<void> onSubmitCallBack(BuildContext context) async {
     final currentFocus = FocusScope.of(context);
     componentFormRM.state.justVisited = false;
-    componentFormRM.state.emptyScoreDetect();
 
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
@@ -104,9 +103,16 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
       return;
     }
     MixpanelService.track('calculator_add_course_component');
+
+    final allIsEmpty = componentFormRM.state.averageScore() == null;
+    final oneIsEmpty = componentFormRM.state.scoreControllers.any(
+      (element) => element.text.isEmpty,
+    );
+    final isSingleSubcomponent =
+        componentFormRM.state.scoreControllers.length == 1;
+
     if (componentFormRM.state.formKey.currentState!.validate() &&
-        !componentFormRM.state.scoreControllers
-            .any((element) => element.text.isEmpty)) {
+        (!oneIsEmpty || allIsEmpty || isSingleSubcomponent)) {
       // progressDialogue(context);
       await componentFormRM.state.submitForm(widget.calculatorId);
       await Future.delayed(const Duration(milliseconds: 150));
@@ -128,7 +134,7 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
         calculatorId: widget.calculatorId,
         courseName: widget.courseName,
         totalScore: _temporaryUpdateScore(
-          averageScore,
+          averageScore ?? 0,
           weight,
         ),
         totalPercentage: _temporaryUpdateWeight(
@@ -320,7 +326,6 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
                           ],
                           onFieldSubmitted: (value) => {
                             data.justVisited = false,
-                            data.emptyScoreDetect(),
                             data.setScore(1),
                           },
                           onChanged: (value) {
@@ -329,9 +334,7 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
                             }
                           },
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'This field is required.';
-                            } else if (double.tryParse(value)! > 200) {
+                            if ((double.tryParse(value!) ?? 0) > 200) {
                               return "Score can't be more than 200";
                             }
                             componentFormRM.setState((s) => s.setScore(1));
@@ -358,7 +361,7 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
                 else
                   ScoresFieldInput(
                     recommendedScore: componentFormRM.state.recommendedScore,
-                    averageScoreCalculation: () => data.averageScore(),
+                    averageScoreCalculation: () => data.averageScore() ?? 0,
                     onControllerEmpty: () =>
                         data.scoreControllers.add(TextEditingController()),
                     subtitle: data.isEmptyScoreDetected

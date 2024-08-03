@@ -105,7 +105,9 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
                 calculatorId: widget.calculatorId,
                 courseName: widget.courseName,
                 totalScore: widget.totalScore -
-                    (widget.componentScore * widget.componentWeight / 100),
+                    ((widget.componentScore < 0 ? 0 : widget.componentScore) *
+                        widget.componentWeight /
+                        100),
                 totalPercentage:
                     widget.totalPercentage - widget.componentWeight,
               );
@@ -135,6 +137,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
 
   Future<void> onSubmitCallBack(BuildContext context) async {
     final currentFocus = FocusScope.of(context);
+    componentFormRM.state.justVisited = false;
 
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
@@ -142,7 +145,16 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
     if (componentFormRM.state.isLoading) {
       return;
     }
-    if (componentFormRM.state.formKey.currentState!.validate()) {
+
+    final allIsEmpty = componentFormRM.state.averageScore() == null;
+    final oneIsEmpty = componentFormRM.state.scoreControllers.any(
+      (element) => element.text.isEmpty,
+    );
+    final isSingleSubcomponent =
+        componentFormRM.state.scoreControllers.length == 1;
+
+    if (componentFormRM.state.formKey.currentState!.validate() &&
+        (!oneIsEmpty || allIsEmpty || isSingleSubcomponent)) {
       await componentFormRM.state.submitEditForm(
         widget.id,
         widget.calculatorId,
@@ -166,7 +178,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
         calculatorId: widget.calculatorId,
         courseName: widget.courseName,
         totalScore: _temporaryUpdateScore(
-          averageScore,
+          averageScore ?? 0,
           weight,
         ),
         totalPercentage: _temporaryUpdateWeight(
@@ -357,7 +369,6 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
                           ],
                           onFieldSubmitted: (value) => {
                             data.justVisited = false,
-                            data.emptyScoreDetect(),
                             data.setScore(1),
                           },
                           onChanged: (value) {
@@ -366,9 +377,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
                             }
                           },
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'This field is required.';
-                            } else if (double.tryParse(value)! > 200) {
+                            if ((double.tryParse(value!) ?? 0) > 200) {
                               return "Score can't be more than 200";
                             }
                             componentFormRM.setState((s) => s.setScore(1));
@@ -394,7 +403,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
                 else
                   ScoresFieldInput(
                     recommendedScore: componentFormRM.state.recommendedScore,
-                    averageScoreCalculation: () => data.averageScore(),
+                    averageScoreCalculation: () => data.averageScore() ?? 0,
                     onControllerEmpty: () =>
                         data.scoreControllers.add(TextEditingController()),
                     subtitle: data.isEmptyScoreDetected

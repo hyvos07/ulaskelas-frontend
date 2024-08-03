@@ -14,9 +14,9 @@ class ComponentRemoteDataSourceImpl extends ComponentRemoteDataSource {
   @override
   Future<Parsed<List<ComponentModel>>> getAllComponent(QueryComponent q) async {
     final list = <ComponentModel>[];
-    final url = '${EndpointsV1.components}?$q';
+    final url = '${EndpointsRevamp.components}?$q';
     final resp = await getIt(url);
-    for (final data in resp.dataBodyIterable) {
+    for (final data in resp.dataBodyIterable['score_component']) {
       list.add(ComponentModel.fromJson(data));
     }
     return resp.parse(list);
@@ -26,7 +26,7 @@ class ComponentRemoteDataSourceImpl extends ComponentRemoteDataSource {
   Future<Parsed<ComponentModel>> createComponent(
     Map<String, dynamic> model,
   ) async {
-    final url = EndpointsV1.components;
+    final url = EndpointsRevamp.components;
     final resp = await postIt(url, model: model);
     return resp.parse(ComponentModel.fromJson(resp.dataBodyAsMap));
   }
@@ -35,14 +35,14 @@ class ComponentRemoteDataSourceImpl extends ComponentRemoteDataSource {
   Future<Parsed<ComponentModel>> editComponent(
     Map<String, dynamic> model,
   ) async {
-    final url = EndpointsV1.components;
+    final url = EndpointsRevamp.components;
     final resp = await putIt(url, model: model);
     return resp.parse(ComponentModel.fromJson(resp.dataBodyAsMap));
   }
 
   @override
   Future<Parsed<void>> deleteComponent(QueryComponent q) async {
-    final url = '${EndpointsV1.components}?$q';
+    final url = '${EndpointsRevamp.components}?$q';
     final resp = await deleteIt(url);
     return resp.parse(null);
   }
