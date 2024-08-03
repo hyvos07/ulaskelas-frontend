@@ -60,6 +60,9 @@ class _AddSemesterDialogState extends State<AddSemesterDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
+      insetPadding: const EdgeInsets.symmetric(
+        vertical: 50,
+      ),
       title: Stack(
         children: [
           Padding(
@@ -104,57 +107,57 @@ class _AddSemesterDialogState extends State<AddSemesterDialog> {
                     _selectableSemester.length,
                     (index) {
                       final semester = _selectableSemester[index];
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: BaseColors.white,
-                          boxShadow:
-                              BoxShadowDecorator().defaultShadow(context),
-                          borderRadius: BorderRadius.circular(8),
+                      return GestureDetector(
+                        onTap: () => _onSelectedSemester(
+                          !_selectedSemester.contains(semester),
+                          semester,
                         ),
-                        margin: index != _selectableSemester.length - 1
-                            ? const EdgeInsets.only(bottom: 20)
-                            : null,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 17,
-                          vertical: 10,
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    !semester.contains('sp')
-                                        ? 'Semester $semester'
-                                        : 'SP ${semester.substring(3)}',
-                                    style: FontTheme.poppins12w400black(),
-                                  ),
-                                ],
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: BaseColors.white,
+                            boxShadow:
+                                BoxShadowDecorator().defaultShadow(context),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          margin: index != _selectableSemester.length - 1
+                              ? const EdgeInsets.only(bottom: 20)
+                              : null,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 17,
+                            vertical: 10,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      !semester.contains('sp')
+                                          ? 'Semester $semester'
+                                          : 'SP ${semester.substring(3)}',
+                                      style: FontTheme.poppins12w400black(),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const WidthSpace(20),
-                            Checkbox(
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              visualDensity: const VisualDensity(
-                                horizontal: -3.5,
-                                vertical: -3.5,
-                              ),
-                              splashRadius: 10,
-                              activeColor: BaseColors.primaryColor,
-                              value: _selectedSemester.contains(semester),
-                              onChanged: (value) {
-                                setState(() {
-                                  if (value!) {
-                                    _selectedSemester.add(semester);
-                                  } else {
-                                    _selectedSemester.remove(semester);
-                                  }
-                                });
-                              },
-                            )
-                          ],
+                              const WidthSpace(20),
+                              Checkbox(
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                                visualDensity: const VisualDensity(
+                                  horizontal: -3.5,
+                                  vertical: -3.5,
+                                ),
+                                splashRadius: 10,
+                                activeColor: BaseColors.primaryColor,
+                                value: _selectedSemester.contains(semester),
+                                onChanged: (value) {
+                                  _onSelectedSemester(value!, semester);
+                                },
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -176,5 +179,15 @@ class _AddSemesterDialogState extends State<AddSemesterDialog> {
         ],
       ),
     );
+  }
+
+  void _onSelectedSemester(bool value, String semester) {
+    setState(() {
+      if (value) {
+        _selectedSemester.add(semester);
+      } else {
+        _selectedSemester.remove(semester);
+      }
+    });
   }
 }

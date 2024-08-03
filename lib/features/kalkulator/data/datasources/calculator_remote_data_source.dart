@@ -32,8 +32,7 @@ class CalculatorRemoteDataSourceImpl extends CalculatorRemoteDataSource {
     }
     if (resp.responseData['semester'] != null) {
       final semesterData = resp.responseData['semester'];
-      super.gpa = '${semesterData['semester_gpa'].toStringAsFixed(2)}'
-          ' in sem $givenSemester';
+      super.gpa = semesterData['semester_gpa'].toStringAsFixed(2);
     }
     return resp.parse(list);
   }
