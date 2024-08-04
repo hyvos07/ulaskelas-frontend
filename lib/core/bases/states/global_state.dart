@@ -64,7 +64,7 @@ final courseDetailRM = RM.inject(
 );
 
 final leaderboardRM = RM.inject(
-      LeaderboardState.new,
+  LeaderboardState.new,
 );
 
 final semesterRM = RM.inject(
@@ -80,8 +80,16 @@ final componentRM = RM.inject(
 );
 
 final componentFormRM = RM.inject(
-      ComponentFormState.new,
+  ComponentFormState.new,
   autoDisposeWhenNotUsed: false,
+);
+
+final allQuestionsRM = RM.inject(
+  AllQuestionState.new,
+);
+
+final historyQuestionsRM = RM.inject(
+  HistoryQuestionState.new
 );
 
 final questionDetailRM = RM.inject(
@@ -111,6 +119,8 @@ class GlobalState {
       Inject(BookmarkState.new),
       Inject(CalculatorState.new),
       Inject(SemesterState.new),
+      Inject(AllQuestionState.new),
+      Inject(HistoryQuestionState.new),
     ];
   }
 
@@ -124,6 +134,8 @@ class GlobalState {
     Inject(BookmarkState.new),
     Inject(CalculatorState.new),
     Inject(SemesterState.new),
+    Inject(AllQuestionState.new),
+    Inject(HistoryQuestionState.new),
   ];
 
   static ReactiveModel<ThemeState> theme() {

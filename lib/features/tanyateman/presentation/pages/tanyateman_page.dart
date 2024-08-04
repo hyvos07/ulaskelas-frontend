@@ -42,47 +42,68 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
     SizingInformation sizeInfo,
   ) {
     return SafeArea(
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20
-              ),
-              child: PrimaryButton(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 10,
+                  horizontal: 20
                 ),
-                borderRadius: BorderRadius.circular(8),
-                width: double.infinity,
-                text: 'Add New Question Page',
-                backgroundColor: BaseColors.purpleHearth,
-                onPressed: () => {
-                  nav.goToAddQuestionPage()
-                },
+                child: PrimaryButton(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  width: double.infinity,
+                  text: 'Add New Question Page',
+                  backgroundColor: BaseColors.purpleHearth,
+                  onPressed: () => {
+                    nav.goToAddQuestionPage()
+                  },
+                ),
               ),
-            ),
-            const HeightSpace(20),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20
-              ),
-              child: PrimaryButton(
+              const HeightSpace(20),
+              Padding(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 10,
+                  horizontal: 20
                 ),
-                borderRadius: BorderRadius.circular(8),
-                width: double.infinity,
-                text: 'Question Detail Page',
-                backgroundColor: BaseColors.bronze2,
-                onPressed: () => {
-                  nav.goToDetailQuestionPage()
-                },
+                child: PrimaryButton(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  width: double.infinity,
+                  text: 'Question Detail Page',
+                  backgroundColor: BaseColors.bronze2,
+                  onPressed: () => {
+                    nav.goToDetailQuestionPage()
+                  },
+                ),
               ),
-            ),
-          ],
+              const HeightSpace(20),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20
+                ),
+                child: PrimaryButton(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  width: double.infinity,
+                  text: 'Forum TanyaTeman',
+                  backgroundColor: BaseColors.blue2,
+                  onPressed: () => {
+                    nav.goToForumTanyaTeman()
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       )
     );

@@ -25,6 +25,7 @@ import '../../../matkul/search/presentation/widgets/_widgets.dart';
 import '../widgets/_widgets.dart';
 
 part 'tanyateman_page.dart';
+part 'forum_tanyateman_page.dart';
 part 'add_question_page.dart';
 part 'detail_question_page.dart';
 part 'search_course_question.dart';

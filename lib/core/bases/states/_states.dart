@@ -30,6 +30,7 @@ import 'package:ulaskelas/features/profile/presentation/states/profile_state.dar
 import 'package:ulaskelas/features/sso/presentation/pages/_pages.dart';
 import 'package:ulaskelas/features/sso/presentation/states/progress_webview_state.dart';
 import 'package:ulaskelas/features/tanyateman/presentation/pages/_pages.dart';
+import 'package:ulaskelas/features/tanyateman/presentation/states/_states.dart';
 import 'package:ulaskelas/main_page.dart';
 import 'package:ulaskelas/onboarding_page.dart';
 import 'package:ulaskelas/services/_services.dart';
