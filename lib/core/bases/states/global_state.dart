@@ -84,20 +84,16 @@ final componentFormRM = RM.inject(
   autoDisposeWhenNotUsed: false,
 );
 
-final allQuestionsRM = RM.inject(
-  AllQuestionState.new,
+final questionsRM = RM.inject(
+  QuestionState.new,
 );
 
-final historyQuestionsRM = RM.inject(
-  HistoryQuestionState.new
+final answersRM = RM.inject(
+  AnswerState.new,
 );
 
-final questionDetailRM = RM.inject(
-    DetailQuestionPageState.new,
-);
-
-final addQuestionRM = RM.inject(
-    AddQuestionPageState.new
+final questionFormRM = RM.inject(
+  QuestionFormState.new,
 );
 
 /// Semua state harus diinject di global state
@@ -119,8 +115,9 @@ class GlobalState {
       Inject(BookmarkState.new),
       Inject(CalculatorState.new),
       Inject(SemesterState.new),
-      Inject(AllQuestionState.new),
-      Inject(HistoryQuestionState.new),
+      Inject(QuestionState.new),
+      Inject(AnswerState.new),
+      Inject(QuestionFormState.new),
     ];
   }
 
@@ -134,8 +131,9 @@ class GlobalState {
     Inject(BookmarkState.new),
     Inject(CalculatorState.new),
     Inject(SemesterState.new),
-    Inject(AllQuestionState.new),
-    Inject(HistoryQuestionState.new),
+    Inject(QuestionState.new),
+    Inject(AnswerState.new),
+    Inject(QuestionFormState.new),
   ];
 
   static ReactiveModel<ThemeState> theme() {

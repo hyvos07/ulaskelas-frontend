@@ -2,8 +2,11 @@ part of '_pages.dart';
 
 class DetailQuestionPage extends StatefulWidget {
   const DetailQuestionPage({
+    required this.model,
     super.key,
   });
+
+  final QuestionModel model;
 
   @override
   _DetailQuestionPageState createState() => _DetailQuestionPageState();
@@ -71,10 +74,12 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
             delegate: SliverChildListDelegate(
               [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: Column(
                     children: [
-                      const PostContent(),
+                      PostContent(
+                        model: widget.model,
+                      ),
                       const HeightSpace(20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,7 +87,9 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                           const QuestionFormLabel(text: 'Komentar'),
                           Row(
                             children: [
-                              const FilterIcon(),
+                              const FilterIcon(
+                                filterOn: true,
+                              ),
                               QuestionFormLabel(
                                 text: 'Filter',
                                 color: BaseColors.primary,
@@ -108,16 +115,15 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                 ),
                 const HeightSpace(10),
                 ExpandablePageView.builder(
-                  controller: _pageController,
-                  animationDuration: const Duration(milliseconds: 500),
-                  itemCount: 2, 
-                  itemBuilder: (context,index) {
-                    if (index == 0) {
-                      return _buildShowComments();
-                    }
-                    return _buildCommentForm();
-                  }
-                )
+                    controller: _pageController,
+                    animationDuration: const Duration(milliseconds: 500),
+                    itemCount: 2,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return _buildShowComments();
+                      }
+                      return _buildCommentForm();
+                    })
               ],
             ),
           ),
@@ -130,7 +136,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18),
+          padding: const EdgeInsets.symmetric(horizontal: 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -142,10 +148,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
               const HeightSpace(20),
               const SendAsAnonymSwitcher(),
               const HeightSpace(20),
-              ImagePickerBox(
-                onTap: () {
-                
-              })
+              ImagePickerBox(onTap: () {})
             ],
           ),
         ),
@@ -169,38 +172,35 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       padding: const EdgeInsets.only(
         bottom: 20,
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 10, horizontal: 20
-            ),
-            child: Row(
-              children: [
-                const UserProfileBox(name: 'Rafie Asadel Tarigan'),
-                const WidthSpace(10),
-                AskQuestionBox(
-                  onTap: () => _pageController.animateToPage(
-                    1, // Index of the second page
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Column(
-            children: List.generate(16, (index) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 5),
-                child: CardPost(
-                  isReply: true,
+      child: Column(children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Row(
+            children: [
+              const UserProfileBox(name: 'Rafie Asadel Tarigan'),
+              const WidthSpace(10),
+              AskQuestionBox(
+                onTap: () => _pageController.animateToPage(
+                  1, // Index of the second page
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
                 ),
-              );
-            }),
-          )
-        ]
-      ),
+              )
+            ],
+          ),
+        ),
+        Column(
+          children: List.generate(16, (index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
+              child: CardPost(
+                isReply: true,
+                model: widget.model,
+              ),
+            );
+          }),
+        )
+      ]),
     );
   }
 

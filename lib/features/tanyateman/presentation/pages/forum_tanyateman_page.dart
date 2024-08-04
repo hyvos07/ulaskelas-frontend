@@ -102,25 +102,7 @@ class _ForumTanyaTemanState extends BaseStateful<ForumTanyaTemanPage> {
     BuildContext context,
     SizingInformation sizeInfo,
   ) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-        child: Column(
-          children: [
-            PrimaryButton(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              borderRadius: BorderRadius.circular(12),
-              width: double.infinity,
-              text: 'Forum TanyaTeman',
-              onPressed: () {
-                nav.pop();
-              },
-              backgroundColor: BaseColors.blue2,
-            ),
-          ],
-        ),
-      ),
-    );
+    return buildNarrowLayout(context, sizeInfo);
   }
 
   @override

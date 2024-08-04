@@ -13,7 +13,12 @@ import 'package:ulaskelas/features/matkul/main/domain/repositories/_repositories
 import 'package:ulaskelas/features/matkul/search/data/models/_models.dart';
 import 'package:ulaskelas/features/matkul/search/domain/entities/_entities.dart';
 
-part 'all_questions_state.dart';
-part 'history_questions_state.dart';
-part 'detail_question_state.dart';
-part 'add_question_state.dart';
+import '../../data/datasources/_datasources.dart';
+import '../../data/models/_models.dart';
+import '../../data/repositories/_repositories.dart';
+import '../../domain/entities/query_question.dart';
+import '../../domain/repositories/_repositories.dart';
+
+part 'question_state.dart';
+part 'answer_state.dart';
+part 'question_form_state.dart';

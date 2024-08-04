@@ -1,6 +1,6 @@
 part of '_states.dart';
 
-class AddQuestionPageState {
+class QuestionFormState {
 
   final TextEditingController _questionController = TextEditingController();
 
@@ -29,5 +29,4 @@ class AddQuestionPageState {
   void setIsAnonym(bool newIsAnonym) {
     _isAnonym = newIsAnonym;
   }
-
 }

@@ -22,6 +22,7 @@ import '../../../matkul/main/domain/entities/query_search_course.dart';
 import '../../../matkul/search/data/models/_models.dart';
 import '../../../matkul/search/presentation/states/_states.dart';
 import '../../../matkul/search/presentation/widgets/_widgets.dart';
+import '../../data/models/_models.dart';
 import '../widgets/_widgets.dart';
 
 part 'tanyateman_page.dart';

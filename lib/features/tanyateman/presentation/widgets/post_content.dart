@@ -2,19 +2,24 @@ part of '_widgets.dart';
 
 class PostContent extends StatelessWidget {
   const PostContent({
+    this.model,
     this.isReply = false,
-    super.key
+    super.key,
   });
 
+  final QuestionModel? model;
   final bool isReply;
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children:[ 
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Row(
           children: <Widget>[
-            const UserProfileBox(name: 'Adrian Hamzah',),
+            UserProfileBox(
+              name: model!.userFullName,
+            ),
             const WidthSpace(12),
             Expanded(
               child: Column(
@@ -22,28 +27,41 @@ class PostContent extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        'Adrian Hamzah',
-                        style: FontTheme.poppins10w700black().copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(width: 5,),
-                      Text(
-                        '2 Hour ago',
-                        style: FontTheme.poppins10w400black().copyWith(
-                            fontSize: 8,
-                            fontWeight: FontWeight.w300,
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            text: model!.userFullName,
+                            style: FontTheme.poppins12w700black().copyWith(
+                              height: 1.75,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            children: [
+                              const WidgetSpan(
+                                child: WidthSpace(8),
+                              ),
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: Text(
+                                  model!.relativeDateTime,
+                                  style:
+                                      FontTheme.poppins12w400black().copyWith(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          overflow: TextOverflow.visible,
                         ),
                       ),
                     ],
                   ),
                   const HeightSpace(4),
                   Text(
-                    'Ilmu Komputer 2022',
+                    '${model!.userMajor} ${model!.userGeneration}',
                     style: FontTheme.poppins10w400black().copyWith(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w300,
                     ),
                   ),
                 ],
@@ -51,54 +69,69 @@ class PostContent extends StatelessWidget {
             ),
           ],
         ),
-        const HeightSpace(5),
+        const HeightSpace(12.5),
         Text(
-          'Halo guys, disini ada yang tau tips & trik ketika ngasdos SDA ga yaa?',
-          style: FontTheme.poppins12w600black(),
+          model!.question,
+          style: FontTheme.poppins14w600black().copyWith(
+            fontSize: 13,
+          ),
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.left,
         ),
-        const HeightSpace(5),
+        const HeightSpace(12.5),
         Row(
           children: [
             SvgPicture.asset(
               'assets/icons/thumbsup.svg',
-              height: 16, width: 16,
+              height: 24,
+              width: 24,
             ),
+            const WidthSpace(2),
             Text(
-              '22',
-              style: FontTheme.poppins10w400black().copyWith(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w300,
+              model!.likes.toString(),
+              style: FontTheme.poppins12w400black().copyWith(
+                fontSize: 11,
+                fontWeight: FontWeight.w300,
               ),
             ),
-            if (!isReply) 
+            if (!isReply)
               Row(
                 children: [
-                  const WidthSpace(5),
+                  const WidthSpace(10),
                   SvgPicture.asset(
                     'assets/icons/comment.svg',
-                    height: 12, width: 12,
+                    height: 16,
+                    width: 16,
                   ),
-                  const WidthSpace(3.5),
+                  const WidthSpace(5),
                   Text(
-                    '2',
-                    style: FontTheme.poppins10w400black().copyWith(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w300,
+                    model!.answers.toString(),
+                    style: FontTheme.poppins12w400black().copyWith(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w300,
                     ),
-                  ),  
+                  ),
                 ],
               ),
             const WidthSpace(10),
             Text(
-              '|  2 Aug 2024 03.32',
-              style: FontTheme.poppins10w400black().copyWith(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w300,
+              '|',
+              style: FontTheme.poppins14w400black().copyWith(
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            const WidthSpace(10),
+            Text(
+              model!.exactDateTime,
+              style: FontTheme.poppins12w400black().copyWith(
+                fontSize: 11,
+                fontWeight: FontWeight.w300,
               ),
             )
           ],
         )
-      ]
+      ],
     );
   }
 }

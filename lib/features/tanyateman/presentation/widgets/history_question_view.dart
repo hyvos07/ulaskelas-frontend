@@ -21,6 +21,8 @@ class HistoryQuestion extends StatelessWidget {
               )
             ],
           ),
+          const HeightSpace(10),
+          const CardPost(),
         ],
       ),
     );

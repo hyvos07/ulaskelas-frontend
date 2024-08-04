@@ -1,17 +1,21 @@
 part of '_widgets.dart';
 
 class UserProfileBox extends StatelessWidget {
-  const UserProfileBox({
-    required this.name,
-    super.key
-  });
+  const UserProfileBox({required this.name, super.key});
 
   final String name;
 
-  String getInitials() {
-    final nameParts = name.split(' ');
-    final initials = nameParts[0][0] + nameParts[1][0];
-    return initials.toUpperCase();
+  String? _getInitials(String name) {
+    String shortName;
+
+    shortName = name.split(' ').fold<String>(
+          '',
+          (previousValue, element) =>
+              previousValue + element.substring(0, min(element.length, 1)),
+        );
+    shortName = shortName.substring(0, min(shortName.length, 2));
+
+    return shortName;
   }
 
   @override
@@ -27,7 +31,7 @@ class UserProfileBox extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          getInitials(),
+          _getInitials(name)!,
           style: FontTheme.poppins14w700black().copyWith(
             color: theme.colorScheme.primary,
           ),

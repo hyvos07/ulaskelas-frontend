@@ -47,6 +47,10 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
   }
 
   void onScroll() {
+    // Solution Issue #35 : Detail Matkul Page tidak perlu melakukan onScroll 
+    // ketika sudah mencapai bottom of the page, karena page ini tidak 
+    // seharusnya melakukan retrieveMoreData (seperti yang ada di Main Page)
+    // ketika sudah mencapai bottom. (CMIIW hehehe)
     completer?.complete();
     final query = QueryReview(courseCode: widget.courseCode);
     reviewCourseRM.state.retrieveMoreData(query).then((value) {
