@@ -60,7 +60,7 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
                 text: 'Add New Question Page',
                 backgroundColor: BaseColors.purpleHearth,
                 onPressed: () => {
-                  nav.goToNewQuestionFormPage()
+                  nav.goToAddQuestionPage()
                 },
               ),
             ),
@@ -78,7 +78,7 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
                 text: 'Question Detail Page',
                 backgroundColor: BaseColors.bronze2,
                 onPressed: () => {
-                  nav.goToQuestionDetailPage()
+                  nav.goToDetailQuestionPage()
                 },
               ),
             ),

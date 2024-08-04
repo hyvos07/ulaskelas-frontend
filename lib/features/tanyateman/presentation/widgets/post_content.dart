@@ -1,7 +1,12 @@
 part of '_widgets.dart';
 
 class PostContent extends StatelessWidget {
-  const PostContent({super.key});
+  const PostContent({
+    this.isReply = false,
+    super.key
+  });
+
+  final bool isReply;
 
   @override
   Widget build(BuildContext context) {
@@ -65,19 +70,24 @@ class PostContent extends StatelessWidget {
                   fontWeight: FontWeight.w300,
               ),
             ),
-            const WidthSpace(5),
-            SvgPicture.asset(
-              'assets/icons/comment.svg',
-              height: 12, width: 12,
-            ),
-            const WidthSpace(3.5),
-            Text(
-              '2',
-              style: FontTheme.poppins10w400black().copyWith(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w300,
+            if (!isReply) 
+              Row(
+                children: [
+                  const WidthSpace(5),
+                  SvgPicture.asset(
+                    'assets/icons/comment.svg',
+                    height: 12, width: 12,
+                  ),
+                  const WidthSpace(3.5),
+                  Text(
+                    '2',
+                    style: FontTheme.poppins10w400black().copyWith(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w300,
+                    ),
+                  ),  
+                ],
               ),
-            ),
             const WidthSpace(10),
             Text(
               '|  2 Aug 2024 03.32',

@@ -1,7 +1,7 @@
 part of '_widgets.dart';
 
-class PostButton extends StatelessWidget {
-  const PostButton({
+class ExpandedButton extends StatelessWidget {
+  const ExpandedButton({
     required this.onTap, required this.text, super.key,
     this.isLoading = false,
   });

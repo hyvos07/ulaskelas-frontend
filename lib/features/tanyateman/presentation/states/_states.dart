@@ -1,4 +1,9 @@
 import 'dart:core';
+import 'dart:io';
 
-part 'question_detail_state.dart';
+import 'package:flutter/cupertino.dart';
 
+import '../../../matkul/search/data/models/_models.dart';
+
+part 'detail_question_state.dart';
+part 'add_question_state.dart';

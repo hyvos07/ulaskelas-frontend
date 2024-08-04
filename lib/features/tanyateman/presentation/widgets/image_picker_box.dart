@@ -1,14 +1,17 @@
 part of '_widgets.dart';
 
 class ImagePickerBox extends StatelessWidget {
-  const ImagePickerBox({super.key});
+  const ImagePickerBox({
+    required this.onTap,
+    super.key
+  });
+
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-
-      },
+      onTap: onTap,
       child: DottedBorder(
         dashPattern: const [15, 10],
         borderType: BorderType.RRect,

@@ -85,7 +85,11 @@ final componentFormRM = RM.inject(
 );
 
 final questionDetailRM = RM.inject(
-    QuestionDetailPageState.new,
+    DetailQuestionPageState.new,
+);
+
+final addQuestionRM = RM.inject(
+    AddQuestionPageState.new
 );
 
 /// Semua state harus diinject di global state
@@ -107,7 +111,6 @@ class GlobalState {
       Inject(BookmarkState.new),
       Inject(CalculatorState.new),
       Inject(SemesterState.new),
-      Inject(QuestionDetailPageState.new)
     ];
   }
 
@@ -121,7 +124,6 @@ class GlobalState {
     Inject(BookmarkState.new),
     Inject(CalculatorState.new),
     Inject(SemesterState.new),
-    Inject(QuestionDetailPageState.new)
   ];
 
   static ReactiveModel<ThemeState> theme() {

@@ -1,16 +1,16 @@
 part of '_pages.dart';
 
-class NewQuestionFormPage extends StatefulWidget {
-  const NewQuestionFormPage({
+class AddQuestionPage extends StatefulWidget {
+  const AddQuestionPage({
     super.key,
   });
 
 
   @override
-  _NewQuestionFormPageState createState() => _NewQuestionFormPageState();
+  _AddQuestionPageState createState() => _AddQuestionPageState();
 }
 
-class _NewQuestionFormPageState extends BaseStateful<NewQuestionFormPage> {
+class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   bool isAnonym = false;
 
   @override
@@ -48,23 +48,31 @@ class _NewQuestionFormPageState extends BaseStateful<NewQuestionFormPage> {
             key: componentFormRM.state.formKey,
             child: ListView(
               padding: const EdgeInsets.all(24),
-              children: const [
-                QuestionFormLabel(
+              children: [
+                const QuestionFormLabel(
                   text: 'Pertanyaan', bottomPad: 10,
                 ),
-                QuestionTextField(),
-                HeightSpace(10),
-                // TODO: dropdown select matkul
-                HeightSpace(20),
-                SendAsAnonymSwitcher(),
-                HeightSpace(20),
-                ImagePickerBox()
+                const QuestionTextField(),
+                const HeightSpace(15),
+                CoursePicker(
+                  onTap: () {
+                    nav.goToSearchCourseRadioPick();
+                  }
+                ),
+                const HeightSpace(20),
+                const SendAsAnonymSwitcher(),
+                const HeightSpace(20),
+                ImagePickerBox(
+                  onTap: () {
+
+                  },
+                )
               ],
             ),
           ),
         ),
         OnReactive(
-          () => PostButton(
+          () => ExpandedButton(
             isLoading: componentFormRM.state.isLoading,
             text: 'Posting',
             onTap: () async {

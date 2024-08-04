@@ -1,15 +1,15 @@
 part of '_pages.dart';
 
-class QuestionDetailPage extends StatefulWidget {
-  const QuestionDetailPage({
+class DetailQuestionPage extends StatefulWidget {
+  const DetailQuestionPage({
     super.key,
   });
 
   @override
-  _QuestionDetailPageState createState() => _QuestionDetailPageState();
+  _DetailQuestionPageState createState() => _DetailQuestionPageState();
 }
 
-class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
+class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   bool isAnonym = false;
   int pageViewIndex = 0;
   double pageViewHeight = 0;
@@ -127,27 +127,29 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
   Widget _buildCommentForm() {
     return Column(
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              QuestionFormLabel(
+              const QuestionFormLabel(
                 text: 'Pertanyaan',
                 bottomPad: 10,
               ),
-              QuestionTextField(),
-              HeightSpace(20),
-              // TODO: dropdown select matkul
-              SendAsAnonymSwitcher(),
-              HeightSpace(20),
-              ImagePickerBox(),
+              const QuestionTextField(),
+              const HeightSpace(20),
+              const SendAsAnonymSwitcher(),
+              const HeightSpace(20),
+              ImagePickerBox(
+                onTap: () {
+                
+              })
             ],
           ),
         ),
         const HeightSpace(40),
         OnReactive(
-          () => PostButton(
+          () => ExpandedButton(
             isLoading: componentFormRM.state.isLoading,
             text: 'Posting',
             onTap: () async {
@@ -167,34 +169,14 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
       ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
+          const Padding(
+            padding: EdgeInsets.symmetric(
               vertical: 10, horizontal: 20
             ),
             child: Row(
               children: [
-                const UserProfileBox(name: 'Rafie Asadel Tarigan'),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    padding: const EdgeInsets.only(left: 10),
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(.15),
-                      borderRadius: BorderRadius.circular(5)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        QuestionFormLabel(
-                          text: 'Kebingungan? Tanya Teman!',
-                          color: BaseColors.mineShaft.withOpacity(0.5),
-                        )
-                      ],
-                    ),
-                  ),
-                )
+                UserProfileBox(name: 'Rafie Asadel Tarigan'),
+                AskQuestionBox()
               ],
             ),
           ),
@@ -202,7 +184,9 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
             children: List.generate(16, (index) {
               return const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 18, vertical: 5),
-                child: CardPost(),
+                child: CardPost(
+                  isReply: true,
+                ),
               );
             }),
           )

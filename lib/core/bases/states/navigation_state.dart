@@ -328,15 +328,23 @@ class NavigationServiceState implements Navigation {
     );
   }
 
-  Future<void> goToNewQuestionFormPage() {
+  Future<void> goToAddQuestionPage() {
     return nav.push<void>(
-      const NewQuestionFormPage()
+      const AddQuestionPage()
     );
   }
 
-  Future<void> goToQuestionDetailPage() {
+  Future<void> goToDetailQuestionPage() {
     return nav.push<void>(
-      const QuestionDetailPage()
+      const DetailQuestionPage()
+    );
+  }
+
+  Future<void> goToSearchCourseRadioPick() {
+    return nav.push<void>(
+      const SearchCourseQuestion(
+        givenSemester: '1'
+      )
     );
   }
 }
