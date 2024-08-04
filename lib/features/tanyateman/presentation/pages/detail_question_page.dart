@@ -40,87 +40,89 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     BuildContext context,
     SizingInformation sizeInfo,
   ) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.grey.shade900,
-            ),
-            onPressed: () => onBackPressed(),
-          ),
-          title: Text(
-            '#Struktur Data dan Algoritma',
-            style: FontTheme.poppins14w400black()
-                .copyWith(color: Colors.grey.shade700),
-          ),
-          centerTitle: false,
-          actions: [
-            Icon(
-              Icons.more_horiz,
-              color: Colors.grey.shade900,
-            ),
-            const WidthSpace(20),
-          ],
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18),
-                child: Column(
-                  children: [
-                    const PostContent(),
-                    const HeightSpace(20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const QuestionFormLabel(text: 'Komentar'),
-                        Row(
-                          children: [
-                            const FilterIcon(),
-                            QuestionFormLabel(
-                              text: 'Filter',
-                              color: BaseColors.primary,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+    return SafeArea(
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.grey.shade900,
               ),
-              const HeightSpace(20),
-              Center(
-                child: SmoothPageIndicator(
-                  controller: _pageController,
-                  count: 2,
-                  effect: ExpandingDotsEffect(
-                    dotHeight: 8,
-                    dotWidth: 8,
-                    activeDotColor: BaseColors.primary,
-                  ),
-                ),
+              onPressed: () => onBackPressed(),
+            ),
+            title: Text(
+              '#Struktur Data dan Algoritma',
+              style: FontTheme.poppins14w400black()
+                  .copyWith(color: Colors.grey.shade700),
+            ),
+            centerTitle: false,
+            actions: [
+              Icon(
+                Icons.more_horiz,
+                color: Colors.grey.shade900,
               ),
-              const HeightSpace(10),
-              ExpandablePageView.builder(
-                controller: _pageController,
-                animationDuration: const Duration(milliseconds: 500),
-                itemCount: 2, 
-                itemBuilder: (context,index) {
-                  if (index == 0) {
-                    return _buildShowComments();
-                  }
-                  return _buildCommentForm();
-                }
-              )
+              const WidthSpace(20),
             ],
           ),
-        ),
-      ],
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 18),
+                  child: Column(
+                    children: [
+                      const PostContent(),
+                      const HeightSpace(20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const QuestionFormLabel(text: 'Komentar'),
+                          Row(
+                            children: [
+                              const FilterIcon(),
+                              QuestionFormLabel(
+                                text: 'Filter',
+                                color: BaseColors.primary,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const HeightSpace(20),
+                Center(
+                  child: SmoothPageIndicator(
+                    controller: _pageController,
+                    count: 2,
+                    effect: ExpandingDotsEffect(
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      activeDotColor: BaseColors.primary,
+                    ),
+                  ),
+                ),
+                const HeightSpace(10),
+                ExpandablePageView.builder(
+                  controller: _pageController,
+                  animationDuration: const Duration(milliseconds: 500),
+                  itemCount: 2, 
+                  itemBuilder: (context,index) {
+                    if (index == 0) {
+                      return _buildShowComments();
+                    }
+                    return _buildCommentForm();
+                  }
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
