@@ -169,14 +169,21 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       ),
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(
+          Padding(
+            padding: const EdgeInsets.symmetric(
               vertical: 10, horizontal: 20
             ),
             child: Row(
               children: [
-                UserProfileBox(name: 'Rafie Asadel Tarigan'),
-                AskQuestionBox()
+                const UserProfileBox(name: 'Rafie Asadel Tarigan'),
+                const WidthSpace(10),
+                AskQuestionBox(
+                  onTap: () => _pageController.animateToPage(
+                    1, // Index of the second page
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  ),
+                )
               ],
             ),
           ),

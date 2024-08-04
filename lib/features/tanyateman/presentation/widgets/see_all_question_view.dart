@@ -92,29 +92,8 @@ class _SeeAllQuestionState
                 ),
               ),
               const WidthSpace(10),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () => nav.goToAddQuestionPage(),
-                  child: Container(
-                    width: double.infinity,
-                    height: 45,
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                      color: BaseColors.primary.withOpacity(.15),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Kebingungan? TanyaTeman!',
-                        style: FontTheme.poppins12w500black().copyWith(
-                          color: BaseColors.gray1.withOpacity(0.8),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              AskQuestionBox(
+                onTap: () => nav.goToAddQuestionPage(),
               )
             ],
           ),
@@ -124,7 +103,11 @@ class _SeeAllQuestionState
               itemCount: 5,
               separatorBuilder: (context, index) => const HeightSpace(10),
               itemBuilder: (context, index) {
-                return const CardPost();
+                return CardPost(
+                  onTap: () {
+                    nav.goToDetailQuestionPage();
+                  },
+                );
               },
             ),
           )
