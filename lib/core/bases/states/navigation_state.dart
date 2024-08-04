@@ -328,15 +328,24 @@ class NavigationServiceState implements Navigation {
     );
   }
 
+  Future<void> goToForumTanyaTeman() {
+    return nav.push<void>(
+      const ForumTanyaTemanPage(),
+      RouteName.forumTanyaTeman,
+    );
+  }
+
   Future<void> goToNewQuestionFormPage() {
     return nav.push<void>(
-      const NewQuestionFormPage()
+      const NewQuestionFormPage(),
+      RouteName.newQuestionFormPage,
     );
   }
 
   Future<void> goToQuestionDetailPage() {
     return nav.push<void>(
-      const QuestionDetailPage()
+      const QuestionDetailPage(),
+      RouteName.questionDetailPage,
     );
   }
 }

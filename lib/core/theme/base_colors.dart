@@ -75,6 +75,10 @@ class BaseColors {
   static const Color bronze2 = Color(0xFFAE5906);
   static const Color bronze3 = Color(0xFFA15810);
 
+  // Blue Colors
+  static const Color blue1 = Color(0xFF1A73E8);
+  static const Color blue2 = Color(0xFF0A4C96);
+
   // Gradient Colors
   
   /// This gradient color set is used in some widgets 

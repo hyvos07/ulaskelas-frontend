@@ -17,5 +17,6 @@ import '../../../matkul/search/presentation/widgets/_widgets.dart';
 import '../widgets/_widgets.dart';
 
 part 'tanyateman_page.dart';
+part 'forum_tanyateman_page.dart';
 part 'new_question_form_page.dart';
 part 'question_detail_page.dart';
