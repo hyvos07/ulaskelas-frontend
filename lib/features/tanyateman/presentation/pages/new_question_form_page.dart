@@ -53,7 +53,7 @@ class _NewQuestionFormPageState extends BaseStateful<NewQuestionFormPage> {
                   text: 'Pertanyaan', bottomPad: 10,
                 ),
                 QuestionTextField(),
-                HeightSpace(20),
+                HeightSpace(10),
                 // TODO: dropdown select matkul
                 HeightSpace(20),
                 SendAsAnonymSwitcher(),

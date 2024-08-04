@@ -25,6 +25,7 @@ import 'package:ulaskelas/features/matkul/search/data/models/_models.dart';
 import 'package:ulaskelas/features/matkul/search/presentation/pages/_pages.dart';
 import 'package:ulaskelas/features/matkul/search/presentation/states/_states.dart';
 import 'package:ulaskelas/features/profile/presentation/pages/profile_page.dart';
+import 'package:ulaskelas/features/tanyateman/presentation/states/_states.dart';
 import 'package:ulaskelas/features/profile/presentation/states/profile_state.dart';
 import 'package:ulaskelas/features/sso/presentation/pages/_pages.dart';
 import 'package:ulaskelas/features/sso/presentation/states/progress_webview_state.dart';

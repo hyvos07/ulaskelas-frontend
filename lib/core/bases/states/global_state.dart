@@ -84,6 +84,10 @@ final componentFormRM = RM.inject(
   autoDisposeWhenNotUsed: false,
 );
 
+final questionDetailRM = RM.inject(
+    QuestionDetailPageState.new,
+);
+
 /// Semua state harus diinject di global state
 class GlobalState {
   static List<Injectable> injectDataMocks() {
@@ -103,6 +107,7 @@ class GlobalState {
       Inject(BookmarkState.new),
       Inject(CalculatorState.new),
       Inject(SemesterState.new),
+      Inject(QuestionDetailPageState.new)
     ];
   }
 
@@ -116,6 +121,7 @@ class GlobalState {
     Inject(BookmarkState.new),
     Inject(CalculatorState.new),
     Inject(SemesterState.new),
+    Inject(QuestionDetailPageState.new)
   ];
 
   static ReactiveModel<ThemeState> theme() {

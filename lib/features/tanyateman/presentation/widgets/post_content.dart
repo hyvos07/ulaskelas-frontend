@@ -5,28 +5,11 @@ class PostContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Column(
       children:[ 
         Row(
           children: <Widget>[
-            Container(
-              height: 50,
-              width: 50,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(.15),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Text(
-                  'AD',
-                  style: FontTheme.poppins14w700black().copyWith(
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-              ),
-            ),
+            const UserProfileBox(name: 'Adrian Hamzah',),
             const WidthSpace(12),
             Expanded(
               child: Column(
@@ -85,7 +68,7 @@ class PostContent extends StatelessWidget {
             const WidthSpace(5),
             SvgPicture.asset(
               'assets/icons/comment.svg',
-              height: 16, width: 16,
+              height: 12, width: 12,
             ),
             const WidthSpace(3.5),
             Text(
