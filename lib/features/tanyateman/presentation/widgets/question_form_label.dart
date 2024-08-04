@@ -7,6 +7,7 @@ class QuestionFormLabel extends StatelessWidget {
     this.topPad,
     this.rightPad,
     this.leftPad,
+    this.color,
     super.key
   });
 
@@ -15,6 +16,7 @@ class QuestionFormLabel extends StatelessWidget {
   final double? topPad;
   final double? rightPad;
   final double? leftPad;
+  final Color?  color;
 
 
   @override
@@ -29,7 +31,7 @@ class QuestionFormLabel extends StatelessWidget {
       child: Text(
         text,
         style: FontTheme.poppins12w600black()
-          .copyWith(color: BaseColors.mineShaft.withOpacity(0.7)),
+          .copyWith(color: color ?? BaseColors.mineShaft.withOpacity(0.7)),
       ),
     );
   }

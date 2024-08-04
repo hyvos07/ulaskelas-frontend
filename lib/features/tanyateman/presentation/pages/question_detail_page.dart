@@ -5,22 +5,24 @@ class QuestionDetailPage extends StatefulWidget {
     super.key,
   });
 
-
   @override
   _QuestionDetailPageState createState() => _QuestionDetailPageState();
 }
 
 class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
   bool isAnonym = false;
+  int pageViewIndex = 0;
+  double pageViewHeight = 0;
+  late PageController _pageController;
 
   @override
-  void init() {
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: pageViewIndex);
     componentFormRM.setState((s) => s.cleanForm());
     componentFormRM.state.previousFrequency = '1';
     componentFormRM.state.frequency.text = '1';
     componentFormRM.state.justVisited = true;
-
-    // print(componentFormRM.state.scoreControllers);
   }
 
   @override
@@ -30,18 +32,7 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
-    return BaseAppBar(
-      elevation: 0,
-      onBackPress: onBackPressed,
-      label: '#Struktur Data dan Algoritma',
-      style: FontTheme.poppins14w400black() 
-        .copyWith(color: Colors.grey.shade700),
-      centerTitle: false,
-      actions: [
-        Icon(Icons.more_horiz, color: Colors.grey.shade700,),
-        const WidthSpace(20)
-      ],
-    );
+    return null; // SliverAppBar will be used instead
   }
 
   @override
@@ -49,53 +40,89 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
     BuildContext context,
     SizingInformation sizeInfo,
   ) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 18),
-            child: Column(
-              children: [
-                PostContent(),
-                HeightSpace(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.grey.shade900,
+            ),
+            onPressed: () => onBackPressed(),
+          ),
+          title: Text(
+            '#Struktur Data dan Algoritma',
+            style: FontTheme.poppins14w400black()
+                .copyWith(color: Colors.grey.shade700),
+          ),
+          centerTitle: false,
+          actions: [
+            Icon(
+              Icons.more_horiz,
+              color: Colors.grey.shade900,
+            ),
+            const WidthSpace(20),
+          ],
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18),
+                child: Column(
                   children: [
-                    QuestionFormLabel(text: 'Komentar'),
+                    const PostContent(),
+                    const HeightSpace(20),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.filter_alt, size: 17.5,),
-                        QuestionFormLabel(text: 'Filter'),
+                        const QuestionFormLabel(text: 'Komentar'),
+                        Row(
+                          children: [
+                            const FilterIcon(),
+                            QuestionFormLabel(
+                              text: 'Filter',
+                              color: BaseColors.primary,
+                            ),
+                          ],
+                        ),
                       ],
-                    )
+                    ),
                   ],
-                )
-              ],
-            ),
-          ),
-          const HeightSpace(20),
-          const DotIndicator(
-            currentIndex: 0, 
-            length: 1
-          ),
-          const HeightSpace(10),
-          SizedBox(
-            height: 100000,
-            child: PageView.builder(
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return _buildShowComments();
+                ),
+              ),
+              const HeightSpace(20),
+              Center(
+                child: SmoothPageIndicator(
+                  controller: _pageController,
+                  count: 2,
+                  effect: ExpandingDotsEffect(
+                    dotHeight: 8,
+                    dotWidth: 8,
+                    activeDotColor: BaseColors.primary,
+                  ),
+                ),
+              ),
+              const HeightSpace(10),
+              ExpandablePageView.builder(
+                controller: _pageController,
+                animationDuration: const Duration(milliseconds: 500),
+                itemCount: 2, 
+                itemBuilder: (context,index) {
+                  if (index == 0) {
+                    return _buildShowComments();
+                  }
+                  return _buildCommentForm();
                 }
-                return _buildCommentForm();
-              },
-            ),
-          )
-        ],
-      ),
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
-
 
   Widget _buildCommentForm() {
     return Column(
@@ -106,18 +133,19 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               QuestionFormLabel(
-                text: 'Pertanyaan', bottomPad: 10,
+                text: 'Pertanyaan',
+                bottomPad: 10,
               ),
               QuestionTextField(),
               HeightSpace(20),
               // TODO: dropdown select matkul
-              HeightSpace(20),
               SendAsAnonymSwitcher(),
               HeightSpace(20),
-              ImagePickerBox()
+              ImagePickerBox(),
             ],
           ),
         ),
+        const HeightSpace(40),
         OnReactive(
           () => PostButton(
             isLoading: componentFormRM.state.isLoading,
@@ -132,15 +160,54 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
   }
 
   Widget _buildShowComments() {
-    return Column(
-      children: List.generate(10, (index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 18, vertical: 5
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: 20,
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10, horizontal: 20
+            ),
+            child: Row(
+              children: [
+                const UserProfileBox(name: 'Rafie Asadel Tarigan'),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 10),
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withOpacity(.15),
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        QuestionFormLabel(
+                          text: 'Kebingungan? Tanya Teman!',
+                          color: BaseColors.mineShaft.withOpacity(0.5),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
-          child: CardPost(),
-        );
-      }),
+          Column(
+            children: List.generate(16, (index) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 5),
+                child: CardPost(),
+              );
+            }),
+          )
+        ]
+      ),
     );
   }
 
@@ -159,7 +226,6 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
     if (componentFormRM.state.formKey.currentState!.validate() &&
         !componentFormRM.state.scoreControllers
             .any((element) => element.text.isEmpty)) {
-      // progressDialogue(context);
       await componentFormRM.state.submitForm(1);
       await Future.delayed(const Duration(milliseconds: 150));
 
@@ -174,20 +240,6 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
         print('success');
       }
 
-      // await nav.replaceToComponentPage(
-      //   givenSemester: widget.givenSemester,
-      //   courseId: widget.courseId,
-      //   calculatorId: widget.calculatorId,
-      //   courseName: widget.courseName,
-      //   totalScore: _temporaryUpdateScore(
-      //     averageScore,
-      //     weight,
-      //   ),
-      //   totalPercentage: _temporaryUpdateWeight(
-      //     weight,
-      //   ),
-      // );
-
       return;
     }
 
@@ -195,7 +247,6 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
         .show(context);
     componentFormRM.state.emptyScoreDetect();
   }
-
 
   @override
   Widget buildWideLayout(
@@ -212,5 +263,10 @@ class _QuestionDetailPageState extends BaseStateful<QuestionDetailPage> {
     componentFormRM.state.emptyScoreDetect();
     nav.pop<void>();
     return true;
+  }
+
+  @override
+  void init() {
+    // TODO: implement init
   }
 }

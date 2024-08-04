@@ -9,6 +9,8 @@ import 'package:states_rebuilder/scr/state_management/listeners/on_reactive.dart
 import 'package:ulaskelas/core/theme/_theme.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:ulaskelas/onboarding_page.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:expandable_page_view/expandable_page_view.dart';
 
 import '../../../../core/bases/states/_states.dart';
 import '../../../../core/constants/_constants.dart';

@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
@@ -13,3 +14,4 @@ import 'package:ulaskelas/features/matkul/search/domain/entities/_entities.dart'
 
 part 'all_questions_state.dart';
 part 'history_questions_state.dart';
+part 'question_detail_state.dart';

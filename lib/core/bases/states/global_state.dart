@@ -92,6 +92,10 @@ final historyQuestionsRM = RM.inject(
   HistoryQuestionState.new
 );
 
+final questionDetailRM = RM.inject(
+    QuestionDetailPageState.new,
+);
+
 /// Semua state harus diinject di global state
 class GlobalState {
   static List<Injectable> injectDataMocks() {
