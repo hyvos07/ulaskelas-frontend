@@ -118,6 +118,8 @@ class _CalculatorComponentPageState
                             SvgPicture.asset(
                               'assets/icons/star.svg',
                               // ignore: deprecated_member_use
+                              height: 23,
+                              width: 23,
                               color: componentRM.state.hasReachedMax
                                 ? null
                                 : BaseColors.gray1.withOpacity(0.3),
@@ -137,8 +139,8 @@ class _CalculatorComponentPageState
                                   borderRadius: BorderRadius.circular(6.5),
                                 ),
                               child: Container(
-                                height: 30,
-                                padding: const EdgeInsets.only(left: 10,),
+                                height: 27,
+                                padding: const EdgeInsets.only(left: 7.5,),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(4.5),
@@ -238,11 +240,11 @@ class _CalculatorComponentPageState
                           text: 'Komponen',
                         ),
                         CustomTableRowComponent(
-                          flexRatio: 7, 
+                          flexRatio: 10, 
                           text: 'Nilai',
                         ),
                         CustomTableRowComponent(
-                          flexRatio: 8, 
+                          flexRatio: 12, 
                           text: 'Bobot',
                         ),
                         CustomTableRowComponent(
@@ -294,16 +296,16 @@ class _CalculatorComponentPageState
                           text: '${componentRM.state.components.length} Komponen', 
                         ),
                         CustomTableRowComponent(
-                          flexRatio: 18, 
+                          flexRatio: 25, 
                           text: componentRM.state.totalScore
                             .toStringAsFixed(2), 
                         ),
                         CustomTableRowComponent(
-                          flexRatio: 16, 
+                          flexRatio: 25, 
                           text: '${componentRM.state.totalWeight.toStringAsFixed(0)}%', 
                         ),
                         CustomTableRowComponent(
-                          flexRatio: 21, 
+                          flexRatio: 30, 
                           text: componentRM.state.hasReachedMax // dummy data
                               ? '55.87'
                               : '', 

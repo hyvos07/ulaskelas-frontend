@@ -179,6 +179,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
     final availableSemesters = semesterRM.state.availableSemestersToFill;
     await showDialog(
       context: context,
+      // barrierColor: Colors.transparent,
       builder: (BuildContext context) {
         return AutoFillSemesterDialog(
           availableSemesters: availableSemesters,

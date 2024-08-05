@@ -42,17 +42,17 @@ class CardCompononent extends StatelessWidget {
                 text: name,
               ),
               CustomTableRowComponent(
-                flexRatio: 20, 
+                flexRatio: 30, 
                 text: score == null ? 'Kosong' : score!.toStringAsFixed(2),
                 textAlign: TextAlign.right,
               ),
               CustomTableRowComponent(
-                flexRatio: 18, 
+                flexRatio: 28, 
                 text: '${weight.toStringAsFixed(0)}%',
                 textAlign: TextAlign.right,
               ),
               CustomTableRowComponent(
-                flexRatio: 18, 
+                flexRatio: 28, 
                 isGradient: score == 0 || score == null,
                 text: score == 0 || score == null
                   ? componentRM.state.hasReachedMax
