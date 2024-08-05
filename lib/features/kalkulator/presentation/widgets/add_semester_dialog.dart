@@ -57,20 +57,32 @@ class _AddSemesterDialogState extends State<AddSemesterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      alignment: Alignment.center,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
+        side: BorderSide(
+          color: Colors.grey.shade500,
+        ),
+      ),
+      contentPadding: const EdgeInsets.only(
+        top: 5,
+      ),
+      titlePadding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 15,
       ),
       insetPadding: const EdgeInsets.symmetric(
         vertical: 50,
+        horizontal: 30,
       ),
+      elevation: 5,
       title: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.only(
-              bottom: 20,
               left: 16,
               right: 16,
-              top: 12,
+              top: 10,
             ),
             child: Center(
               child: Text(
@@ -84,16 +96,21 @@ class _AddSemesterDialogState extends State<AddSemesterDialog> {
             top: -15,
             child: IconButton(
               onPressed: () => nav.pop(),
-              icon: const Icon(
+              icon: Icon(
                 Icons.close_rounded,
                 size: 30,
                 color: BaseColors.gray2,
+                shadows: List.generate(10, (index) {
+                  return const Shadow(
+                    color: BaseColors.gray2,
+                    blurRadius: 1.5,
+                  );
+                }),
               ),
             ),
           ),
         ],
       ),
-      contentPadding: EdgeInsets.zero,
       content: Column(
         children: [
           Expanded(
@@ -166,16 +183,11 @@ class _AddSemesterDialogState extends State<AddSemesterDialog> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 30),
-            child: PrimaryButton(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              width: double.infinity,
-              backgroundColor: BaseColors.accentColor,
-              text: 'Tambah Semester',
-              onPressed: () => widget.onPressed(_selectedSemester),
-            ),
-          )
+          SimpanButton(
+            isForAutoFill: true,
+            onTap: () => widget.onPressed(_selectedSemester),
+            text: 'Tambah Semester',
+          ),
         ],
       ),
     );

@@ -19,7 +19,8 @@ class _AutoFillSemesterDialogState extends State<AutoFillSemesterDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       insetPadding: const EdgeInsets.symmetric(
-        vertical: 50, horizontal: 30,
+        vertical: 50,
+        horizontal: 30,
       ),
       titlePadding: const EdgeInsets.symmetric(
         horizontal: 10,
@@ -29,7 +30,9 @@ class _AutoFillSemesterDialogState extends State<AutoFillSemesterDialog> {
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: Colors.grey.shade500,)
+        side: BorderSide(
+          color: Colors.grey.shade500,
+        ),
       ),
       elevation: 5,
       title: Column(
@@ -73,7 +76,7 @@ class _AutoFillSemesterDialogState extends State<AutoFillSemesterDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Rekomendasi Mata kuliah untuk jurusan kamu!', 
+                  'Rekomendasi Mata kuliah untuk jurusan kamu!',
                   style: FontTheme.poppins12w400black(),
                 ),
                 const HeightSpace(5),
@@ -92,14 +95,12 @@ class _AutoFillSemesterDialogState extends State<AutoFillSemesterDialog> {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 10, right: 10, top: 10
-              ),
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: List.generate(
-                    widget.availableSemesters.length, (index) {
+                  children:
+                      List.generate(widget.availableSemesters.length, (index) {
                     final semester = widget.availableSemesters[index];
                     return ExpansionCard(
                       title: 'Semester ${semester.givenSemester}',
