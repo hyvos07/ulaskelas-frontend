@@ -39,7 +39,7 @@ class QuestionModel {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    
+
     data['id'] = id;
     data['user_full_name'] = userFullName;
     data['user_major'] = userMajor;
@@ -49,27 +49,45 @@ class QuestionModel {
     data['likes'] = likes;
     data['answers'] = answers;
     data['created_at'] = createdAt;
-    
+
     return data;
   }
 
   String get exactDateTime => DateFormat('dd MMM yyyy HH:mm')
-      .format(DateTime.fromMillisecondsSinceEpoch(createdAt));
+      .format(DateTime.fromMillisecondsSinceEpoch(createdAt * 1000));
 
   String get relativeDateTime {
     final now = DateTime.now();
-    final created = DateTime.fromMillisecondsSinceEpoch(createdAt);
+    final created = DateTime.fromMillisecondsSinceEpoch(createdAt * 1000);
     final diff = now.difference(created);
 
-    final timeUnit = diff.inDays > 0
-        ? 'days'
-        : diff.inHours > 0
-            ? 'hours'
-            : diff.inMinutes > 0
-                ? 'minutes'
-                : 'seconds';
+    final timeUnit = diff.inDays > 365
+        ? 'years'
+        : diff.inDays > 30
+            ? 'months'
+            : diff.inDays > 6
+                ? 'weeks'
+                : diff.inDays > 0
+                    ? 'days'
+                    : diff.inHours > 0
+                        ? 'hours'
+                        : diff.inMinutes > 0
+                            ? 'minutes'
+                            : 'seconds';
 
     switch (timeUnit) {
+      case 'years':
+        return diff.inDays ~/ 365 == 1
+            ? 'a year ago'
+            : '${diff.inDays ~/ 365} years ago';
+      case 'months':
+        return diff.inDays ~/ 30 == 1
+            ? 'a month ago'
+            : '${diff.inDays ~/ 30} months ago';
+      case 'weeks':
+        return diff.inDays ~/ 7 == 1
+            ? 'a week ago'
+            : '${diff.inDays ~/ 7} weeks ago';
       case 'days':
         return diff.inDays == 1 ? 'a day ago' : '${diff.inDays} days ago';
       case 'hours':

@@ -13,11 +13,16 @@ class QuestionRemoteDataSourceImpl implements QuestionRemoteDataSource {
   Future<Parsed<List<QuestionModel>>> getAllQuestions(
     QueryQuestion query,
   ) async {
+    print('start ${(query.page! - 1) * query.limit}');
+    print('end ${query.page! * query.limit}');
     final list = <QuestionModel>[];
     final resp = {
-      'data': _dummyData['data']
-          .sublist(query.page! - 1, query.page! * query.limit),
+      'data': _dummyData['data'].sublist(
+        (query.page! - 1) * query.limit,
+        query.page! * query.limit > 25 ? 25 : query.page! * query.limit,
+      ),
     };
+    print(resp['data'].length);
     for (var i = 0; i < resp['data'].length; i++) {
       list.add(QuestionModel.fromJson(resp['data'][i]));
     }

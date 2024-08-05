@@ -27,6 +27,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
 
   void _onScroll() {
     if (_isBottom && !completer!.isCompleted && scrollCondition()) {
+      print('${scrollCondition()} lol');
       onScroll();
     }
   }
@@ -85,7 +86,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                                   fontSize: 13,
                                   color: BaseColors.primaryColor,
                                 ),
-                              )
+                              ),
                             ],
                           );
                         },
@@ -134,6 +135,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                   onData: (data) {
                     return data.questions.isEmpty
                         ? Center(
+                            // TODO: Change this
                             child: Text(
                               'Belum ada pertanyaan nih',
                               style: FontTheme.poppins14w400black(),
@@ -142,10 +144,22 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                         : ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 10,
+                            itemCount: data.questions.length + 1,
                             separatorBuilder: (context, index) =>
                                 const HeightSpace(16),
                             itemBuilder: (context, index) {
+                              if (index == data.questions.length) {
+                                return !data.hasReachedMax
+                                    ? const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                        ),
+                                        child: CircleLoading(
+                                          size: 25,
+                                        ),
+                                      )
+                                    : _buildBottomMax();
+                              }
                               final question = data.questions[index];
                               return CardPost(
                                 model: question,
@@ -160,24 +174,20 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
               ],
             ),
           ),
-          Visibility(
-            visible:
-                scrollController.hasClients && scrollController.offset > 50,
-            child: Positioned(
-              right: 24,
-              bottom: 16,
-              child: FloatingActionButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                backgroundColor: BaseColors.purpleHearth,
-                foregroundColor: BaseColors.white,
-                mini: true,
-                onPressed: _scrollToTop,
-                child: const Icon(
-                  Icons.expand_less_rounded,
-                  size: 25,
-                ),
+          Positioned(
+            right: 24,
+            bottom: 20,
+            child: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              backgroundColor: BaseColors.purpleHearth,
+              foregroundColor: BaseColors.white,
+              mini: true,
+              onPressed: _scrollToTop,
+              child: const Icon(
+                Icons.expand_less_rounded,
+                size: 25,
               ),
             ),
           ),
@@ -199,18 +209,58 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
     return true;
   }
 
-  void onScroll() {
+  Widget _buildBottomMax() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Image(
+            image: AssetImage('assets/images/ilust_onboard2.png'),
+            width: 120,
+            height: 120,
+          ),
+          const WidthSpace(15),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Masih belum menemukan\npertanyaan yang\nkamu cari?',
+                style: FontTheme.poppins12w700black(),
+                overflow: TextOverflow.visible,
+                textAlign: TextAlign.left,
+              ),
+              const HeightSpace(7),
+              Text(
+                'Ajukan pertanyaanmu\nsekarang!',
+                style: FontTheme.poppins10w500black(),
+                overflow: TextOverflow.visible,
+                textAlign: TextAlign.left,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> onScroll() async {
     completer?.complete();
-    // TODO: Implement yh
+    final query = QueryQuestion();
+    await questionsRM.state.retrieveMoreData(query).then((value) {
+      completer = Completer<void>();
+      questionsRM.notify();
+    }).onError((error, stackTrace) {
+      completer = Completer<void>();
+    });
   }
 
   Future<void> retrieveData() async {
-    // TODO: implement retrieveData
     await questionsRM.state.retrieveData(QueryQuestion());
   }
 
   bool scrollCondition() {
-    return !questionsRM.state.getCondition();
+    return !questionsRM.state.hasReachedMax;
   }
 
   void _scrollToTop() {

@@ -4,11 +4,13 @@ class PostContent extends StatelessWidget {
   const PostContent({
     this.model,
     this.isReply = false,
+    this.isDetail = false,
     super.key,
   });
 
   final QuestionModel? model;
   final bool isReply;
+  final bool isDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -69,17 +71,23 @@ class PostContent extends StatelessWidget {
             ),
           ],
         ),
-        const HeightSpace(12.5),
+        HeightSpace(isDetail ? 15 : 13.5),
         Text(
           model!.question,
-          style: FontTheme.poppins14w600black().copyWith(
-            fontSize: 13,
-          ),
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
+          style: isDetail || isReply
+              ? FontTheme.poppins14w500black().copyWith(
+                  fontSize: 13,
+                  height: 1.75,
+                )
+              : FontTheme.poppins14w600black().copyWith(
+                  fontSize: 13,
+                  height: 1.7,
+                ),
+          maxLines: isDetail ? null : 3,
+          overflow: isDetail ? TextOverflow.visible : TextOverflow.ellipsis,
           textAlign: TextAlign.left,
         ),
-        const HeightSpace(12.5),
+        HeightSpace(isDetail ? 15 : 13.5),
         Row(
           children: [
             SvgPicture.asset(
@@ -89,7 +97,7 @@ class PostContent extends StatelessWidget {
             ),
             const WidthSpace(2),
             Text(
-              model!.likes.toString(),
+              _shortenEngagement(model!.likes),
               style: FontTheme.poppins12w400black().copyWith(
                 fontSize: 11,
                 fontWeight: FontWeight.w300,
@@ -104,9 +112,9 @@ class PostContent extends StatelessWidget {
                     height: 16,
                     width: 16,
                   ),
-                  const WidthSpace(5),
+                  const WidthSpace(6),
                   Text(
-                    model!.answers.toString(),
+                    _shortenEngagement(model!.answers),
                     style: FontTheme.poppins12w400black().copyWith(
                       fontSize: 11,
                       fontWeight: FontWeight.w300,
@@ -133,5 +141,14 @@ class PostContent extends StatelessWidget {
         )
       ],
     );
+  }
+
+  String _shortenEngagement(int entity) {
+    if (entity >= 1000) {
+      return '${(entity / 1000).toStringAsFixed(1)}k';
+    } else if (entity >= 1000000) {
+      return '${(entity / 1000000).toStringAsFixed(1)}M';
+    }
+    return entity.toString();
   }
 }

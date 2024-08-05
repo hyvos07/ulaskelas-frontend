@@ -13,7 +13,12 @@ class UserProfileBox extends StatelessWidget {
           (previousValue, element) =>
               previousValue + element.substring(0, min(element.length, 1)),
         );
+
     shortName = shortName.substring(0, min(shortName.length, 2));
+
+    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(shortName)) {
+      return shortName.characters.first.toUpperCase();
+    }
 
     return shortName;
   }

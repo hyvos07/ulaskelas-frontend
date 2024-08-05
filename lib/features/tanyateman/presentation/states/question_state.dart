@@ -14,10 +14,6 @@ class QuestionState {
 
   List<QuestionModel> get questions => _questions ?? [];
 
-  bool getCondition() {
-    return hasReachedMax;
-  }
-
   Future<void> retrieveData(QueryQuestion q) async {
     await Future.wait([
       retrieveAllQuestion(q),
@@ -27,6 +23,7 @@ class QuestionState {
   Future<void> retrieveAllQuestion(QueryQuestion q) async {
     page = 1;
     q.page = page;
+    print('retrieveAllQuestion, with query page: ${q.page}');
     final resp = await _repo.getAllQuestions(q);
     resp.fold((failure) => throw failure, (result) {
       final lessThanLimit = result.data.length < 10;
@@ -40,6 +37,7 @@ class QuestionState {
   Future<void> retrieveMoreData(QueryQuestion q) async {
     ++page;
     q.page = page;
+    print('retrieveMoreData, with query page: ${q.page}');
     final resp = await _repo.getAllQuestions(q);
     resp.fold((failure) => throw failure, (result) {
       _questions?.addAll(result.data);

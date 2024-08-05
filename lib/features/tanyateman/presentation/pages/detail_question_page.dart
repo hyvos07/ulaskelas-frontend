@@ -54,7 +54,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                 Icons.arrow_back,
                 color: Colors.grey.shade900,
               ),
-              onPressed: () => onBackPressed(),
+              onPressed: onBackPressed,
             ),
             title: Text(
               '#Struktur Data dan Algoritma',
@@ -79,6 +79,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                     children: [
                       PostContent(
                         model: widget.model,
+                        isDetail: true,
                       ),
                       const HeightSpace(20),
                       Row(
@@ -136,10 +137,11 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const HeightSpace(15),
               const QuestionFormLabel(
                 text: 'Pertanyaan',
                 bottomPad: 10,
@@ -174,10 +176,10 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       ),
       child: Column(children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
           child: Row(
             children: [
-              const UserProfileBox(name: 'Rafie Asadel Tarigan'),
+              UserProfileBox(name: profileRM.state.profile.name ?? ''),
               const WidthSpace(10),
               AskQuestionBox(
                 onTap: () => _pageController.animateToPage(
@@ -189,10 +191,11 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
             ],
           ),
         ),
+        const HeightSpace(10),
         Column(
           children: List.generate(16, (index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
               child: CardPost(
                 isReply: true,
                 model: widget.model,

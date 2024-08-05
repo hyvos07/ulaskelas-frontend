@@ -47,6 +47,7 @@ class _ForumTanyaTemanState extends BaseStateful<ForumTanyaTemanPage> {
               return Column(
                 children: [
                   TabBar(
+                    indicatorPadding: const EdgeInsets.only(bottom: 5),
                     labelPadding: EdgeInsets.zero,
                     tabs: [
                       Tab(
@@ -73,7 +74,7 @@ class _ForumTanyaTemanState extends BaseStateful<ForumTanyaTemanPage> {
                     // borderRadius: BorderRadius.circular(10),
                     // ),
                     indicator: _UnderlineTab(
-                      width: 80,
+                      width: 70,
                       height: 4,
                       color: BaseColors.purpleHearth,
                       borderRadius: BorderRadius.circular(10),
