@@ -189,7 +189,6 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
   }
 
   Future<void> showAddSemesterDialog(BuildContext context) async {
-    print('${await getVmUri()}');
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -205,11 +204,6 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
         );
       },
     );
-  }
-
-  Future<Uri?> getVmUri() async {
-    final serviceProtocolInfo = await Service.getInfo();
-    return serviceProtocolInfo.serverUri;
   }
 
   Widget _addSemesterButton(int givenSemester) {

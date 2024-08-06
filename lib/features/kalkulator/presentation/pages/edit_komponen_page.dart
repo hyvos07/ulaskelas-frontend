@@ -38,10 +38,11 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
     componentFormRM.state.weightController.text =
         widget.componentWeight.toString();
     componentFormRM.setState(
-      (s) => {
-        s.scoreControllers.last.text = widget.componentScore.toStringAsFixed(2),
-        s.setScore(1),
-      },
+      (s) => s.retrieveDetailedComponent(
+        QueryComponent(
+          scoreComponentId: widget.id,
+        ),
+      ),
     );
     print(componentFormRM.state.scoreControllers);
   }
@@ -155,10 +156,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
 
     if (componentFormRM.state.formKey.currentState!.validate() &&
         (!oneIsEmpty || allIsEmpty || isSingleSubcomponent)) {
-      await componentFormRM.state.submitEditForm(
-        widget.id,
-        widget.calculatorId,
-      );
+      await componentFormRM.state.submitEditForm(widget.id);
       await Future.delayed(const Duration(milliseconds: 150));
 
       nav.pop();

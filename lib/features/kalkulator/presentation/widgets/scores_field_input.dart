@@ -26,6 +26,9 @@ class ScoresFieldInput extends StatelessWidget {
         ? '???'
         : averageScoreCalculation().toStringAsFixed(2);
 
+    print(controllers.length);
+    print(componentFormRM.state.formData.score);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -220,7 +223,7 @@ class ScoresFieldInput extends StatelessWidget {
                           : scoreFix.toStringAsFixed(2)
                       : '???',
                   style: FontTheme.poppins12w500black().copyWith(
-                    color: scoreFix! > 200 ? BaseColors.danger : null,
+                    color: (scoreFix ?? 0) > 200 ? BaseColors.danger : null,
                   ),
                 ),
         ),

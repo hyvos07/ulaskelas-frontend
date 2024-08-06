@@ -43,8 +43,13 @@ class CardCompononent extends StatelessWidget {
               ),
               CustomTableRowComponent(
                 flexRatio: 30, 
-                text: score == null ? 'Kosong' : score!.toStringAsFixed(2),
+                text: score == -1.00 ? 'Kosong' : score!.toStringAsFixed(2),
                 textAlign: TextAlign.right,
+                isGradient: score == -1.00,
+                gradientColors: [
+                  BaseColors.gray3,
+                  BaseColors.gray3,
+                ],
               ),
               CustomTableRowComponent(
                 flexRatio: 28, 
@@ -53,8 +58,8 @@ class CardCompononent extends StatelessWidget {
               ),
               CustomTableRowComponent(
                 flexRatio: 28, 
-                isGradient: score == 0 || score == null,
-                text: score == 0 || score == null
+                isGradient: score == 0 || score == -1.00,
+                text: score == 0 || score == -1.00
                   ? componentRM.state.hasReachedMax
                       ? hope!.toStringAsFixed(2)
                       : ''

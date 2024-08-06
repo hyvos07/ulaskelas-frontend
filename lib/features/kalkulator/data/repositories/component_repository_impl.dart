@@ -15,6 +15,13 @@ class ComponentRepositoryImpl extends ComponentRepository {
   }
 
   @override
+  Future<Decide<Failure, Parsed<Map<String, dynamic>>>> getDetailComponent(
+    QueryComponent q,
+  ) {
+    return apiCall(_remoteDataSource.getDetailComponent(q));
+  }
+
+  @override
   Future<Decide<Failure, Parsed<ComponentModel>>> createComponent(
     Map<String, dynamic> model,
   ) {
@@ -23,7 +30,8 @@ class ComponentRepositoryImpl extends ComponentRepository {
 
   @override
   Future<Decide<Failure, Parsed<ComponentModel>>> editComponent(
-      Map<String, dynamic> model,) {
+    Map<String, dynamic> model,
+  ) {
     return apiCall(_remoteDataSource.editComponent(model));
   }
 

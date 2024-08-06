@@ -1,5 +1,3 @@
-// ignore_for_file: lines_longer_than_80_chars
-
 part of '_pages.dart';
 
 class CalculatorComponentPage extends StatefulWidget {
@@ -105,7 +103,9 @@ class _CalculatorComponentPageState
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -121,26 +121,36 @@ class _CalculatorComponentPageState
                               height: 23,
                               width: 23,
                               color: componentRM.state.hasReachedMax
-                                ? null
-                                : BaseColors.gray1.withOpacity(0.3),
+                                  ? null
+                                  : BaseColors.gray1.withOpacity(0.3),
                             ),
-                            const SizedBox(width: 6,),
-                            Container( // nanti pisahin jadi state terpisah
-                              padding: const EdgeInsets.symmetric(horizontal: 1.75, vertical: 1.75),
+                            const SizedBox(
+                              width: 6,
+                            ),
+                            Container(
+                              // nanti pisahin jadi state terpisah
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 1.75,
+                                vertical: 1.75,
+                              ),
                               decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: componentRM.state.hasReachedMax
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: componentRM.state.hasReachedMax
                                       ? BaseColors.autoSystemColor
-                                      : [BaseColors.gray1.withOpacity(0.3), 
-                                        BaseColors.gray1.withOpacity(0.3)],
-                                  ),
-                                  borderRadius: BorderRadius.circular(6.5),
+                                      : [
+                                          BaseColors.gray1.withOpacity(0.3),
+                                          BaseColors.gray1.withOpacity(0.3)
+                                        ],
                                 ),
+                                borderRadius: BorderRadius.circular(6.5),
+                              ),
                               child: Container(
                                 height: 27,
-                                padding: const EdgeInsets.only(left: 7.5,),
+                                padding: const EdgeInsets.only(
+                                  left: 7.5,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(4.5),
@@ -148,7 +158,9 @@ class _CalculatorComponentPageState
                                 child: GestureDetector(
                                   onTap: () {
                                     if (!componentRM.state.hasReachedMax) {
-                                       ErrorMessenger('Total bobot harus mencapai 100%').show(context);
+                                      ErrorMessenger(
+                                        'Total bobot harus mencapai 100%',
+                                      ).show(context);
                                     }
                                   },
                                   child: DropdownButtonHideUnderline(
@@ -156,48 +168,65 @@ class _CalculatorComponentPageState
                                       borderRadius: BorderRadius.circular(10),
                                       value: _selectedItem,
                                       onChanged: componentRM.state.hasReachedMax
-                                        ? (String? newValue) {
-                                            setState(() {
-                                              _selectedItem = newValue!;
-                                            });
-                                          }
-                                        : null
-                                      ,
-                                      selectedItemBuilder: (BuildContext context) {
-                                        return _nilaiHarapanList.map<Widget>((String value) {
+                                          ? (String? newValue) {
+                                              setState(() {
+                                                _selectedItem = newValue!;
+                                              });
+                                            }
+                                          : null,
+                                      selectedItemBuilder:
+                                          (BuildContext context) {
+                                        return _nilaiHarapanList
+                                            .map<Widget>((String value) {
                                           return Center(
                                             child: GradientText(
                                               value,
                                               gradient: LinearGradient(
                                                 begin: Alignment.topCenter,
                                                 end: Alignment.bottomCenter,
-                                                colors: componentRM.state.hasReachedMax
-                                                  ? BaseColors.autoSystemColor
-                                                  : [BaseColors.gray1.withOpacity(0.3), 
-                                                    BaseColors.gray1.withOpacity(0.3)],
+                                                colors: componentRM
+                                                        .state.hasReachedMax
+                                                    ? BaseColors.autoSystemColor
+                                                    : [
+                                                        BaseColors.gray1
+                                                            .withOpacity(0.3),
+                                                        BaseColors.gray1
+                                                            .withOpacity(0.3)
+                                                      ],
                                               ),
-                                              style: FontTheme.poppins14w500black(),
+                                              style: FontTheme
+                                                  .poppins14w500black(),
                                             ),
                                           );
                                         }).toList();
                                       },
-                                      items: _nilaiHarapanList.map((String value) {
+                                      items:
+                                          _nilaiHarapanList.map((String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Center(
                                             child: Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 7.5, vertical: 2.5),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 7.5,
+                                                vertical: 2.5,
+                                              ),
                                               decoration: BoxDecoration(
                                                 color: _selectedItem == value
-                                                  ? BaseColors.mineShaft.withOpacity(0.125)
-                                                  : Colors.transparent,
-                                                borderRadius: BorderRadius.circular(4),
+                                                    ? BaseColors.mineShaft
+                                                        .withOpacity(0.125)
+                                                    : Colors.transparent,
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
                                               ),
                                               child: Text(
                                                 value,
-                                                style: FontTheme.poppins14w500black().copyWith(
+                                                style: FontTheme
+                                                        .poppins14w500black()
+                                                    .copyWith(
                                                   fontSize: 13.5,
-                                                  color: BaseColors.mineShaft.withOpacity(0.85),
+                                                  color: BaseColors.mineShaft
+                                                      .withOpacity(0.85),
                                                 ),
                                               ),
                                             ),
@@ -209,10 +238,15 @@ class _CalculatorComponentPageState
                                           return LinearGradient(
                                             begin: Alignment.topCenter,
                                             end: Alignment.bottomCenter,
-                                            colors: componentRM.state.hasReachedMax
-                                              ? BaseColors.autoSystemColor
-                                              : [BaseColors.gray1.withOpacity(0.3), 
-                                                BaseColors.gray1.withOpacity(0.3)],
+                                            colors:
+                                                componentRM.state.hasReachedMax
+                                                    ? BaseColors.autoSystemColor
+                                                    : [
+                                                        BaseColors.gray1
+                                                            .withOpacity(0.3),
+                                                        BaseColors.gray1
+                                                            .withOpacity(0.3)
+                                                      ],
                                           ).createShader(bounds);
                                         },
                                         child: const Icon(
@@ -234,81 +268,88 @@ class _CalculatorComponentPageState
                         top: 20,
                       ),
                       child: CustomTableRow(
-                      components: [
-                        CustomTableRowComponent(
-                          flexRatio: 25, 
-                          text: 'Komponen',
-                        ),
-                        CustomTableRowComponent(
-                          flexRatio: 10, 
-                          text: 'Nilai',
-                        ),
-                        CustomTableRowComponent(
-                          flexRatio: 12, 
-                          text: 'Bobot',
-                        ),
-                        CustomTableRowComponent(
-                          flexRatio: 0, 
-                          text: 'Rekomendasi',
-                          isGradient: componentRM.state.hasReachedMax,
-                          componentStyle: componentRM.state.hasReachedMax
-                            ? null
-                            : FontTheme.poppins12w600black().copyWith(
-                                color: BaseColors.gray1.withOpacity(0.3),
-                            ),
-                        )],
+                        components: [
+                          CustomTableRowComponent(
+                            flexRatio: 25,
+                            text: 'Komponen',
+                          ),
+                          CustomTableRowComponent(
+                            flexRatio: 10,
+                            text: 'Nilai',
+                          ),
+                          CustomTableRowComponent(
+                            flexRatio: 12,
+                            text: 'Bobot',
+                          ),
+                          CustomTableRowComponent(
+                            flexRatio: 0,
+                            text: 'Rekomendasi',
+                            isGradient: componentRM.state.hasReachedMax,
+                            componentStyle: componentRM.state.hasReachedMax
+                                ? null
+                                : FontTheme.poppins12w600black().copyWith(
+                                    color: BaseColors.gray1.withOpacity(0.3),
+                                  ),
+                          )
+                        ],
                       ),
                     ),
-                    if (components.isEmpty) 
+                    if (components.isEmpty)
                       Padding(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(25),
                         child: Center(
                           child: Text(
                             'Belum Ada Komponen',
-                            style: FontTheme.poppins12w500black(),
+                            style: FontTheme.poppins12w500black().copyWith(
+                              color: BaseColors.gray3,
+                            ),
                           ),
                         ),
-                    ) else ListView.separated(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.only(top: 20),
-                      itemCount: componentRM.state.components.length,
-                      itemBuilder: (context, index) {
-                        final component = components[index];
-                        return CardCompononent(
-                          id: component.id!,
-                          name: component.name!,
-                          score: component.score,
-                          weight: component.weight!,
-                          hope: componentRM.state.hasReachedMax
-                            ? 85
-                            : null,
-                          onTap: () => goToEditComponentPage(component),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const SizedBox(height: 1),
-                    ),
+                      )
+                    else
+                      ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.only(top: 20),
+                        itemCount: componentRM.state.components.length,
+                        itemBuilder: (context, index) {
+                          final component = components[index];
+                          return CardCompononent(
+                            id: component.id!,
+                            name: component.name!,
+                            score: component.score,
+                            weight: component.weight!,
+                            hope: componentRM.state.hasReachedMax ? 85 : null,
+                            onTap: () {
+                              goToEditComponentPage(component);
+                            },
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const SizedBox(height: 1),
+                      ),
+                    const HeightSpace(5),
                     CustomTableRow(
                       components: [
                         CustomTableRowComponent(
-                          flexRatio: 50, 
-                          text: '${componentRM.state.components.length} Komponen', 
+                          flexRatio: 50,
+                          text:
+                              '${componentRM.state.components.length} Komponen',
                         ),
                         CustomTableRowComponent(
-                          flexRatio: 25, 
-                          text: componentRM.state.totalScore
-                            .toStringAsFixed(2), 
+                          flexRatio: 25,
+                          text: componentRM.state.totalScore.toStringAsFixed(2),
                         ),
                         CustomTableRowComponent(
-                          flexRatio: 25, 
-                          text: '${componentRM.state.totalWeight.toStringAsFixed(0)}%', 
+                          flexRatio: 25,
+                          text:
+                              '${componentRM.state.totalWeight.toStringAsFixed(0)}%',
                         ),
                         CustomTableRowComponent(
-                          flexRatio: 30, 
+                          flexRatio: 30,
                           text: componentRM.state.hasReachedMax // dummy data
                               ? '55.87'
-                              : '', 
+                              : '',
                           isGradient: true,
                           textAlign: TextAlign.center,
                         )
@@ -361,16 +402,16 @@ class _CalculatorComponentPageState
 
   void deleteCourse() {
     nav.pop();
-      calculatorRM.setState(
-        (s) => s.deleteCalculator(
-          query: QueryCalculator(
-            courseId: widget.courseId,
-          ),
-          givenSemester: widget.givenSemester,
-          courseName: widget.courseName,
-          totalScore: widget.totalScore,
+    calculatorRM.setState(
+      (s) => s.deleteCalculator(
+        query: QueryCalculator(
+          courseId: widget.courseId,
         ),
-      );
+        givenSemester: widget.givenSemester,
+        courseName: widget.courseName,
+        totalScore: widget.totalScore,
+      ),
+    );
   }
 
   void goToComponentCreationPage() {
@@ -379,7 +420,7 @@ class _CalculatorComponentPageState
       courseId: widget.courseId,
       calculatorId: widget.calculatorId,
       courseName: widget.courseName,
-      totalScore: widget.totalScore, 
+      totalScore: widget.totalScore,
       totalPercentage: widget.totalPercentage,
     );
   }
