@@ -28,9 +28,11 @@ class ImagePickerBox extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                !isImageSizeTooBig!
-                  ? 'Reupload Gambar'
-                  : 'Upload Gambar', 
+                isImageSizeTooBig == null 
+                  ? 'Upload Gambar'
+                  : isImageSizeTooBig!
+                      ? 'Upload Gambar'
+                      : 'Reupload Gambar', 
                 style: FontTheme.poppins14w700black()
                   .copyWith(color: Colors.blue),),
               Column(
@@ -39,7 +41,7 @@ class ImagePickerBox extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Jpeg/Png/Jpg Max 5 Mb',
+                        'Jpeg/Png/Jpg Max 5 MB',
                         style: FontTheme.poppins10w400black(),),
                       Text(
                         '*',
@@ -83,13 +85,14 @@ class ImagePickerBox extends StatelessWidget {
                                   const Icon(
                                     Icons.warning_rounded,
                                     color: Colors.red,),
+                                  const WidthSpace(5),
                                   Text(
                                     'Error,',
                                     style: FontTheme.poppins12w700black().copyWith(
                                       color: Colors.red,),
                                   ),
                                   Text(
-                                    ' berhasil ditambahkan',
+                                    ' gambar melebihi 5 MB',
                                     style: FontTheme.poppins12w400black(),
                                   )
                                 ],
