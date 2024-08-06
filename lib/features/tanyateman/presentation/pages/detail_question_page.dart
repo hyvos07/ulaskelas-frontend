@@ -49,19 +49,26 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
           SliverAppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.grey.shade900,
-              ),
-              onPressed: onBackPressed,
+            leadingWidth: MediaQuery.of(context).size.width,
+            leading: Row(
+              children: [
+                IconButton(
+                  padding: const EdgeInsets.only(
+                    left: 7.5,
+                  ),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.grey.shade900,
+                  ),
+                  onPressed: onBackPressed,
+                ),
+                Text(
+                    '#${widget.model.tags}',
+                    style: FontTheme.poppins12w600black().copyWith(
+                      color: Colors.grey.shade600,),
+                  ),
+              ],
             ),
-            title: Text(
-              '#Struktur Data dan Algoritma',
-              style: FontTheme.poppins14w400black()
-                  .copyWith(color: Colors.grey.shade700),
-            ),
-            centerTitle: false,
             actions: [
               Icon(
                 Icons.more_horiz,
@@ -169,7 +176,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   }
 
   Widget _buildShowComments() {
-    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(
         bottom: 20,
