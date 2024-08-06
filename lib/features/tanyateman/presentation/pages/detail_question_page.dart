@@ -17,6 +17,8 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   int pageViewIndex = 0;
   double pageViewHeight = 0;
   late PageController _pageController;
+  ImagePicker? _imagePicker;
+  File? _fileImage;
 
   @override
   void initState() {
@@ -26,6 +28,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     componentFormRM.state.previousFrequency = '1';
     componentFormRM.state.frequency.text = '1';
     componentFormRM.state.justVisited = true;
+    _imagePicker = ImagePicker();
   }
 
   @override
@@ -36,6 +39,36 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return null; // SliverAppBar will be used instead
+  }
+
+  Future<void> pickImage() async {
+    final pickedImg = await _imagePicker!.pickImage(
+      source: ImageSource.gallery,);
+    if (pickedImg != null) {
+      final fileSizeInBytes = await pickedImg.length();
+      final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+      
+      if (fileSizeInMB <= 5) {
+        final croppedImage = await cropImage(imageFile: File(pickedImg.path));
+    
+        setState(() {
+          _fileImage = croppedImage;
+        });
+      } else {
+        ErrorMessenger('Size of the image is more than 5 MB!').show(context);
+      }
+    }
+  }
+
+  Future<File?> cropImage({required File imageFile}) async {
+    final croppedImage =
+        await ImageCropper().cropImage(sourcePath: imageFile.path);
+    if (croppedImage == null) return null;
+    return File(croppedImage.path);
+  }
+
+  void seeImage() {
+
   }
 
   @override
@@ -157,7 +190,10 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
               const HeightSpace(20),
               const SendAsAnonymSwitcher(),
               const HeightSpace(20),
-              ImagePickerBox(onTap: () {})
+              ImagePickerBox(
+                onTapUpload: pickImage,
+                onTapSeeImage: seeImage,
+              )
             ],
           ),
         ),

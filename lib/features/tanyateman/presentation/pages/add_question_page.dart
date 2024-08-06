@@ -14,6 +14,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   bool isAnonym = false;
   File? _fileImage;
   ImagePicker? _imagePicker;
+  bool? _isImageSizeTooBig;
 
   @override
   void init() {
@@ -50,9 +51,12 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
     
         setState(() {
           _fileImage = croppedImage;
+          _isImageSizeTooBig = false;
         });
       } else {
-        ErrorMessenger('Size of the image is more than 5 MB!').show(context);
+        setState(() {
+          _isImageSizeTooBig = true;
+        });
       }
     }
   }
@@ -62,6 +66,10 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
         await ImageCropper().cropImage(sourcePath: imageFile.path);
     if (croppedImage == null) return null;
     return File(croppedImage.path);
+  }
+
+  void seeImage() {
+    print('kucing');
   }
 
   @override
@@ -91,12 +99,10 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
                 const SendAsAnonymSwitcher(),
                 const HeightSpace(20),
                 ImagePickerBox(
-                  onTap: pickImage,
+                  onTapUpload: pickImage,
+                  onTapSeeImage: seeImage,
+                  isImageSizeTooBig: _isImageSizeTooBig,
                 ),
-                if (_fileImage != null)
-                  Center(
-                    child: Image.file(_fileImage!),
-                  )
               ],
             ),
           ),
