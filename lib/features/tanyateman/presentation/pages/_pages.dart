@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:states_rebuilder/scr/state_management/listeners/on_reactive.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
@@ -14,6 +17,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:ulaskelas/onboarding_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/bases/states/_states.dart';
 import '../../../../core/constants/_constants.dart';

@@ -60,6 +60,8 @@ dev_dependencies:
   # See envify.
 #  envify_generator: ^2.0.2
   envied_generator: ^0.3.0+3
+  image_picker: ^1.0.7
+  image_cropper: ^5.0.1
 
 flutter:
 

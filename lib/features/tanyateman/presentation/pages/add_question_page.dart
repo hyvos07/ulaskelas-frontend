@@ -12,6 +12,8 @@ class AddQuestionPage extends StatefulWidget {
 
 class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   bool isAnonym = false;
+  File? _fileImage;
+  ImagePicker? _imagePicker;
 
   @override
   void init() {
@@ -19,7 +21,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
     componentFormRM.state.previousFrequency = '1';
     componentFormRM.state.frequency.text = '1';
     componentFormRM.state.justVisited = true;
-
+    _imagePicker = ImagePicker();
     // print(componentFormRM.state.scoreControllers);
   }
 
@@ -34,6 +36,32 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
       label: 'TanyaTeman',
       onBackPress: onBackPressed,
     );
+  }
+
+  Future<void> pickImage() async {
+    final pickedImg = await _imagePicker!.pickImage(
+      source: ImageSource.gallery,);
+    if (pickedImg != null) {
+      final fileSizeInBytes = await pickedImg.length();
+      final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+      
+      if (fileSizeInMB <= 5) {
+        final croppedImage = await cropImage(imageFile: File(pickedImg.path));
+    
+        setState(() {
+          _fileImage = croppedImage;
+        });
+      } else {
+        ErrorMessenger('Size of the image is more than 5 MB!').show(context);
+      }
+    }
+  }
+
+  Future<File?> cropImage({required File imageFile}) async {
+    final croppedImage =
+        await ImageCropper().cropImage(sourcePath: imageFile.path);
+    if (croppedImage == null) return null;
+    return File(croppedImage.path);
   }
 
   @override
@@ -63,10 +91,12 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
                 const SendAsAnonymSwitcher(),
                 const HeightSpace(20),
                 ImagePickerBox(
-                  onTap: () {
-
-                  },
-                )
+                  onTap: pickImage,
+                ),
+                if (_fileImage != null)
+                  Center(
+                    child: Image.file(_fileImage!),
+                  )
               ],
             ),
           ),

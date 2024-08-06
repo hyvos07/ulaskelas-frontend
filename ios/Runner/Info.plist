@@ -37,6 +37,12 @@
 	<string>$(APP_FLAVOR)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to allow you to select images for the app.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera to allow you to take photos for the app.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone to allow you to record audio for videos.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
