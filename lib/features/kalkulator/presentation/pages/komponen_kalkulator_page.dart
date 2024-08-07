@@ -403,16 +403,28 @@ class _CalculatorComponentPageState
     return true;
   }
 
-  void deleteCourse() {
-    nav.pop();
-    calculatorRM.setState(
-      (s) => s.deleteCalculator(
-        query: QueryCalculator(
-          courseId: widget.courseId,
-        ),
-        givenSemester: widget.givenSemester,
-        courseName: widget.courseName,
-        totalScore: widget.totalScore,
+  Future<void> deleteCourse() async {
+    await showDialog(
+      context: context,
+      builder: (context) => DeleteDialog(
+        title: 'Hapus Matkul',
+        content:
+            'Apakah kamu yakin ingin menghapus Kalkulator ${widget.courseName}?',
+        onConfirm: () async {
+          nav
+            ..pop()
+            ..pop();
+          await calculatorRM.setState(
+            (s) => s.deleteCalculator(
+              query: QueryCalculator(
+                courseId: widget.courseId,
+              ),
+              givenSemester: widget.givenSemester,
+              courseName: widget.courseName,
+              totalScore: widget.totalScore,
+            ),
+          );
+        },
       ),
     );
   }

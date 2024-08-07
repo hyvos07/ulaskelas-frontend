@@ -86,30 +86,46 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
         Center(
           child: InkWell(
             onTap: () {
-              nav.pop();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return DeleteDialog(
+                    title: 'Hapus Komponen Nilai',
+                    content: 'Apakah Anda yakin ingin menghapus '
+                        '${widget.componentName}?',
+                    onConfirm: () {
+                      nav
+                        ..pop()
+                        ..pop();
 
-              componentFormRM.state.cleanForm();
-              if (kDebugMode) {
-                print('Hapus Komponen');
-              }
+                      componentFormRM.state.cleanForm();
+                      if (kDebugMode) {
+                        print('Hapus Komponen');
+                      }
 
-              componentRM.setState(
-                (s) => s.deleteComponent(
-                  QueryComponent(id: widget.id),
-                ),
-              );
+                      componentRM.setState(
+                        (s) => s.deleteComponent(
+                          QueryComponent(id: widget.id),
+                        ),
+                      );
 
-              nav.replaceToComponentPage(
-                givenSemester: widget.givenSemester,
-                courseId: widget.courseId,
-                calculatorId: widget.calculatorId,
-                courseName: widget.courseName,
-                totalScore: widget.totalScore -
-                    ((widget.componentScore < 0 ? 0 : widget.componentScore) *
-                        widget.componentWeight /
-                        100),
-                totalPercentage:
-                    widget.totalPercentage - widget.componentWeight,
+                      nav.replaceToComponentPage(
+                        givenSemester: widget.givenSemester,
+                        courseId: widget.courseId,
+                        calculatorId: widget.calculatorId,
+                        courseName: widget.courseName,
+                        totalScore: widget.totalScore -
+                            ((widget.componentScore < 0
+                                    ? 0
+                                    : widget.componentScore) *
+                                widget.componentWeight /
+                                100),
+                        totalPercentage:
+                            widget.totalPercentage - widget.componentWeight,
+                      );
+                    },
+                  );
+                },
               );
             },
             child: Text(
