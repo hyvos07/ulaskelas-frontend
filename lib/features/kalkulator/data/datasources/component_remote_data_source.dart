@@ -1,7 +1,7 @@
 part of '_datasources.dart';
 
 abstract class ComponentRemoteDataSource {
-  Future<Parsed<List<ComponentModel>>> getAllComponent(QueryComponent q);
+  Future<Parsed<Map<String, dynamic>>> getAllComponent(QueryComponent q);
 
   Future<Parsed<Map<String, dynamic>>> getDetailComponent(QueryComponent q);
 
@@ -14,14 +14,20 @@ abstract class ComponentRemoteDataSource {
 
 class ComponentRemoteDataSourceImpl extends ComponentRemoteDataSource {
   @override
-  Future<Parsed<List<ComponentModel>>> getAllComponent(QueryComponent q) async {
+  Future<Parsed<Map<String, dynamic>>> getAllComponent(QueryComponent q) async {
     final list = <ComponentModel>[];
     final url = '${EndpointsRevamp.components}?$q';
     final resp = await getIt(url);
     for (final data in resp.dataBodyIterable['score_component']) {
       list.add(ComponentModel.fromJson(data));
     }
-    return resp.parse(list);
+
+    final result = {
+      'recommended_score': resp.dataBodyAsMap['recommended_score'],
+      'components': list,
+    };
+
+    return resp.parse(result);
   }
 
   @override

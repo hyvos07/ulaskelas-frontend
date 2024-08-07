@@ -13,6 +13,7 @@ class ComponentState{
   bool hasReachedMax = false;
   double totalScore = 0;
   int totalWeight = 0;
+  double recommendedScore = 85;
   int page = 1;
 
   String? cacheKey = 'component-state';
@@ -29,7 +30,8 @@ class ComponentState{
     }, (result) {
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
-      _components = result.data;
+      _components = result.data['components'];
+      recommendedScore = result.data['recommended_score']?.toDouble() ?? 85;
       print(components);
     },);
     /////////////////////////////////////////////////////

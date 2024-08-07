@@ -319,7 +319,9 @@ class _CalculatorComponentPageState
                             name: component.name!,
                             score: component.score,
                             weight: component.weight!,
-                            hope: componentRM.state.hasReachedMax ? 85 : null,
+                            hope: componentRM.state.hasReachedMax
+                                ? componentRM.state.recommendedScore
+                                : null,
                             onTap: () {
                               goToEditComponentPage(component);
                             },
@@ -348,7 +350,8 @@ class _CalculatorComponentPageState
                         CustomTableRowComponent(
                           flexRatio: 30,
                           text: componentRM.state.hasReachedMax // dummy data
-                              ? '55.87'
+                              ? componentRM.state.recommendedScore
+                                  .toStringAsFixed(2)
                               : '',
                           isGradient: true,
                           textAlign: TextAlign.center,
@@ -420,22 +423,23 @@ class _CalculatorComponentPageState
       courseId: widget.courseId,
       calculatorId: widget.calculatorId,
       courseName: widget.courseName,
-      totalScore: widget.totalScore,
+      totalScore: widget.totalScore < 0 ? 0 : widget.totalScore,
       totalPercentage: widget.totalPercentage,
     );
   }
 
   void goToEditComponentPage(ComponentModel component) {
+    print(widget.totalScore);
     nav.goToEditComponentPage(
       id: component.id!,
       givenSemester: widget.givenSemester,
       courseId: widget.courseId,
       calculatorId: widget.calculatorId,
       courseName: widget.courseName,
-      totalScore: widget.totalScore,
+      totalScore: widget.totalScore < 0 ? 0 : widget.totalScore,
       totalPercentage: widget.totalPercentage,
       componentName: component.name!,
-      componentScore: component.score!,
+      componentScore: component.score! < 0 ? 0 : component.score!,
       componentWeight: component.weight!,
     );
   }

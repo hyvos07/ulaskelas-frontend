@@ -4,18 +4,16 @@ class ScoresFieldInput extends StatelessWidget {
   const ScoresFieldInput({
     required this.controllers,
     required this.length,
-    required this.subtitle,
     required this.onControllerEmpty,
     required this.averageScoreCalculation,
     required this.recommendedScore,
-    this.onFieldSubmitted,
+    this.onFieldChanged,
     super.key,
   });
 
   final List<TextEditingController> controllers;
   final int length;
-  final Text? subtitle;
-  final Function(String, int)? onFieldSubmitted;
+  final Function(String, int)? onFieldChanged;
   final VoidCallback onControllerEmpty;
   final double Function() averageScoreCalculation;
   final double recommendedScore;
@@ -47,7 +45,6 @@ class ScoresFieldInput extends StatelessWidget {
             fontSize: 13,
           ),
         ),
-        subtitle: subtitle,
         children: [
           for (var i = 0; i < length; i++) _buildSingleField(i),
           Padding(
@@ -140,7 +137,8 @@ class ScoresFieldInput extends StatelessWidget {
                         ),
                       ],
                       onFieldSubmitted: (value) =>
-                          onFieldSubmitted!(value, index + 1),
+                          onFieldChanged!(value, index + 1),
+                      onChanged: (value) => onFieldChanged!(value, index + 1),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),

@@ -8,7 +8,7 @@ class ComponentRepositoryImpl extends ComponentRepository {
   final ComponentRemoteDataSource _remoteDataSource;
 
   @override
-  Future<Decide<Failure, Parsed<List<ComponentModel>>>> getAllComponent(
+  Future<Decide<Failure, Parsed<Map<String, dynamic>>>> getAllComponent(
     QueryComponent q,
   ) {
     return apiCall(_remoteDataSource.getAllComponent(q));

@@ -20,7 +20,6 @@ class ComponentFormState {
   String _previousFrequency = '1';
   double _recommendedScore = 85;
   bool isLoading = false;
-  bool isEmptyScoreDetected = false;
   bool justVisited = true;
 
   /// Get details information of passed component
@@ -38,7 +37,7 @@ class ComponentFormState {
             detail['scores'][i] == null ? '' : detail['scores'][i].toString();
         _formData.score![i + 1] = detail['scores'][i];
       }
-      _recommendedScore = detail['recommended_score'] ?? 85;
+      _recommendedScore = detail['recommended_score']?.toDouble() ?? 85;
       justVisited = true;
     });
   }
@@ -211,17 +210,6 @@ class ComponentFormState {
       valid++;
     }
     return sum != 0 && valid != 0 ? sum / valid : null;
-  }
-
-  void emptyScoreDetect() {
-    if (_scoreControllers.length == 1 && justVisited) {
-      isEmptyScoreDetected = false;
-    } else {
-      isEmptyScoreDetected = !(averageScore() == null) &&
-          _scoreControllers.any((element) => element.text.isEmpty);
-    }
-
-    componentFormRM.notify();
   }
 }
 

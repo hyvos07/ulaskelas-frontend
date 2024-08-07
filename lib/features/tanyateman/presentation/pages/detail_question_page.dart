@@ -252,7 +252,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   Future<void> onSubmitCallBack(BuildContext context) async {
     final currentFocus = FocusScope.of(context);
     componentFormRM.state.justVisited = false;
-    componentFormRM.state.emptyScoreDetect();
 
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
@@ -273,7 +272,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       final weight = componentFormRM.state.formData.weight!;
 
       componentFormRM.state.cleanForm();
-      componentFormRM.state.emptyScoreDetect();
       if (kDebugMode) {
         print('success');
       }
@@ -283,7 +281,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
     WarningMessenger('Pastikan semua field sudah terisi dengan benar!')
         .show(context);
-    componentFormRM.state.emptyScoreDetect();
   }
 
   @override
@@ -298,7 +295,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   Future<bool> onBackPressed() async {
     componentFormRM.state.previousFrequency = '1';
     componentFormRM.state.cleanForm();
-    componentFormRM.state.emptyScoreDetect();
     nav.pop<void>();
     return true;
   }

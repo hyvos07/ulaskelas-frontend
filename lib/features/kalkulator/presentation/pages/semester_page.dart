@@ -165,6 +165,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
   Future<bool> onBackPressed() async {
     nav.pop();
     calculatorRM.state.calculators.clear();
+    await semesterRM.state.retrieveData();
     return true;
   }
 
