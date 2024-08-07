@@ -36,9 +36,19 @@ class ComponentState{
     totalWeight = _components!.fold(
       0, (int num, e) => num + e.weight!.toInt(),);
     hasReachedMax = totalWeight >= 100;
+    for (final i in _components!) {
+      print(i.score);
+    }
     totalScore = _components!.fold(
       // ignore: prefer_int_literals
-      0.0, (double num, e) => num + (e.weight!.toInt() / 100 * e.score!),);
+      0.0, 
+      (double num, e) {
+        if (e.score != null && e.score != -1.0) {
+          return num + (e.weight!.toInt() / 100 * e.score!);
+        }
+        return num;
+      },
+    );
     /////////////////////////////////////////////////////
     componentRM.notify();
   }
