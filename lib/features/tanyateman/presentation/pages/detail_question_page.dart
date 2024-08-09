@@ -43,9 +43,8 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   }
 
   Future<void> pickImage() async {
-    final pickedImg = await _imagePicker!.pickImage(
-      source: ImageSource.gallery,
-    );
+    final pickedImg =
+        await _imagePicker!.pickImage(source: ImageSource.gallery);
     if (pickedImg != null) {
       final fileSizeInBytes = await pickedImg.length();
       final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
@@ -53,10 +52,12 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       if (fileSizeInMB <= 5) {
         final croppedImage = await cropImage(imageFile: File(pickedImg.path));
 
-        setState(() {
-          _fileImage = croppedImage;
-          _isImageSizeTooBig = false;
-        });
+        if (croppedImage != null) {
+          setState(() {
+            _fileImage = croppedImage;
+            _isImageSizeTooBig = false;
+          });
+        }
       } else {
         setState(() {
           _isImageSizeTooBig = true;
@@ -68,7 +69,30 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
   Future<File?> cropImage({required File imageFile}) async {
     final croppedImage =
-        await ImageCropper().cropImage(sourcePath: imageFile.path);
+        await ImageCropper().cropImage(
+          sourcePath: imageFile.path,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio3x2,
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.ratio4x3,
+            CropAspectRatioPreset.ratio16x9,
+          ],
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: 'Crop Photo',
+              toolbarColor: Colors.black,
+              toolbarWidgetColor: Colors.white,
+              activeControlsWidgetColor: Colors.grey.shade600,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false,
+            ),
+            IOSUiSettings(
+              title: 'Cropper',
+              minimumAspectRatio: 1,
+            ),
+          ],
+          );
     if (croppedImage == null) return null;
     return File(croppedImage.path);
   }
