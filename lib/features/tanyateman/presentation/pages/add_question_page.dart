@@ -69,7 +69,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   }
 
   void seeImage() {
-    print('kucing');
+    nav.goToViewImagePage(FileImage(_fileImage!));
   }
 
   @override

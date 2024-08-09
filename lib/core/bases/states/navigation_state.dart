@@ -348,4 +348,10 @@ class NavigationServiceState implements Navigation {
   Future<void> goToSearchCourseRadioPick() {
     return nav.push<void>(const SearchCourseQuestion(givenSemester: '1'));
   }
+
+  Future<void> goToViewImagePage(FileImage imageFile) {
+    return nav.push<void>(
+      ViewImagePage(imageFile: imageFile)
+    );
+  }
 }
