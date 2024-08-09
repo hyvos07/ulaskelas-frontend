@@ -83,8 +83,8 @@ class ImagePickerBox extends StatelessWidget {
                               Row(
                                 children: [
                                   const Icon(
-                                    Icons.warning_rounded,
-                                    color: Colors.red,),
+                                    Icons.error,
+                                    color: Colors.red, size: 20,),
                                   const WidthSpace(5),
                                   Text(
                                     'Error,',

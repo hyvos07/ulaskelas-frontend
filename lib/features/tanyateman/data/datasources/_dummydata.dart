@@ -11,6 +11,7 @@ class DummyData {
         'likes': 10,
         'answers': 5,
         'created_at': 1722123421,
+        'attachment_url': null,
       },
       {
         'id': 2,
@@ -22,6 +23,7 @@ class DummyData {
         'likes': 214,
         'answers': 40,
         'created_at': 1720155450,
+        'attachment_url': null,
       },
       {
         'id': 3,
@@ -29,10 +31,12 @@ class DummyData {
         'user_major': 'Ilmu Komputer',
         'user_generation': '2022',
         'tags': 'Dasar - Dasar Pemrograman 1',
-        'question': 'TP 3 enaknya bikin neural network from scratch kali yak?',
+        'question': 'Ternyata python juga ada batasannya ya',
         'likes': 3455,
         'answers': 223,
         'created_at': 1705173240,
+        'attachment_url':
+            'https://drive.google.com/uc?export=view&id=1riQsTtYoh6plVVfPBENiH6wSGdl5hXbE',
       },
       {
         'id': 4,
@@ -45,6 +49,7 @@ class DummyData {
         'likes': 10034,
         'answers': 883,
         'created_at': 1752172881,
+        'attachment_url': null,
       },
       {
         'id': 5,
@@ -58,6 +63,7 @@ class DummyData {
         'likes': 110,
         'answers': 40,
         'created_at': 1708355326,
+        'attachment_url': null,
       },
       {
         'id': 6,
@@ -70,6 +76,7 @@ class DummyData {
         'likes': 101203,
         'answers': 10,
         'created_at': 1714782171,
+        'attachment_url': null,
       },
       {
         'id': 7,
@@ -82,6 +89,7 @@ class DummyData {
         'likes': 12200,
         'answers': 110,
         'created_at': 1708320679,
+        'attachment_url': null,
       },
       {
         'id': 8,
@@ -93,17 +101,20 @@ class DummyData {
         'likes': 100,
         'answers': 10,
         'created_at': 1706305883,
+        'attachment_url': null,
       },
       {
         'id': 9,
         'user_full_name': 'Caca Marica',
         'user_major': 'Ilmu Komputer',
         'user_generation': '2022',
-        'tags': 'Dasar - Dasar Pemrograman 2',
-        'question': 'Kenapa kalo bikin class di Java harus pake public?',
+        'tags': 'Pengantar Sistem Digital',
+        'question': 'Ada yang bikin logisim kayak begini juga gak guys?',
         'likes': 1234,
         'answers': 100,
         'created_at': 1720155450,
+        'attachment_url':
+            'https://drive.google.com/uc?export=view&id=1UcCsyKAMj8QRJSOhCrbUUkE4yjfWeohD',
       },
       {
         'id': 10,
@@ -116,6 +127,7 @@ class DummyData {
         'likes': 1,
         'answers': 1234,
         'created_at': 1717789895,
+        'attachment_url': null,
       },
       {
         'id': 11,
@@ -127,6 +139,7 @@ class DummyData {
         'likes': 134,
         'answers': 12,
         'created_at': 1720356189,
+        'attachment_url': null,
       },
       {
         'id': 12,
@@ -138,6 +151,8 @@ class DummyData {
         'likes': 123,
         'answers': 1234,
         'created_at': 1711419016,
+        'attachment_url':
+            'https://drive.google.com/uc?export=view&id=1iG5VS7N6yAyhugfFK5lCQEGmPnMqYgXj',
       },
       {
         'id': 13,
@@ -149,6 +164,7 @@ class DummyData {
         'likes': 12324,
         'answers': 23,
         'created_at': 1722123421,
+        'attachment_url': null,
       },
       {
         'id': 14,
@@ -156,10 +172,12 @@ class DummyData {
         'user_major': 'Sistem Informasi',
         'user_generation': '2027',
         'tags': 'Tugas Akhir',
-        'question': 'Ada yang tau dosen pembimbing yang baik ga?',
+        'question': 'TA gw apa bikin konservasi penyu ya? 🐢',
         'likes': 123,
         'answers': 56,
         'created_at': 1713921013,
+        'attachment_url':
+            'https://drive.google.com/uc?export=view&id=18w_I714EvVzDffMZE6cfM-A-dDPk2Yvw',
       },
       {
         'id': 15,
@@ -172,6 +190,7 @@ class DummyData {
         'likes': 1023,
         'answers': 63,
         'created_at': 1707693911,
+        'attachment_url': null,
       },
       {
         'id': 16,
@@ -184,18 +203,21 @@ class DummyData {
         'likes': 134,
         'answers': 12,
         'created_at': 1720356189,
+        'attachment_url': null,
       },
       {
         'id': 17,
         'user_full_name': 'Joshua Montolalu',
         'user_major': 'Sistem Informasi',
         'user_generation': '2022',
-        'tags': 'MPKT',
+        'tags': 'Pengantar Sistem Digital',
         'question':
-            'Kelas nya Bu Arawinda recommended ga sih? Di twitter banyak yang bilang bagus, tapi kayak ngesarkas gitu',
+            'Apakah basic cylical counter saya sudah benar? Mohon bantuannya',
         'likes': 123,
         'answers': 1234,
         'created_at': 1711419016,
+        'attachment_url':
+            'https://drive.google.com/uc?export=view&id=1C4cH2IJ8wInB62eZp3KiH6KTZwpA3Hfi',
       },
       {
         'id': 18,
@@ -208,6 +230,7 @@ class DummyData {
         'likes': 12324,
         'answers': 23,
         'created_at': 1722123421,
+        'attachment_url': null,
       },
       {
         'id': 19,
@@ -220,6 +243,7 @@ class DummyData {
         'likes': 123,
         'answers': 56,
         'created_at': 1713921013,
+        'attachment_url': null,
       },
       {
         'id': 20,
@@ -231,6 +255,7 @@ class DummyData {
         'likes': 1098723,
         'answers': 63,
         'created_at': 1707693911,
+        'attachment_url': null,
       },
       {
         'id': 21,
@@ -242,6 +267,7 @@ class DummyData {
         'likes': 134,
         'answers': 12,
         'created_at': 1720356189,
+        'attachment_url': null,
       },
       {
         'id': 22,
@@ -249,10 +275,12 @@ class DummyData {
         'user_major': 'Sistem Informasi',
         'user_generation': '2022',
         'tags': 'Aljabar Linear',
-        'question': "So you're telling me that 2 + 2 = 4?",
+        'question': 'Kelas alin gacor cuy dapet haaland nih',
         'likes': 123,
         'answers': 1234,
         'created_at': 1711419016,
+        'attachment_url':
+            'https://drive.google.com/uc?export=view&id=1ilTDHuZLmfEZkv3qMmyrffEB3eDx1o1U',
       },
       {
         'id': 23,
@@ -264,6 +292,7 @@ class DummyData {
         'likes': 12324,
         'answers': 23,
         'created_at': 1722123421,
+        'attachment_url': null,
       },
       {
         'id': 24,
@@ -275,6 +304,7 @@ class DummyData {
         'likes': 123,
         'answers': 56,
         'created_at': 1713921013,
+        'attachment_url': null,
       },
       {
         'id': 25,
@@ -286,6 +316,7 @@ class DummyData {
         'likes': 2455,
         'answers': 1122,
         'created_at': 1707693911,
+        'attachment_url': null,
       },
     ]
   };

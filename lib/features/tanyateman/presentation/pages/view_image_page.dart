@@ -6,14 +6,14 @@ class ViewImagePage extends StatefulWidget {
     super.key,
   });
 
-  final FileImage imageFile;
+  final ImageProvider imageFile;
 
   @override
   State<ViewImagePage> createState() => _ViewImagePageState();
 }
 
 class _ViewImagePageState extends State<ViewImagePage> {
-  var focusOnImage = false;
+  bool focusOnImage = false;
 
   @override
   Widget build(BuildContext context) {

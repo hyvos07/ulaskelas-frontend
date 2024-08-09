@@ -9,7 +9,8 @@ class QuestionModel {
   final String question;
   final int likes;
   final int answers;
-  final int createdAt; // Milliseconds since epoch
+  final int createdAt; // unix timestamp (?)
+  final String? attachmentUrl;
 
   QuestionModel({
     required this.id,
@@ -21,6 +22,7 @@ class QuestionModel {
     required this.likes,
     required this.answers,
     required this.createdAt,
+    this.attachmentUrl,
   });
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class QuestionModel {
       likes: json['likes'],
       answers: json['answers'],
       createdAt: json['created_at'],
+      attachmentUrl: json['attachment_url'],
     );
   }
 
@@ -46,6 +49,7 @@ class QuestionModel {
     data['user_generation'] = userGeneration;
     data['tags'] = tags;
     data['question'] = question;
+    // data['attachment'] = attachment;
     data['likes'] = likes;
     data['answers'] = answers;
     data['created_at'] = createdAt;

@@ -5,15 +5,20 @@ class PostContent extends StatelessWidget {
     this.model,
     this.isReply = false,
     this.isDetail = false,
+    this.onImageTap,
     super.key,
   });
 
   final QuestionModel? model;
+  final VoidCallback? onImageTap;
   final bool isReply;
   final bool isDetail;
 
   @override
   Widget build(BuildContext context) {
+    final maxImageWidth = double.infinity;
+    final maxImageHeight = MediaQuery.of(context).size.width - (20 * 4);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -87,7 +92,100 @@ class PostContent extends StatelessWidget {
           overflow: isDetail ? TextOverflow.visible : TextOverflow.ellipsis,
           textAlign: TextAlign.left,
         ),
-        HeightSpace(isDetail ? 15 : 13.5),
+        if (model!.attachmentUrl != null)
+          Column(
+            children: [
+              HeightSpace(isDetail ? 20 : 18),
+              GestureDetector(
+                onTap: onImageTap ?? () {},
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return CachedNetworkImage(
+                      imageUrl: model!.attachmentUrl!,
+                      placeholder: (context, url) => SizedBox(
+                        height: MediaQuery.of(context).size.width - (20 * 4),
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: BaseColors.gray3,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        height: MediaQuery.of(context).size.width - (20 * 4),
+                        decoration: BoxDecoration(
+                          color: BaseColors.gray3,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              const Icon(
+                                Icons.error,
+                                color: BaseColors.gray1,
+                              ),
+                              const HeightSpace(10),
+                              Text(
+                                'Gagal memuat gambar',
+                                style: FontTheme.poppins12w400black().copyWith(
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      imageBuilder: (context, imageProvider) {
+                        double? displayHeight;
+                        imageProvider
+                            .resolve(ImageConfiguration.empty)
+                            .addListener(
+                          ImageStreamListener((ImageInfo info, bool _) {
+                            final aspectRatio =
+                                info.image.width / info.image.height;
+                            final displayWidth =
+                                constraints.maxWidth < maxImageWidth
+                                    ? constraints.maxWidth
+                                    : maxImageWidth;
+                            displayHeight = isDetail
+                                ? displayWidth / aspectRatio
+                                : displayWidth / aspectRatio > maxImageHeight
+                                    ? maxImageHeight
+                                    : displayWidth / aspectRatio;
+                          }),
+                        );
+
+                        return Container(
+                          width: maxImageWidth,
+                          height: displayHeight,
+                          decoration: BoxDecoration(
+                            color: BaseColors.gray4.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(6),
+                            image: DecorationImage(
+                              alignment: Alignment.topCenter,
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                            border: Border.all(
+                              color: BaseColors.gray1,
+                              width: 0.1,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+              HeightSpace(isDetail ? 20 : 18),
+            ],
+          )
+        else
+          HeightSpace(isDetail ? 15 : 13.5),
         Row(
           children: [
             SvgPicture.asset(
@@ -144,10 +242,10 @@ class PostContent extends StatelessWidget {
   }
 
   String _shortenEngagement(int entity) {
-    if (entity >= 1000) {
-      return '${(entity / 1000).toStringAsFixed(1)}k';
-    } else if (entity >= 1000000) {
+    if (entity >= 1000000) {
       return '${(entity / 1000000).toStringAsFixed(1)}M';
+    } else if (entity >= 1000) {
+      return '${(entity / 1000).toStringAsFixed(1)}k';
     }
     return entity.toString();
   }

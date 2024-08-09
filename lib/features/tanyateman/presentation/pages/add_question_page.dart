@@ -5,7 +5,6 @@ class AddQuestionPage extends StatefulWidget {
     super.key,
   });
 
-
   @override
   _AddQuestionPageState createState() => _AddQuestionPageState();
 }
@@ -40,15 +39,15 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   }
 
   Future<void> pickImage() async {
-    final pickedImg = await _imagePicker!.pickImage(
-      source: ImageSource.gallery,);
+    final pickedImg =
+        await _imagePicker!.pickImage(source: ImageSource.gallery);
     if (pickedImg != null) {
       final fileSizeInBytes = await pickedImg.length();
       final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-      
+
       if (fileSizeInMB <= 5) {
         final croppedImage = await cropImage(imageFile: File(pickedImg.path));
-    
+
         setState(() {
           _fileImage = croppedImage;
           _isImageSizeTooBig = false;
@@ -86,14 +85,15 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
               padding: const EdgeInsets.all(24),
               children: [
                 const QuestionFormLabel(
-                  text: 'Pertanyaan', bottomPad: 10,
+                  text: 'Pertanyaan',
+                  bottomPad: 10,
                 ),
                 const QuestionTextField(),
                 const HeightSpace(15),
                 CoursePicker(
                   onTap: () {
                     nav.goToSearchCourseRadioPick();
-                  }
+                  },
                 ),
                 const HeightSpace(20),
                 const SendAsAnonymSwitcher(),
@@ -168,7 +168,6 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
     WarningMessenger('Pastikan semua field sudah terisi dengan benar!')
         .show(context);
   }
-
 
   @override
   Widget buildWideLayout(

@@ -19,6 +19,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   late PageController _pageController;
   ImagePicker? _imagePicker;
   File? _fileImage;
+  bool? _isImageSizeTooBig;
 
   @override
   void initState() {
@@ -43,18 +44,23 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
   Future<void> pickImage() async {
     final pickedImg = await _imagePicker!.pickImage(
-      source: ImageSource.gallery,);
+      source: ImageSource.gallery,
+    );
     if (pickedImg != null) {
       final fileSizeInBytes = await pickedImg.length();
       final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-      
+
       if (fileSizeInMB <= 5) {
         final croppedImage = await cropImage(imageFile: File(pickedImg.path));
-    
+
         setState(() {
           _fileImage = croppedImage;
+          _isImageSizeTooBig = false;
         });
       } else {
+        setState(() {
+          _isImageSizeTooBig = true;
+        });
         ErrorMessenger('Size of the image is more than 5 MB!').show(context);
       }
     }
@@ -67,8 +73,16 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     return File(croppedImage.path);
   }
 
-  void seeImage() {
-
+  void seeImage({
+    bool isDetail = false,
+  }) {
+    if (isDetail) {
+      nav.goToViewImagePage(
+        CachedNetworkImageProvider(widget.model.attachmentUrl!),
+      );
+    } else {
+      nav.goToViewImagePage(FileImage(_fileImage!));
+    }
   }
 
   @override
@@ -96,10 +110,11 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                   onPressed: onBackPressed,
                 ),
                 Text(
-                    '#${widget.model.tags}',
-                    style: FontTheme.poppins12w600black().copyWith(
-                      color: Colors.grey.shade600,),
+                  '#${widget.model.tags}',
+                  style: FontTheme.poppins12w600black().copyWith(
+                    color: Colors.grey.shade600,
                   ),
+                ),
               ],
             ),
             actions: [
@@ -120,6 +135,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                       PostContent(
                         model: widget.model,
                         isDetail: true,
+                        onImageTap: () => seeImage(isDetail: true),
                       ),
                       const HeightSpace(20),
                       Row(
@@ -193,6 +209,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
               ImagePickerBox(
                 onTapUpload: pickImage,
                 onTapSeeImage: seeImage,
+                isImageSizeTooBig: _isImageSizeTooBig,
               )
             ],
           ),
@@ -301,6 +318,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
   @override
   void init() {
-    // TODO: implement init
+    // TODO: load state to retrieve data (tp nanti aja)
   }
 }

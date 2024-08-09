@@ -48,6 +48,7 @@ class CardPost extends StatelessWidget {
               PostContent(
                 isReply: isReply,
                 model: model,
+                onImageTap: onTap,
               ),
             ],
           )),
