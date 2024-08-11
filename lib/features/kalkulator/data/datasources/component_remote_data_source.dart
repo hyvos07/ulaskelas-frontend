@@ -15,15 +15,27 @@ abstract class ComponentRemoteDataSource {
 class ComponentRemoteDataSourceImpl extends ComponentRemoteDataSource {
   @override
   Future<Parsed<Map<String, dynamic>>> getAllComponent(QueryComponent q) async {
+    // di q bisa aja dateng '&target_score=??? nanti dipertimbangkan lagi
     final list = <ComponentModel>[];
-    final url = '${EndpointsRevamp.components}?$q';
-    final resp = await getIt(url);
+    var url = '${EndpointsRevamp.components}?$q';
+    var resp = await getIt(url);
+    final maxPossibleScore = resp.dataBodyAsMap['max_possible_score'];
+
+    var ts = 85; // default target score
+    if (maxPossibleScore < ts && q.targetScore == null){
+      while (ts > maxPossibleScore && ts >= 55) {ts -= 5;}
+      url = '${EndpointsRevamp.components}?$q&target_score=$ts';
+      resp = await getIt(url);
+    }
+
     for (final data in resp.dataBodyIterable['score_component']) {
       list.add(ComponentModel.fromJson(data));
     }
 
     final result = {
       'recommended_score': resp.dataBodyAsMap['recommended_score'],
+      'max_possible_score' : resp.dataBodyAsMap['max_possible_score'],
+      'target_score' : q.targetScore,
       'components': list,
     };
 

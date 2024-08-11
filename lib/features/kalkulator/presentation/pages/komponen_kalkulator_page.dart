@@ -50,15 +50,14 @@ class _CalculatorComponentPageState
     );
   }
 
-  String _selectedItem = 'A (85.00)';
   final List<String> _nilaiHarapanList = [
-    'A (85.00)',
-    'A- (80.00)',
-    'B+ (75.00)',
-    'B (70.00)',
-    'B- (65.00)',
-    'C+ (60.00)',
-    'C (55.00)'
+    '85',
+    '80',
+    '75',
+    '70',
+    '65',
+    '60',
+    '55'
   ];
 
   @override
@@ -166,12 +165,14 @@ class _CalculatorComponentPageState
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       borderRadius: BorderRadius.circular(10),
-                                      value: _selectedItem,
+                                      value: componentRM.state.target
+                                        .toString(),
                                       onChanged: componentRM.state.hasReachedMax
                                           ? (String? newValue) {
-                                              setState(() {
-                                                _selectedItem = newValue!;
-                                              });
+                                              componentRM.state.setTarget(
+                                                int.parse(newValue!)
+                                              );
+                                              retrieveData();
                                             }
                                           : null,
                                       selectedItemBuilder:
@@ -180,7 +181,8 @@ class _CalculatorComponentPageState
                                             .map<Widget>((String value) {
                                           return Center(
                                             child: GradientText(
-                                              value,
+                                              _getFinalScoreAndGrade(
+                                                double.parse(value)),
                                               gradient: LinearGradient(
                                                 begin: Alignment.topCenter,
                                                 end: Alignment.bottomCenter,
@@ -203,6 +205,9 @@ class _CalculatorComponentPageState
                                       items:
                                           _nilaiHarapanList.map((String value) {
                                         return DropdownMenuItem<String>(
+                                          enabled: 
+                                            componentRM.state.maxPossibleScore 
+                                              > double.parse(value),
                                           value: value,
                                           child: Center(
                                             child: Container(
@@ -212,21 +217,29 @@ class _CalculatorComponentPageState
                                                 vertical: 2.5,
                                               ),
                                               decoration: BoxDecoration(
-                                                color: _selectedItem == value
+                                                color: componentRM.state.target
+                                                            .toString() == value
                                                     ? BaseColors.mineShaft
                                                         .withOpacity(0.125)
                                                     : Colors.transparent,
                                                 borderRadius:
                                                     BorderRadius.circular(4),
                                               ),
+                                              // ignore: lines_longer_than_80_chars
                                               child: Text(
-                                                value,
+                                                _getFinalScoreAndGrade(
+                                                  double.parse(value),),
                                                 style: FontTheme
                                                         .poppins14w500black()
                                                     .copyWith(
                                                   fontSize: 13.5,
                                                   color: BaseColors.mineShaft
-                                                      .withOpacity(0.85),
+                                                      .withOpacity(
+                                                        componentRM.state.maxPossibleScore
+                                                          > double.parse(value)
+                                                        ? 0.85
+                                                        : 0.25
+                                                      ),
                                                 ),
                                               ),
                                             ),
@@ -350,7 +363,7 @@ class _CalculatorComponentPageState
                         CustomTableRowComponent(
                           flexRatio: 30,
                           text: componentRM.state.hasReachedMax // dummy data
-                              ? componentRM.state.recommendedScore
+                              ? componentRM.state.target!
                                   .toStringAsFixed(2)
                               : '',
                           isGradient: true,
@@ -482,9 +495,14 @@ class _CalculatorComponentPageState
   Future<void> retrieveData() async {
     await componentRM.setState(
       (s) => s.retrieveData(
-        QueryComponent(
-          calculatorId: widget.calculatorId,
-        ),
+        componentRM.state.target == null
+          ? QueryComponent(
+              calculatorId: widget.calculatorId,
+            )
+          : QueryComponent(
+              calculatorId: widget.calculatorId,
+              targetScore: componentRM.state.target
+            ),
       ),
     );
   }

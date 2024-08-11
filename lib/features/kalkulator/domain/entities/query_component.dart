@@ -2,11 +2,13 @@ class QueryComponent {
   int? id;
   int? calculatorId;
   int? scoreComponentId;
+  int? targetScore;
 
   QueryComponent({
     this.calculatorId,
     this.id,
     this.scoreComponentId,
+    this.targetScore
   });
 
   @override
@@ -20,6 +22,9 @@ class QueryComponent {
     }
     if (scoreComponentId != null) {
       data['score_component_id'] = scoreComponentId.toString();
+    }
+    if (targetScore != null) {
+      data['target_score'] = targetScore.toString();
     }
     return Uri(queryParameters: data).query;
   }
