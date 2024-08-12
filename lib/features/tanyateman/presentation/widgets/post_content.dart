@@ -17,7 +17,8 @@ class PostContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final maxImageWidth = double.infinity;
-    final maxImageHeight = MediaQuery.of(context).size.width - (20 * 4);
+    final maxImageHeight =
+        MediaQuery.of(context).size.width - (isDetail ? 20 * 2 : 20 * 4);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,29 +36,11 @@ class PostContent extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text.rich(
-                          TextSpan(
-                            text: model!.userFullName,
-                            style: FontTheme.poppins12w700black().copyWith(
-                              height: 1.75,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            children: [
-                              const WidgetSpan(
-                                child: WidthSpace(8),
-                              ),
-                              WidgetSpan(
-                                alignment: PlaceholderAlignment.middle,
-                                child: Text(
-                                  model!.relativeDateTime,
-                                  style:
-                                      FontTheme.poppins12w400black().copyWith(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ),
-                            ],
+                        child: Text(
+                          model!.userFullName,
+                          style: FontTheme.poppins12w700black().copyWith(
+                            height: 1.75,
+                            fontWeight: FontWeight.w600,
                           ),
                           overflow: TextOverflow.visible,
                         ),
@@ -103,7 +86,7 @@ class PostContent extends StatelessWidget {
                     return CachedNetworkImage(
                       imageUrl: model!.attachmentUrl!,
                       placeholder: (context, url) => SizedBox(
-                        height: MediaQuery.of(context).size.width - (20 * 4),
+                        height: maxImageHeight,
                         child: Shimmer.fromColors(
                           baseColor: Colors.grey.shade300,
                           highlightColor: Colors.grey.shade100,
@@ -116,24 +99,25 @@ class PostContent extends StatelessWidget {
                         ),
                       ),
                       errorWidget: (context, url, error) => Container(
-                        height: MediaQuery.of(context).size.width - (20 * 4),
+                        height: maxImageHeight,
                         decoration: BoxDecoration(
                           color: BaseColors.gray3,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Icon(
-                                Icons.error,
+                                Icons.warning_rounded,
                                 color: BaseColors.gray1,
+                                size: 40,
                               ),
                               const HeightSpace(10),
                               Text(
-                                'Gagal memuat gambar',
-                                style: FontTheme.poppins12w400black().copyWith(
-                                  fontWeight: FontWeight.w300,
-                                ),
+                                'Gagal memuat gambar!'
+                                '\nKlik untuk mencoba lagi.',
+                                style: FontTheme.poppins12w600black(),
                               ),
                             ],
                           ),
@@ -151,9 +135,8 @@ class PostContent extends StatelessWidget {
                                 constraints.maxWidth < maxImageWidth
                                     ? constraints.maxWidth
                                     : maxImageWidth;
-                            displayHeight = isDetail
-                                ? displayWidth / aspectRatio
-                                : displayWidth / aspectRatio > maxImageHeight
+                            displayHeight =
+                                displayWidth / aspectRatio > maxImageHeight
                                     ? maxImageHeight
                                     : displayWidth / aspectRatio;
                           }),
@@ -163,7 +146,7 @@ class PostContent extends StatelessWidget {
                           width: maxImageWidth,
                           height: displayHeight,
                           decoration: BoxDecoration(
-                            color: BaseColors.gray4.withOpacity(0.6),
+                            color: BaseColors.gray4.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(6),
                             image: DecorationImage(
                               alignment: Alignment.topCenter,
