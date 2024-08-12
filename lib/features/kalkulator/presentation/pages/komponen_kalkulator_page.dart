@@ -127,160 +127,39 @@ class _CalculatorComponentPageState
                             const SizedBox(
                               width: 6,
                             ),
-                            Container(
-                              // nanti pisahin jadi state terpisah
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 1.75,
-                                vertical: 1.75,
-                              ),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: componentRM.state.hasReachedMax
-                                    && componentRM.state.canGiveRecom!
-                                      ? BaseColors.autoSystemColor
-                                      : [
-                                          BaseColors.gray1.withOpacity(0.3),
-                                          BaseColors.gray1.withOpacity(0.3)
-                                        ],
-                                ),
-                                borderRadius: BorderRadius.circular(6.5),
-                              ),
-                              child: Container(
-                                height: 27,
-                                padding: const EdgeInsets.only(
-                                  left: 7.5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(4.5),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (!componentRM.state.hasReachedMax ) {
-                                      ErrorMessenger(
-                                        'Total bobot harus mencapai 100%',
-                                      ).show(context);
-                                    } else if (!componentRM.state.canGiveRecom) {
-                                      ErrorMessenger(
-                                        'Semua nilai komponen sudah terisi',
-                                      ).show(context);
+                            TargetScoreDropdown(
+                              nilaiHarapanList: _nilaiHarapanList,
+                              voidWhenHasntReacedhMax: () {
+                                if (!componentRM.state.hasReachedMax) {
+                                  ErrorMessenger(
+                                    'Total bobot harus mencapai 100%',
+                                  ).show(context);
+                                } else if (!componentRM.state.canGiveRecom) {
+                                  if (componentRM.state.allScoreFilled) {
+                                    print(componentRM.state.allScoreFilled);
+                                    ErrorMessenger(
+                                      'Semua nilai komponen sudah terisi',
+                                    ).show(context);
+                                  } else if (!componentRM.state.canPass) {
+                                    ErrorMessenger(
+                                      'Nilai tidak dapat mencapai minimal target',
+                                    ).show(context);
+                                  } 
+                                }
+                              },
+                              voidWhenReachedMax: componentRM.state.hasReachedMax
+                                && componentRM.state.canGiveRecom
+                                  ? (String? newValue) {
+                                      componentRM.state.setTarget(
+                                        int.parse(newValue!)
+                                      );
+                                      retrieveData();
                                     }
-                                  },
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      borderRadius: BorderRadius.circular(10),
-                                      value: componentRM.state.target
-                                        .toString(),
-                                      onChanged: componentRM.state.hasReachedMax
-                                        && componentRM.state.canGiveRecom!
-                                          ? (String? newValue) {
-                                              componentRM.state.setTarget(
-                                                int.parse(newValue!)
-                                              );
-                                              retrieveData();
-                                            }
-                                          : null,
-                                      selectedItemBuilder:
-                                          (BuildContext context) {
-                                        return _nilaiHarapanList
-                                            .map<Widget>((String value) {
-                                          return Center(
-                                            child: GradientText(
-                                              _getFinalScoreAndGrade(
-                                                double.parse(value)),
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: componentRM
-                                                        .state.hasReachedMax
-                                                     && componentRM.state
-                                                        .canGiveRecom!
-                                                    ? BaseColors.autoSystemColor
-                                                    : [
-                                                        BaseColors.gray1
-                                                            .withOpacity(0.3),
-                                                        BaseColors.gray1
-                                                            .withOpacity(0.3)
-                                                      ],
-                                              ),
-                                              style: FontTheme
-                                                  .poppins14w500black(),
-                                            ),
-                                          );
-                                        }).toList();
-                                      },
-                                      items:
-                                          _nilaiHarapanList.map((String value) {
-                                        return DropdownMenuItem<String>(
-                                          enabled: 
-                                            componentRM.state.maxPossibleScore 
-                                              >= double.parse(value),
-                                          value: value,
-                                          child: Center(
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 7.5,
-                                                vertical: 2.5,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: componentRM.state.target
-                                                            .toString() == value
-                                                    ? BaseColors.mineShaft
-                                                        .withOpacity(0.125)
-                                                    : Colors.transparent,
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                              ),
-                                              // ignore: lines_longer_than_80_chars
-                                              child: Text(
-                                                _getFinalScoreAndGrade(
-                                                  double.parse(value),),
-                                                style: FontTheme
-                                                        .poppins14w500black()
-                                                    .copyWith(
-                                                  fontSize: 13.5,
-                                                  color: BaseColors.mineShaft
-                                                      .withOpacity(
-                                                        componentRM.state.maxPossibleScore
-                                                          >= double.parse(value)
-                                                        ? 0.85
-                                                        : 0.25
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      icon: ShaderMask(
-                                        shaderCallback: (Rect bounds) {
-                                          return LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors:
-                                                componentRM.state.hasReachedMax
-                                                  && componentRM.state.canGiveRecom!
-                                                    ? BaseColors.autoSystemColor
-                                                    : [
-                                                        BaseColors.gray1
-                                                            .withOpacity(0.3),
-                                                        BaseColors.gray1
-                                                            .withOpacity(0.3)
-                                                      ],
-                                          ).createShader(bounds);
-                                        },
-                                        child: const Icon(
-                                          Icons.arrow_drop_down_rounded,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                                  : null,
+                              canGiveRecom: componentRM.state.canGiveRecom,
+                              hasReachedMax: componentRM.state.hasReachedMax, 
+                              target: componentRM.state.target, 
+                              maxPossibleScore: componentRM.state.maxPossibleScore
                             )
                           ],
                         )

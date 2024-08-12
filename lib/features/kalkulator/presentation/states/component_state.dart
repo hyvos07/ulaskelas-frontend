@@ -12,6 +12,8 @@ class ComponentState{
 
   bool hasReachedMax = false;
   bool canGiveRecom = false;
+  bool canPass = true;
+  bool allScoreFilled = false;
 
   double totalScore = 0;
   int totalWeight = 0;
@@ -60,7 +62,7 @@ class ComponentState{
       },
     );
     if (hasReachedMax) {
-      final allScoreFilled = components.every((i) => i.score != -1);
+      allScoreFilled = components.every((i) => i.score != -1);
       // ignore: avoid_bool_literals_in_conditional_expressions
       canGiveRecom = maxPossibleScore >= 55 
                       && allScoreFilled == false 
@@ -69,8 +71,10 @@ class ComponentState{
       if (canGiveRecom) {
         while (target! > maxPossibleScore &&  target! >= 55) {
           target = target! - 5;}
-        if (target == 50) {target = 85;}
         if (targetScore != null) target = targetScore;
+        canPass = true;
+      } else if (maxPossibleScore < 55 ){
+        canPass = false;
       }
     } else {
       target = 85;

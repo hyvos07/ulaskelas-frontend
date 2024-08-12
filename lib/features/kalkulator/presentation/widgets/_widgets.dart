@@ -35,3 +35,4 @@ part 'autofill_dialog.dart';
 part 'add_semester_dialog.dart';
 part 'delete_dialog.dart';
 part 'custom_table_row.dart';
+part 'target_score_dropdown.dart';
