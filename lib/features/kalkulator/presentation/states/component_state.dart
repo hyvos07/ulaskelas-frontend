@@ -11,7 +11,7 @@ class ComponentState{
   List<ComponentModel> get components => _components ?? [];
 
   bool hasReachedMax = false;
-  bool? canGiveRecom;
+  bool canGiveRecom = false;
 
   double totalScore = 0;
   int totalWeight = 0;
@@ -37,7 +37,11 @@ class ComponentState{
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
       _components = result.data['components'];
-      recommendedScore = result.data['recommended_score'];
+      if (result.data['recommended_score'] != 0) {
+        recommendedScore = result.data['recommended_score'];
+      } else {
+        recommendedScore = 0.0;
+      }
       maxPossibleScore =  result.data['max_possible_score'];
       targetScore = result.data['target_score'];
     },);
@@ -56,14 +60,21 @@ class ComponentState{
       },
     );
     if (hasReachedMax) {
+      final allScoreFilled = components.every((i) => i.score != -1);
       // ignore: avoid_bool_literals_in_conditional_expressions
-      canGiveRecom = maxPossibleScore >= 55 ? true : false;
+      canGiveRecom = maxPossibleScore >= 55 
+                      && allScoreFilled == false 
+                        ? true : false;
       target = 85;
-      while (target! > maxPossibleScore &&  target! >= 55) {
-        target = target! - 5;}
-      if (targetScore != null) target = targetScore;
+      if (canGiveRecom) {
+        while (target! > maxPossibleScore &&  target! >= 55) {
+          target = target! - 5;}
+        if (target == 50) {target = 85;}
+        if (targetScore != null) target = targetScore;
+      }
     } else {
-      canGiveRecom = null;
+      target = 85;
+      canGiveRecom = false;
     }
     /////////////////////////////////////////////////////
     componentRM.notify();

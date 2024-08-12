@@ -6,7 +6,7 @@ class CardCompononent extends StatelessWidget {
     required this.name,
     required this.score,
     required this.weight,
-    required this.hope,
+    this.hope,
     super.key,
     this.onTap,
   });
@@ -61,9 +61,11 @@ class CardCompononent extends StatelessWidget {
                 isGradient: score == 0 || score == -1.00,
                 text: score == 0 || score == -1.00
                   ? componentRM.state.hasReachedMax
+                    && componentRM.state.canGiveRecom
                       ? hope!.toStringAsFixed(2)
                       : ''
                   : componentRM.state.hasReachedMax
+                    && componentRM.state.canGiveRecom
                       ? score!.toStringAsFixed(2) 
                       : '',
                 textAlign: TextAlign.right,

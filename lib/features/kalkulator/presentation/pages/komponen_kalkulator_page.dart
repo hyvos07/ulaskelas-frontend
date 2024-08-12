@@ -120,6 +120,7 @@ class _CalculatorComponentPageState
                               height: 23,
                               width: 23,
                               color: componentRM.state.hasReachedMax
+                                && componentRM.state.canGiveRecom!
                                   ? null
                                   : BaseColors.gray1.withOpacity(0.3),
                             ),
@@ -137,6 +138,7 @@ class _CalculatorComponentPageState
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
                                   colors: componentRM.state.hasReachedMax
+                                    && componentRM.state.canGiveRecom!
                                       ? BaseColors.autoSystemColor
                                       : [
                                           BaseColors.gray1.withOpacity(0.3),
@@ -156,9 +158,13 @@ class _CalculatorComponentPageState
                                 ),
                                 child: GestureDetector(
                                   onTap: () {
-                                    if (!componentRM.state.hasReachedMax) {
+                                    if (!componentRM.state.hasReachedMax ) {
                                       ErrorMessenger(
                                         'Total bobot harus mencapai 100%',
+                                      ).show(context);
+                                    } else if (!componentRM.state.canGiveRecom) {
+                                      ErrorMessenger(
+                                        'Semua nilai komponen sudah terisi',
                                       ).show(context);
                                     }
                                   },
@@ -168,6 +174,7 @@ class _CalculatorComponentPageState
                                       value: componentRM.state.target
                                         .toString(),
                                       onChanged: componentRM.state.hasReachedMax
+                                        && componentRM.state.canGiveRecom!
                                           ? (String? newValue) {
                                               componentRM.state.setTarget(
                                                 int.parse(newValue!)
@@ -188,6 +195,8 @@ class _CalculatorComponentPageState
                                                 end: Alignment.bottomCenter,
                                                 colors: componentRM
                                                         .state.hasReachedMax
+                                                     && componentRM.state
+                                                        .canGiveRecom!
                                                     ? BaseColors.autoSystemColor
                                                     : [
                                                         BaseColors.gray1
@@ -207,7 +216,7 @@ class _CalculatorComponentPageState
                                         return DropdownMenuItem<String>(
                                           enabled: 
                                             componentRM.state.maxPossibleScore 
-                                              > double.parse(value),
+                                              >= double.parse(value),
                                           value: value,
                                           child: Center(
                                             child: Container(
@@ -236,7 +245,7 @@ class _CalculatorComponentPageState
                                                   color: BaseColors.mineShaft
                                                       .withOpacity(
                                                         componentRM.state.maxPossibleScore
-                                                          > double.parse(value)
+                                                          >= double.parse(value)
                                                         ? 0.85
                                                         : 0.25
                                                       ),
@@ -253,6 +262,7 @@ class _CalculatorComponentPageState
                                             end: Alignment.bottomCenter,
                                             colors:
                                                 componentRM.state.hasReachedMax
+                                                  && componentRM.state.canGiveRecom!
                                                     ? BaseColors.autoSystemColor
                                                     : [
                                                         BaseColors.gray1
@@ -297,8 +307,10 @@ class _CalculatorComponentPageState
                           CustomTableRowComponent(
                             flexRatio: 0,
                             text: 'Rekomendasi',
-                            isGradient: componentRM.state.hasReachedMax,
-                            componentStyle: componentRM.state.hasReachedMax
+                            isGradient: componentRM.state.hasReachedMax 
+                                  && componentRM.state.canGiveRecom!,
+                            componentStyle: componentRM.state.hasReachedMax   
+                                  && componentRM.state.canGiveRecom!
                                 ? null
                                 : FontTheme.poppins12w600black().copyWith(
                                     color: BaseColors.gray1.withOpacity(0.3),
@@ -333,6 +345,7 @@ class _CalculatorComponentPageState
                             score: component.score,
                             weight: component.weight!,
                             hope: componentRM.state.hasReachedMax
+                              && componentRM.state.canGiveRecom
                                 ? componentRM.state.recommendedScore
                                 : null,
                             onTap: () {
@@ -362,7 +375,8 @@ class _CalculatorComponentPageState
                         ),
                         CustomTableRowComponent(
                           flexRatio: 30,
-                          text: componentRM.state.hasReachedMax // dummy data
+                          text: componentRM.state.hasReachedMax
+                            && componentRM.state.canGiveRecom
                               ? componentRM.state.target!
                                   .toStringAsFixed(2)
                               : '',
