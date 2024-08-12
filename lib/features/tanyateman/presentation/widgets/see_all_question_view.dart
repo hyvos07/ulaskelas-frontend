@@ -27,7 +27,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
 
   void _onScroll() {
     if (_isBottom && !completer!.isCompleted && scrollCondition()) {
-      print('${scrollCondition()} lol');
+      print('${scrollCondition()}');
       onScroll();
     }
   }

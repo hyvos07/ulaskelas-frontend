@@ -1,19 +1,21 @@
 part of '_widgets.dart';
 
-class QuestionTextField extends StatefulWidget {
+class QuestionTextField extends StatelessWidget {
   const QuestionTextField({
-    super.key
+    required this.controller,
+    required this.onChanged,
+    required this.validator,
+    super.key,
   });
 
-  @override
-  State<QuestionTextField> createState() => _QuestionTextFieldState();
-}
+  final TextEditingController controller;
+  final void Function(String) onChanged;
+  final String? Function(String?) validator;
 
-class _QuestionTextFieldState extends State<QuestionTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: componentFormRM.state.nameController,
+      controller: controller,
       maxLines: 12,
       style: FontTheme.poppins12w400black(),
       decoration: InputDecoration(
@@ -24,18 +26,8 @@ class _QuestionTextFieldState extends State<QuestionTextField> {
         hintText: 'Apa yang ingin kamu tanyakan?',
       ),
       textInputAction: TextInputAction.newline,
-      onChanged: (value) {
-        if (value.trim().isEmpty) {
-          componentFormRM.state.nameController.text = '';
-        }
-      },
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'This field is required.';
-        }
-        componentFormRM.setState((s) => s.setName());
-        return null;
-      },
+      onChanged: onChanged,
+      validator: validator,
     );
   }
 }

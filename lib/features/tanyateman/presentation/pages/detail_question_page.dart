@@ -13,23 +13,19 @@ class DetailQuestionPage extends StatefulWidget {
 }
 
 class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
-  bool isAnonym = false;
   int pageViewIndex = 0;
   double pageViewHeight = 0;
   late PageController _pageController;
-  ImagePicker? _imagePicker;
-  File? _fileImage;
-  bool? _isImageSizeTooBig;
+
+  @override
+  void init() {
+    questionFormRM.setState((s) => s.clearForm());
+  }
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: pageViewIndex);
-    componentFormRM.setState((s) => s.cleanForm());
-    componentFormRM.state.previousFrequency = '1';
-    componentFormRM.state.frequency.text = '1';
-    componentFormRM.state.justVisited = true;
-    _imagePicker = ImagePicker();
   }
 
   @override
@@ -42,61 +38,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     return null; // SliverAppBar will be used instead
   }
 
-  Future<void> pickImage() async {
-    final pickedImg =
-        await _imagePicker!.pickImage(source: ImageSource.gallery);
-    if (pickedImg != null) {
-      final fileSizeInBytes = await pickedImg.length();
-      final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-
-      if (fileSizeInMB <= 5) {
-        final croppedImage = await cropImage(imageFile: File(pickedImg.path));
-
-        if (croppedImage != null) {
-          setState(() {
-            _fileImage = croppedImage;
-            _isImageSizeTooBig = false;
-          });
-        }
-      } else {
-        setState(() {
-          _isImageSizeTooBig = true;
-        });
-        ErrorMessenger('Size of the image is more than 5 MB!').show(context);
-      }
-    }
-  }
-
-  Future<File?> cropImage({required File imageFile}) async {
-    final croppedImage =
-        await ImageCropper().cropImage(
-          sourcePath: imageFile.path,
-          aspectRatioPresets: [
-            CropAspectRatioPreset.square,
-            CropAspectRatioPreset.ratio3x2,
-            CropAspectRatioPreset.original,
-            CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio16x9,
-          ],
-          uiSettings: [
-            AndroidUiSettings(
-              toolbarTitle: 'Crop Photo',
-              toolbarColor: Colors.black,
-              toolbarWidgetColor: Colors.white,
-              activeControlsWidgetColor: Colors.grey.shade600,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false,
-            ),
-            IOSUiSettings(
-              title: 'Cropper',
-              minimumAspectRatio: 1,
-            ),
-          ],
-          );
-    if (croppedImage == null) return null;
-    return File(croppedImage.path);
-  }
-
   void seeImage({
     bool isDetail = false,
   }) {
@@ -105,7 +46,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
         CachedNetworkImageProvider(widget.model.attachmentUrl!),
       );
     } else {
-      nav.goToViewImagePage(FileImage(_fileImage!));
+      nav.goToViewImagePage(FileImage(questionFormRM.state.fileImage!));
     }
   }
 
@@ -226,15 +167,48 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                 text: 'Pertanyaan',
                 bottomPad: 10,
               ),
-              const QuestionTextField(),
+              QuestionTextField(
+                controller: questionFormRM.state.questionController,
+                onChanged: (value) {
+                  if (value.trim().isEmpty) {
+                    questionFormRM.state.questionController.text = '';
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'This field is required.';
+                  }
+                  questionFormRM.setState((s) => s.setQuestion(value));
+                  return null;
+                },
+              ),
               const HeightSpace(20),
-              const SendAsAnonymSwitcher(),
+              OnBuilder<QuestionFormState>.all(
+                listenTo: questionFormRM,
+                onIdle: WaitingView.new,
+                onWaiting: WaitingView.new,
+                onError: (dynamic error, refresh) => Text(error.toString()),
+                onData: (data) {
+                  return SendAsAnonymSwitcher(
+                    isAnonym: questionFormRM.state.isAnonym,
+                    onChanged: questionFormRM.state.setIsAnonym,
+                  );
+                },
+              ),
               const HeightSpace(20),
-              ImagePickerBox(
-                onTapUpload: pickImage,
-                onTapSeeImage: seeImage,
-                isImageSizeTooBig: _isImageSizeTooBig,
-              )
+              OnBuilder<QuestionFormState>.all(
+                listenTo: questionFormRM,
+                onIdle: WaitingView.new,
+                onWaiting: WaitingView.new,
+                onError: (dynamic error, refresh) => Text(error.toString()),
+                onData: (data) {
+                  return ImagePickerBox(
+                    onTapUpload: questionFormRM.state.pickImage,
+                    onTapSeeImage: seeImage,
+                    isImageSizeTooBig: questionFormRM.state.isImageSizeTooBig,
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -334,14 +308,8 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
   @override
   Future<bool> onBackPressed() async {
-    componentFormRM.state.previousFrequency = '1';
-    componentFormRM.state.cleanForm();
+    questionFormRM.state.clearForm();
     nav.pop<void>();
     return true;
-  }
-
-  @override
-  void init() {
-    // TODO: load state to retrieve data (tp nanti aja)
   }
 }

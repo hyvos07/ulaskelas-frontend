@@ -1,33 +1,29 @@
 part of '_widgets.dart';
 
-class SendAsAnonymSwitcher extends StatefulWidget {
-  const SendAsAnonymSwitcher({super.key});
+class SendAsAnonymSwitcher extends StatelessWidget {
+  const SendAsAnonymSwitcher({
+    required this.isAnonym,
+    required this.onChanged,
+    super.key,
+  });
 
-  @override
-  State<SendAsAnonymSwitcher> createState() => _SendAsAnonymSwitcherState();
-}
+  final bool isAnonym;
+  final void Function(bool) onChanged;
 
-class _SendAsAnonymSwitcherState extends State<SendAsAnonymSwitcher> {
-
-  bool isAnonym = false;
-  
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const QuestionFormLabel(
-            text: 'Post sebagai anonym',),
+          text: 'Post sebagai anonym',
+        ),
         Transform.scale(
           scale: 0.85,
           child: CupertinoSwitch(
-            activeColor: BaseColors.primaryColor!,
-            value: isAnonym, 
-            onChanged: (v) {
-              setState(() {
-                isAnonym = v;
-              });
-            },
+            activeColor: BaseColors.primaryColor,
+            value: isAnonym,
+            onChanged: onChanged,
           ),
         ),
       ],
