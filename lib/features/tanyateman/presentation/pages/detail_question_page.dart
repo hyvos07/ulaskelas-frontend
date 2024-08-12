@@ -44,6 +44,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     if (isDetail) {
       nav.goToViewImagePage(
         CachedNetworkImageProvider(widget.model.attachmentUrl!),
+        isDetail: isDetail,
       );
     } else {
       nav.goToViewImagePage(FileImage(questionFormRM.state.fileImage!));

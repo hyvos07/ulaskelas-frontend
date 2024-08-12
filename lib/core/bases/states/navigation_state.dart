@@ -349,9 +349,12 @@ class NavigationServiceState implements Navigation {
     return nav.push<void>(const SearchCourseQuestion(givenSemester: '1'));
   }
 
-  Future<void> goToViewImagePage(ImageProvider imageFile) {
+  Future<void> goToViewImagePage(
+    ImageProvider imageFile, {
+    bool isDetail = false,
+  }) {
     return nav.push<void>(
-      ViewImagePage(imageFile: imageFile)
+      ViewImagePage(imageFile: imageFile, isDetail: isDetail),
     );
   }
 }

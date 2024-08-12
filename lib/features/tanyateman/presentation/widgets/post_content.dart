@@ -39,8 +39,8 @@ class PostContent extends StatelessWidget {
                         child: Text(
                           model!.userFullName,
                           style: FontTheme.poppins12w700black().copyWith(
-                            height: 1.75,
                             fontWeight: FontWeight.w600,
+                            fontSize: 12.5,
                           ),
                           overflow: TextOverflow.visible,
                         ),
@@ -83,84 +83,166 @@ class PostContent extends StatelessWidget {
                 onTap: onImageTap ?? () {},
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    return CachedNetworkImage(
-                      imageUrl: model!.attachmentUrl!,
-                      placeholder: (context, url) => SizedBox(
-                        height: maxImageHeight,
-                        child: Shimmer.fromColors(
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: BaseColors.gray3,
-                              borderRadius: BorderRadius.circular(8),
+                    return isDetail
+                        ? Hero(
+                            tag: 'image-preview',
+                            child: CachedNetworkImage(
+                              imageUrl: model!.attachmentUrl!,
+                              placeholder: (context, url) => SizedBox(
+                                height: maxImageHeight,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: BaseColors.gray3,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                height: maxImageHeight,
+                                decoration: BoxDecoration(
+                                  color: BaseColors.gray3,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.warning_rounded,
+                                        color: BaseColors.gray1,
+                                        size: 40,
+                                      ),
+                                      const HeightSpace(10),
+                                      Text(
+                                        'Gagal memuat gambar!'
+                                        '\nKlik untuk mencoba lagi.',
+                                        style: FontTheme.poppins12w600black(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              imageBuilder: (context, imageProvider) {
+                                double? displayHeight;
+                                imageProvider
+                                    .resolve(ImageConfiguration.empty)
+                                    .addListener(
+                                  ImageStreamListener((ImageInfo info, bool _) {
+                                    final aspectRatio =
+                                        info.image.width / info.image.height;
+                                    final displayWidth =
+                                        constraints.maxWidth < maxImageWidth
+                                            ? constraints.maxWidth
+                                            : maxImageWidth;
+                                    displayHeight = displayWidth / aspectRatio >
+                                            maxImageHeight
+                                        ? maxImageHeight
+                                        : displayWidth / aspectRatio;
+                                  }),
+                                );
+                            
+                                return Container(
+                                  width: maxImageWidth,
+                                  height: displayHeight,
+                                  decoration: BoxDecoration(
+                                    color: BaseColors.gray4.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(6),
+                                    image: DecorationImage(
+                                      alignment: Alignment.topCenter,
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    border: Border.all(
+                                      color: BaseColors.gray1,
+                                      width: 0.1,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          ),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        height: maxImageHeight,
-                        decoration: BoxDecoration(
-                          color: BaseColors.gray3,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.warning_rounded,
-                                color: BaseColors.gray1,
-                                size: 40,
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: model!.attachmentUrl!,
+                            placeholder: (context, url) => SizedBox(
+                              height: maxImageHeight,
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: BaseColors.gray3,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
                               ),
-                              const HeightSpace(10),
-                              Text(
-                                'Gagal memuat gambar!'
-                                '\nKlik untuk mencoba lagi.',
-                                style: FontTheme.poppins12w600black(),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              height: maxImageHeight,
+                              decoration: BoxDecoration(
+                                color: BaseColors.gray3,
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      imageBuilder: (context, imageProvider) {
-                        double? displayHeight;
-                        imageProvider
-                            .resolve(ImageConfiguration.empty)
-                            .addListener(
-                          ImageStreamListener((ImageInfo info, bool _) {
-                            final aspectRatio =
-                                info.image.width / info.image.height;
-                            final displayWidth =
-                                constraints.maxWidth < maxImageWidth
-                                    ? constraints.maxWidth
-                                    : maxImageWidth;
-                            displayHeight =
-                                displayWidth / aspectRatio > maxImageHeight
-                                    ? maxImageHeight
-                                    : displayWidth / aspectRatio;
-                          }),
-                        );
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.warning_rounded,
+                                      color: BaseColors.gray1,
+                                      size: 40,
+                                    ),
+                                    const HeightSpace(10),
+                                    Text(
+                                      'Gagal memuat gambar!'
+                                      '\nKlik untuk mencoba lagi.',
+                                      style: FontTheme.poppins12w600black(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            imageBuilder: (context, imageProvider) {
+                              double? displayHeight;
+                              imageProvider
+                                  .resolve(ImageConfiguration.empty)
+                                  .addListener(
+                                ImageStreamListener((ImageInfo info, bool _) {
+                                  final aspectRatio =
+                                      info.image.width / info.image.height;
+                                  final displayWidth =
+                                      constraints.maxWidth < maxImageWidth
+                                          ? constraints.maxWidth
+                                          : maxImageWidth;
+                                  displayHeight = displayWidth / aspectRatio >
+                                          maxImageHeight
+                                      ? maxImageHeight
+                                      : displayWidth / aspectRatio;
+                                }),
+                              );
 
-                        return Container(
-                          width: maxImageWidth,
-                          height: displayHeight,
-                          decoration: BoxDecoration(
-                            color: BaseColors.gray4.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(6),
-                            image: DecorationImage(
-                              alignment: Alignment.topCenter,
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                            border: Border.all(
-                              color: BaseColors.gray1,
-                              width: 0.1,
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                              return Container(
+                                width: maxImageWidth,
+                                height: displayHeight,
+                                decoration: BoxDecoration(
+                                  color: BaseColors.gray4.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(6),
+                                  image: DecorationImage(
+                                    alignment: Alignment.topCenter,
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: BaseColors.gray1,
+                                    width: 0.1,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
                   },
                 ),
               ),
