@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:states_rebuilder/scr/state_management/listeners/on_reactive.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:ulaskelas/app.dart';
 import 'package:ulaskelas/core/theme/_theme.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:ulaskelas/features/tanyateman/presentation/states/_states.dart';
@@ -31,7 +32,6 @@ import '../../data/models/_models.dart';
 import '../widgets/_widgets.dart';
 
 part 'tanyateman_page.dart';
-part 'forum_tanyateman_page.dart';
 part 'add_question_page.dart';
 part 'detail_question_page.dart';
 part 'search_course_question.dart';

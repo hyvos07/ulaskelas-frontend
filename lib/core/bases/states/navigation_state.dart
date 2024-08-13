@@ -328,13 +328,6 @@ class NavigationServiceState implements Navigation {
     );
   }
 
-  Future<void> goToForumTanyaTeman() {
-    return nav.push<void>(
-      const ForumTanyaTemanPage(),
-      RouteName.forumTanyaTeman,
-    );
-  }
-
   Future<void> goToAddQuestionPage() {
     return nav.push<void>(const AddQuestionPage());
   }
