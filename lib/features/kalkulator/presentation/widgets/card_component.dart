@@ -6,7 +6,7 @@ class CardCompononent extends StatelessWidget {
     required this.name,
     required this.score,
     required this.weight,
-    required this.hope,
+    this.hope,
     super.key,
     this.onTap,
   });
@@ -42,23 +42,30 @@ class CardCompononent extends StatelessWidget {
                 text: name,
               ),
               CustomTableRowComponent(
-                flexRatio: 20, 
-                text: score == null ? 'Kosong' : score!.toStringAsFixed(2),
+                flexRatio: 30, 
+                text: score == -1.00 ? 'Kosong' : score!.toStringAsFixed(2),
                 textAlign: TextAlign.right,
+                isGradient: score == -1.00,
+                gradientColors: [
+                  BaseColors.gray3,
+                  BaseColors.gray3,
+                ],
               ),
               CustomTableRowComponent(
-                flexRatio: 18, 
+                flexRatio: 28, 
                 text: '${weight.toStringAsFixed(0)}%',
                 textAlign: TextAlign.right,
               ),
               CustomTableRowComponent(
-                flexRatio: 18, 
-                isGradient: score == 0 || score == null,
-                text: score == 0 || score == null
+                flexRatio: 28, 
+                isGradient: score == 0 || score == -1.00,
+                text: score == 0 || score == -1.00
                   ? componentRM.state.hasReachedMax
+                    && componentRM.state.canGiveRecom
                       ? hope!.toStringAsFixed(2)
                       : ''
                   : componentRM.state.hasReachedMax
+                    && componentRM.state.canGiveRecom
                       ? score!.toStringAsFixed(2) 
                       : '',
                 textAlign: TextAlign.right,

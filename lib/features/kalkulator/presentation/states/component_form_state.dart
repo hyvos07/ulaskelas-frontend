@@ -20,8 +20,27 @@ class ComponentFormState {
   String _previousFrequency = '1';
   double _recommendedScore = 85;
   bool isLoading = false;
-  bool isEmptyScoreDetected = false;
   bool justVisited = true;
+
+  /// Get details information of passed component
+  Future<void> retrieveDetailedComponent(QueryComponent q) async {
+    final resp = await _repo.getDetailComponent(q);
+    resp.fold((failure) {
+      throw failure;
+    }, (result) {
+      final detail = result.data;
+      _frequency.text = detail['frequency'].toString();
+      _scoreControllers.clear();
+      for (var i = 0; i < int.parse(_frequency.text); i++) {
+        _scoreControllers.add(TextEditingController());
+        scoreControllers.last.text =
+            detail['scores'][i] == null ? '' : detail['scores'][i].toString();
+        _formData.score![i + 1] = detail['scores'][i];
+      }
+      _recommendedScore = detail['recommended_score']?.toDouble() ?? 85;
+      justVisited = true;
+    });
+  }
 
   /// Submitting form data
   Future<void> submitForm(int calculatorId) async {
@@ -31,8 +50,9 @@ class ComponentFormState {
 
     result['calculator_id'] = calculatorId;
     result['name'] = _formData.name;
-    result['score'] = averageScore() ?? -1;
     result['weight'] = _formData.weight;
+    result['frequency'] = int.parse(_frequency.text);
+    result['scores'] = _formData.score!.values.toList();
 
     final resp = await _repo.createComponent(result);
     isLoading = false;
@@ -45,16 +65,16 @@ class ComponentFormState {
     });
   }
 
-  Future<void> submitEditForm(int id, int calculatorId) async {
+  Future<void> submitEditForm(int id) async {
     isLoading = true;
     componentFormRM.notify();
     final result = <String, dynamic>{};
 
-    result['id'] = id;
-    result['calculator_id'] = calculatorId;
+    result['score_component_id'] = id;
     result['name'] = _formData.name;
-    result['score'] = averageScore();
     result['weight'] = _formData.weight;
+    result['frequency'] = int.parse(_frequency.text);
+    result['scores'] = _formData.score!.values.toList();
 
     final resp = await _repo.editComponent(result);
     isLoading = false;
@@ -83,7 +103,7 @@ class ComponentFormState {
 
   void setScore(int index) {
     _formData.score![index] =
-        double.tryParse(scoreControllers[index - 1].text) ?? -1;
+        double.tryParse(scoreControllers[index - 1].text);
 
     if (kDebugMode) {
       print('Form Data: ${_formData.score}');
@@ -97,7 +117,7 @@ class ComponentFormState {
   /// Cleaning form when success submitting form
   void cleanForm() {
     _formData = ComponentData();
-    _formData.score = <int, double>{};
+    _formData.score = <int, double?>{};
 
     _nameController.text = '';
     _weightController.text = '';
@@ -132,7 +152,7 @@ class ComponentFormState {
     _frequency.text = (int.parse(_frequency.text) + 1).toString();
     _scoreControllers.add(TextEditingController());
 
-    _formData.score![int.parse(_frequency.text)] = -1;
+    _formData.score![int.parse(_frequency.text)] = null;
 
     if (kDebugMode) {
       print('Frequency: ${_frequency.text}');
@@ -165,7 +185,7 @@ class ComponentFormState {
       }
 
       for (var i = 1; i < value + 1; i++) {
-        _formData.score!.putIfAbsent(i, () => -1);
+        _formData.score!.putIfAbsent(i, () => null);
       }
     }
 
@@ -187,27 +207,14 @@ class ComponentFormState {
 
     for (var i = 0; i < length; i++) {
       sum += double.tryParse(_scoreControllers[i].text) ?? 0;
-      if (_scoreControllers[i].text.isNotEmpty) {
-        valid++;
-      }
+      valid++;
     }
     return sum != 0 && valid != 0 ? sum / valid : null;
-  }
-
-  void emptyScoreDetect() {
-    if (_scoreControllers.length == 1 && justVisited) {
-      isEmptyScoreDetected = false;
-    } else {
-      isEmptyScoreDetected = !(averageScore() == null) &&
-          _scoreControllers.any((element) => element.text.isEmpty);
-    }
-
-    componentFormRM.notify();
   }
 }
 
 class ComponentData {
   String? name;
-  Map<int, double>? score;
+  Map<int, double?>? score;
   double? weight;
 }

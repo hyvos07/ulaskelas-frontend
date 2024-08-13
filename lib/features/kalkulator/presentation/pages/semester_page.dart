@@ -165,6 +165,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
   Future<bool> onBackPressed() async {
     nav.pop();
     calculatorRM.state.calculators.clear();
+    await semesterRM.state.retrieveData();
     return true;
   }
 
@@ -192,8 +193,26 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
             child: InkWell(
               onTap: () async {
                 // For now, the dialog will buy some time for the buggy flushbar
-                await Future.delayed(const Duration(milliseconds: 150));
-                await _showDeleteDialog();
+                await Future.delayed(const Duration(milliseconds: 250));
+                await showDialog(
+                  context: context,
+                  builder: (context) => DeleteDialog(
+                    title: 'Hapus Semester',
+                    content: 'Apakah kamu yakin ingin menghapus $semesterName?',
+                    onConfirm: () async {
+                      nav
+                        ..pop()
+                        ..pop();
+                      await semesterRM.setState(
+                        (s) => s.deleteSemester(
+                          query: QuerySemester(
+                            givenSemester: widget.givenSemester,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
               },
               child: Text(
                 'Hapus Semester ini',
@@ -207,78 +226,6 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
         ),
         const HeightSpace(30),
       ],
-    );
-  }
-
-  Future<void> _showDeleteDialog() async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          insetPadding: const EdgeInsets.symmetric(
-            horizontal: 40,
-            vertical: 70,
-          ),
-          title: Text(
-            'Hapus Semester',
-            textAlign: TextAlign.center,
-            style: FontTheme.poppins16w700black().copyWith(
-              color: BaseColors.error,
-            ),
-          ),
-          contentPadding: const EdgeInsets.only(
-            left: 15,
-            right: 15,
-            top: 20,
-            bottom: 10,
-          ),
-          content: Text(
-            'Apakah kamu yakin ingin menghapus semester ini?',
-            textAlign: TextAlign.center,
-            style: FontTheme.poppins14w400black(),
-          ),
-          actionsAlignment: MainAxisAlignment.center,
-          actionsPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
-          actions: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextButton(
-                  onPressed: () async {
-                    nav
-                      ..pop()
-                      ..pop();
-                    await semesterRM.setState(
-                      (s) => s.deleteSemester(
-                        query: QuerySemester(
-                          givenSemester: widget.givenSemester,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Hapus',
-                    style: FontTheme.poppins14w700black(),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => nav.pop(),
-                  child: Text(
-                    'Batal',
-                    style: FontTheme.poppins14w700black(),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
     );
   }
 }

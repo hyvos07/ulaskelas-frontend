@@ -38,10 +38,11 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
     componentFormRM.state.weightController.text =
         widget.componentWeight.toString();
     componentFormRM.setState(
-      (s) => {
-        s.scoreControllers.last.text = widget.componentScore.toStringAsFixed(2),
-        s.setScore(1),
-      },
+      (s) => s.retrieveDetailedComponent(
+        QueryComponent(
+          scoreComponentId: widget.id,
+        ),
+      ),
     );
     print(componentFormRM.state.scoreControllers);
   }
@@ -85,31 +86,46 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
         Center(
           child: InkWell(
             onTap: () {
-              nav.pop();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return DeleteDialog(
+                    title: 'Hapus Komponen Nilai',
+                    content: 'Apakah Anda yakin ingin menghapus '
+                        '${widget.componentName}?',
+                    onConfirm: () {
+                      nav
+                        ..pop()
+                        ..pop();
 
-              componentFormRM.state.cleanForm();
-              componentFormRM.state.emptyScoreDetect();
-              if (kDebugMode) {
-                print('Hapus Komponen');
-              }
+                      componentFormRM.state.cleanForm();
+                      if (kDebugMode) {
+                        print('Hapus Komponen');
+                      }
 
-              componentRM.setState(
-                (s) => s.deleteComponent(
-                  QueryComponent(id: widget.id),
-                ),
-              );
+                      componentRM.setState(
+                        (s) => s.deleteComponent(
+                          QueryComponent(id: widget.id),
+                        ),
+                      );
 
-              nav.replaceToComponentPage(
-                givenSemester: widget.givenSemester,
-                courseId: widget.courseId,
-                calculatorId: widget.calculatorId,
-                courseName: widget.courseName,
-                totalScore: widget.totalScore -
-                    ((widget.componentScore < 0 ? 0 : widget.componentScore) *
-                        widget.componentWeight /
-                        100),
-                totalPercentage:
-                    widget.totalPercentage - widget.componentWeight,
+                      nav.replaceToComponentPage(
+                        givenSemester: widget.givenSemester,
+                        courseId: widget.courseId,
+                        calculatorId: widget.calculatorId,
+                        courseName: widget.courseName,
+                        totalScore: widget.totalScore -
+                            ((widget.componentScore < 0
+                                    ? 0
+                                    : widget.componentScore) *
+                                widget.componentWeight /
+                                100),
+                        totalPercentage:
+                            widget.totalPercentage - widget.componentWeight,
+                      );
+                    },
+                  );
+                },
               );
             },
             child: Text(
@@ -155,19 +171,15 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
 
     if (componentFormRM.state.formKey.currentState!.validate() &&
         (!oneIsEmpty || allIsEmpty || isSingleSubcomponent)) {
-      await componentFormRM.state.submitEditForm(
-        widget.id,
-        widget.calculatorId,
-      );
+      await componentFormRM.state.submitEditForm(widget.id);
       await Future.delayed(const Duration(milliseconds: 150));
 
       nav.pop();
 
-      final averageScore = componentFormRM.state.averageScore();
+      final averageScore = componentFormRM.state.averageScore() ?? 0;
       final weight = componentFormRM.state.formData.weight!;
 
       componentFormRM.state.cleanForm();
-      componentFormRM.state.emptyScoreDetect();
       if (kDebugMode) {
         print('Hapus Komponen');
       }
@@ -178,7 +190,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
         calculatorId: widget.calculatorId,
         courseName: widget.courseName,
         totalScore: _temporaryUpdateScore(
-          averageScore ?? 0,
+          averageScore < 0 ? 0 : averageScore,
           weight,
         ),
         totalPercentage: _temporaryUpdateWeight(
@@ -190,7 +202,6 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
 
     WarningMessenger('Pastikan semua field sudah terisi dengan benar!')
         .show(context);
-    componentFormRM.state.emptyScoreDetect();
   }
 
   Widget _buildNameField() {
@@ -406,18 +417,8 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
                     averageScoreCalculation: () => data.averageScore() ?? 0,
                     onControllerEmpty: () =>
                         data.scoreControllers.add(TextEditingController()),
-                    subtitle: data.isEmptyScoreDetected
-                        ? Text(
-                            'Terdapat nilai yang belum diisi',
-                            style: FontTheme.poppins10w400black().copyWith(
-                              color: BaseColors.error,
-                              fontSize: 11,
-                            ),
-                          )
-                        : null,
-                    onFieldSubmitted: (value, index) => {
+                    onFieldChanged: (value, index) => {
                       data.justVisited = false,
-                      data.emptyScoreDetect(),
                       data.setScore(index),
                     },
                     controllers: data.scoreControllers,
@@ -435,6 +436,9 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
     double newScore,
     double newWeight,
   ) {
+    print('Total Score: ${widget.totalScore}');
+    print('Component Score: ${widget.componentScore}');
+    print('Component Weight: ${widget.componentWeight}');
     return widget.totalScore -
         (widget.componentScore * widget.componentWeight / 100) +
         (newScore * newWeight / 100);
@@ -456,7 +460,6 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
   Future<bool> onBackPressed() async {
     componentFormRM.state.previousFrequency = '1';
     componentFormRM.state.cleanForm();
-    componentFormRM.state.emptyScoreDetect();
     nav.pop<void>();
     return true;
   }

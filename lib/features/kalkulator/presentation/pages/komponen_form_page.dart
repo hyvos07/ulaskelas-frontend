@@ -119,11 +119,10 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
 
       nav.pop();
 
-      final averageScore = componentFormRM.state.averageScore();
+      final averageScore = componentFormRM.state.averageScore() ?? 0;
       final weight = componentFormRM.state.formData.weight!;
 
       componentFormRM.state.cleanForm();
-      componentFormRM.state.emptyScoreDetect();
       if (kDebugMode) {
         print('success');
       }
@@ -134,7 +133,7 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
         calculatorId: widget.calculatorId,
         courseName: widget.courseName,
         totalScore: _temporaryUpdateScore(
-          averageScore ?? 0,
+          averageScore < 0 ? 0 : averageScore,
           weight,
         ),
         totalPercentage: _temporaryUpdateWeight(
@@ -147,7 +146,6 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
 
     WarningMessenger('Pastikan semua field sudah terisi dengan benar!')
         .show(context);
-    componentFormRM.state.emptyScoreDetect();
   }
 
   Widget _buildNameField() {
@@ -342,7 +340,6 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
                           },
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.all(16),
-                            // constraints: const BoxConstraints(maxHeight: 12.5 * 20),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -364,18 +361,8 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
                     averageScoreCalculation: () => data.averageScore() ?? 0,
                     onControllerEmpty: () =>
                         data.scoreControllers.add(TextEditingController()),
-                    subtitle: data.isEmptyScoreDetected
-                        ? Text(
-                            'Terdapat nilai yang belum diisi',
-                            style: FontTheme.poppins10w400black().copyWith(
-                              color: BaseColors.error,
-                              fontSize: 11,
-                            ),
-                          )
-                        : null,
-                    onFieldSubmitted: (value, index) => {
+                    onFieldChanged: (value, index) => {
                       data.justVisited = false,
-                      data.emptyScoreDetect(),
                       data.setScore(index),
                     },
                     controllers: data.scoreControllers,
@@ -401,7 +388,6 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
   Future<bool> onBackPressed() async {
     componentFormRM.state.previousFrequency = '1';
     componentFormRM.state.cleanForm();
-    componentFormRM.state.emptyScoreDetect();
     nav.pop<void>();
     return true;
   }
