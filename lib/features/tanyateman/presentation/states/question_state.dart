@@ -10,6 +10,8 @@ class QuestionState {
 
   int page = 1;
   bool hasReachedMax = false;
+  String allQuestionsFilter = 'semua';
+  String historyQuestionsFilter = 'semua';
   List<QuestionModel>? _questions;
 
   List<QuestionModel> get questions => _questions ?? [];

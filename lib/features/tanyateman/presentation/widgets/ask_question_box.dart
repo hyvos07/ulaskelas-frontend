@@ -15,7 +15,7 @@ class AskQuestionBox extends StatelessWidget {
         onTap: onTap,
         child: Container(
           width: double.infinity,
-          height: 45,
+          height: 42.5,
           padding: const EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
             color: BaseColors.primary.withOpacity(.15),

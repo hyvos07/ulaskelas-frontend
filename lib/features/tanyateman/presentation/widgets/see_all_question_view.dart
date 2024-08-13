@@ -11,6 +11,18 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
   late ScrollController scrollController;
   Completer<void>? completer;
 
+  List<String> filterOptionsValue = [
+    'semua',
+    'terbaru',
+    'populer',
+  ];
+
+  List<String> filterOptionsText = [
+    'Semua',
+    'Terbaru',
+    'Paling banyak Disukai',
+  ];
+
   @override
   void init() {
     scrollController = ScrollController();
@@ -72,25 +84,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                           color: BaseColors.gray1,
                         ),
                       ),
-                      StateBuilder(
-                        observe: () => filterRM,
-                        builder: (context, snapshot) {
-                          return Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              const FilterIcon(filterOn: true),
-                              const WidthSpace(5),
-                              Text(
-                                'Filter',
-                                style: FontTheme.poppins12w700black().copyWith(
-                                  fontSize: 13,
-                                  color: BaseColors.primaryColor,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                      OnReactive(_buildFilter),
                     ],
                   ),
                 ),
@@ -175,8 +169,8 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
             ),
           ),
           Positioned(
-            right: 24,
-            bottom: 20,
+            right: 20,
+            bottom: 18,
             child: FloatingActionButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -211,35 +205,83 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
 
   Widget _buildBottomMax() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Image(
-            image: AssetImage('assets/images/ilust_onboard2.png'),
-            width: 120,
-            height: 120,
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        child: Text(
+          'Tidak ada pertanyaan lagi.',
+          style: FontTheme.poppins12w600black().copyWith(
+            color: BaseColors.gray2.withOpacity(0.7),
           ),
-          const WidthSpace(15),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Masih belum menemukan\npertanyaan yang\nkamu cari?',
-                style: FontTheme.poppins12w700black(),
-                overflow: TextOverflow.visible,
-                textAlign: TextAlign.left,
+          textAlign: TextAlign.center,
+        ));
+  }
+
+  Widget _buildFilter() {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2(
+        customButton: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            FilterIcon(
+              filterOn: questionsRM.state.allQuestionsFilter != 'semua',
+            ),
+            const WidthSpace(5),
+            Text(
+              'Filter',
+              style: FontTheme.poppins12w700black().copyWith(
+                fontSize: 13,
+                color: BaseColors.primaryColor,
               ),
-              const HeightSpace(7),
-              Text(
-                'Ajukan pertanyaanmu\nsekarang!',
-                style: FontTheme.poppins10w500black(),
-                overflow: TextOverflow.visible,
-                textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+        items: List.generate(
+          filterOptionsValue.length,
+          (index) => DropdownMenuItem(
+            alignment: Alignment.topCenter,
+            value: filterOptionsValue[index],
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: questionsRM.state.allQuestionsFilter ==
+                        filterOptionsValue[index]
+                    ? BaseColors.gray5
+                    : BaseColors.white,
               ),
-            ],
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      filterOptionsText[index],
+                      style: FontTheme.poppins12w400black().copyWith(),
+                      overflow: TextOverflow.visible,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
+        ),
+        onChanged: (value) {
+          questionsRM.setState(
+            (s) => s.allQuestionsFilter = value.toString(),
+          );
+          if (kDebugMode) print('filter: $value');
+        },
+        dropdownStyleData: DropdownStyleData(
+          width: 140,
+          direction: DropdownDirection.left,
+          padding: const EdgeInsets.symmetric(vertical: 17),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            color: BaseColors.white,
+          ),
+          elevation: 1,
+        ),
+        menuItemStyleData: const MenuItemStyleData(
+          height: 42,
+          padding: EdgeInsets.symmetric(horizontal: 14),
+        ),
       ),
     );
   }
@@ -278,7 +320,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
     }
     final maxScroll = scrollController.position.maxScrollExtent;
     final currentScroll = scrollController.offset;
-    print(currentScroll >= (maxScroll * 0.9));
-    return currentScroll >= (maxScroll * 0.9);
+    print(currentScroll >= (maxScroll * 0.95));
+    return currentScroll >= (maxScroll * 0.95);
   }
 }
