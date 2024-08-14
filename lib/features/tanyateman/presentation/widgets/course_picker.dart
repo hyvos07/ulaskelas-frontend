@@ -27,7 +27,9 @@ class CoursePicker extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Matkul Terkait',
+              questionFormRM.state.course == null
+                ?'Matkul Terkait'
+                : questionFormRM.state.course!.name!,
               style: FontTheme.poppins12w400black().copyWith(
                 color: Colors.grey.shade600
               ),

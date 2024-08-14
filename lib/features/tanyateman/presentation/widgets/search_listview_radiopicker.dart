@@ -1,7 +1,7 @@
 part of '_widgets.dart';
 
-class SearchListViewQuestion extends StatelessWidget {
-  const SearchListViewQuestion({
+class SearchListViewRadioPicker extends StatelessWidget {
+  const SearchListViewRadioPicker({
     required this.refreshIndicatorKey,
     required this.scrollController,
     required this.onScroll,
@@ -67,6 +67,17 @@ class SearchListViewQuestion extends StatelessWidget {
 Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata kunci lain.''',
                   );
                 }
+
+                
+                /////       /////       /////       /////
+                searchCourseRM.state.selectedCourses.add(
+                    questionFormRM.state.course != null
+                      ? questionFormRM.state.course!
+                      : searchCourseRM.state.filteredCourses[0]
+                  );
+                /////       /////       /////       /////
+                
+                
                 return ListView.separated(
                   controller: scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -84,14 +95,6 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
                     final course = courses[i];
                     return CardCourseRadio(
                       model: course,
-                      isChecked: searchCourseRM.state.selectedCourses
-                          .contains(course),
-                      // onTap: () {
-                      //   nav.pop();
-                      //   calculatorRM.setState(
-                      //     (s) => s.postCalculator(course.code!),
-                      //   );
-                      // },
                     );
                   },
                 );

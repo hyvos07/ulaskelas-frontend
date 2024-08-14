@@ -169,3 +169,53 @@ Future<Response> sendCustomRequest(
     },
   );
 }
+
+
+Future<Response> postWithFileInIt(
+  String url, {
+  Map<String, String>? headers,
+  Map<String, dynamic>? model,
+}) async {
+  if (kDebugMode) {
+    Logger().i({
+      'url': url,
+      'headers': '${Pref.getHeaders()}',
+      'model': '$model',
+    });
+  }
+
+  final getHeaders = headers ?? Pref.getHeaders();
+
+  // Convert the model to FormData if it contains a file
+  FormData formData = FormData();
+
+  if (model != null) {
+    model.forEach((key, value) {
+      if (value is File) {
+        formData.files.add(MapEntry(
+          key,
+          MultipartFile.fromFileSync(value.path, filename: value.path.split('/').last),
+        ));
+      } else {
+        formData.fields.add(MapEntry(key, value.toString()));
+      }
+    });
+  }
+
+  final resp = await Dio().post(
+    url,
+    data: formData,
+    options: Options(
+      headers: getHeaders,
+      receiveTimeout: const Duration(milliseconds: 5000),
+      sendTimeout: const Duration(milliseconds: 6000),
+    ),
+  );
+
+  if (kDebugMode) {
+    Logger()
+        .i({'response': '${resp.data}', 'statusCode': '${resp.statusCode}'});
+  }
+
+  return resp;
+}

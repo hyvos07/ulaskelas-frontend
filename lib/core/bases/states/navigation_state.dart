@@ -339,7 +339,8 @@ class NavigationServiceState implements Navigation {
   }
 
   Future<void> goToSearchCourseRadioPick() {
-    return nav.push<void>(const SearchCourseQuestion(givenSemester: '1'));
+    return nav.push<void>(
+      const SearchCourseRadioPicker());
   }
 
   Future<void> goToViewImagePage(
@@ -349,6 +350,12 @@ class NavigationServiceState implements Navigation {
     return nav.push<void>(
       ViewImagePage(imageFile: imageFile, isDetail: isDetail),
     );
+  }
+
+  Future<void> goToTanyaTemanPage() {
+    return nav.push(
+      const TanyaTemanPage(),
+      RouteName.tanyaTeman);
   }
 
   Future<void> replaceToTanyaTemanPage() {

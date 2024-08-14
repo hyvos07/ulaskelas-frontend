@@ -1,19 +1,16 @@
 part of '_pages.dart';
 
-class SearchCourseQuestion extends StatefulWidget {
-  const SearchCourseQuestion({
-    required this.givenSemester,
+class SearchCourseRadioPicker extends StatefulWidget {
+  const SearchCourseRadioPicker({
     super.key,
   });
 
-  final String givenSemester;
-
   @override
-  _SearchCourseQuestionState createState() => _SearchCourseQuestionState();
+  _SearchCourseRadioPickerState createState() => _SearchCourseRadioPickerState();
 }
 
-class _SearchCourseQuestionState
-    extends BasePaginationState<SearchCourseQuestion, SearchCourseState> {
+class _SearchCourseRadioPickerState
+    extends BasePaginationState<SearchCourseRadioPicker, SearchCourseState> {
   final focusNode = FocusNode();
 
   Timer? _debounce;
@@ -109,7 +106,7 @@ class _SearchCourseQuestionState
                   searchCourseRM.state.controller.text.isEmpty) {
                 return _buildHistory();
               } else {
-                return SearchListViewQuestion(
+                return SearchListViewRadioPicker(
                   refreshIndicatorKey: refreshIndicatorKey,
                   scrollController: scrollController,
                   onScroll: onScroll,
@@ -127,12 +124,8 @@ class _SearchCourseQuestionState
                   ErrorMessenger('Pilih minimal satu mata kuliah').show(context);
                   return;
                 }
-                final selectedCourses =
-                    List<CourseModel>.from(searchCourseRM.state.selectedCourses);
-                calculatorRM.state.postCalculator(
-                  selectedCourses,
-                  widget.givenSemester,
-                );
+                final selectedCourses = searchCourseRM.state.selectedCourses[0];
+                questionFormRM.state.setCourse(selectedCourses);
                 searchCourseRM.state.clearSelectedCourses();
                 nav.pop();
             }, 

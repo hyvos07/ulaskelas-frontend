@@ -120,9 +120,10 @@ class QuestionFormState {
     final model = {
       'attachment_file' : questionFormRM.state.fileImage,
       'course_id' : questionFormRM.state.course != null
-        ? questionFormRM.state.course!.id : null,
+        ? '${questionFormRM.state.course!.id}' : null,
       'question_text' : questionFormRM.state.questionController.text.trim(),
-      'is_anonym' : questionFormRM.state.isAnonym
+      'is_anonym' : questionFormRM.state.isAnonym == true
+        ? '1' : '0'
     };
     final resp = await _repo.postQuestion(model);
     await resp.fold((failure) {
@@ -130,18 +131,8 @@ class QuestionFormState {
           .show(ctx!);
     }, (result) async {
       SuccessMessenger('Pertanyaan berhasil dibuat').show(ctx!);
-      _questionController.clear();
-      _fileImage = null;
-      _course = null;
-      _isAnonym = false;
-      // final calcResp = await _repo.getAllQuestions();
-      // calcResp.fold((failure) => throw failure, (result) {
-      //   final lessThanLimit = result.data.length < 10;
-      //   hasReachedMax = result.data.isEmpty || lessThanLimit;
-      //   _semesters = result.data;
-      //   print(_semesters);
-      // });
-      nav.replaceToTanyaTemanPage();
+      clearForm();
+      nav.pop();
     });
     semesterRM.notify();
 

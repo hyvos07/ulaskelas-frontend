@@ -205,4 +205,16 @@ class SearchCourseState
   void clearSelectedCourses() {
     _selectedCourses.clear();
   }
+
+  void addCourseRadioType(CourseModel course) {
+    if (_selectedCourses.contains(course)) {
+      _selectedCourses.remove(course);
+    } else {
+      _selectedCourses..clear()..add(course);
+    }
+
+    print(_selectedCourses);
+    
+    searchCourseRM.notify();
+  }
 }

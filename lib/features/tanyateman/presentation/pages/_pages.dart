@@ -34,5 +34,5 @@ import '../widgets/_widgets.dart';
 part 'tanyateman_page.dart';
 part 'add_question_page.dart';
 part 'detail_question_page.dart';
-part 'search_course_question.dart';
+part 'search_course_radio_picker.dart';
 part 'view_image_page.dart';

@@ -34,7 +34,7 @@ class QuestionRemoteDataSourceImpl implements QuestionRemoteDataSource {
   Future<Parsed<Map<String,dynamic>>> postQuestion(
     Map<String,dynamic> model) async {
     final url = EndpointsRevamp.tanyaTeman;
-    final resp = await postIt(url, model: model);
+    final resp = await postWithFileInIt(url, model: model);
     return Parsed.fromJson(
       resp.bodyAsMap,
       200, 
