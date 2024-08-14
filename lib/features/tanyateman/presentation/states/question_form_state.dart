@@ -1,6 +1,13 @@
 part of '_states.dart';
 
 class QuestionFormState {
+  QuestionFormState() {
+    final remoteDataSource = QuestionRemoteDataSourceImpl();
+    _repo = QuestionRepositoryImpl(remoteDataSource);
+  }
+
+  late QuestionRepository _repo; 
+
   final TextEditingController _questionController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
@@ -107,5 +114,34 @@ class QuestionFormState {
     );
     if (croppedImage == null) return null;
     return File(croppedImage.path);
+  }
+
+  Future<void> postNewQuestion() async {
+    final model = {
+      'attachment_file' : _fileImage,
+      'course_id' : _course!.id,
+      'question_text' : _questionController.text,
+      'is_anonym' : _isAnonym
+    };
+    final resp = await _repo.postQuestion(model);
+    await resp.fold((failure) {
+      ErrorMessenger('Pertanyaan gagal dibuat')
+          .show(ctx!);
+    }, (result) async {
+      SuccessMessenger('Pertanyaan berhasil dibuat').show(ctx!);
+      _questionController.clear();
+      _fileImage = null;
+      _course = null;
+      _isAnonym = false;
+      // final calcResp = await _repo.getAllQuestions();
+      // calcResp.fold((failure) => throw failure, (result) {
+      //   final lessThanLimit = result.data.length < 10;
+      //   hasReachedMax = result.data.isEmpty || lessThanLimit;
+      //   _semesters = result.data;
+      //   print(_semesters);
+      // });
+    });
+    semesterRM.notify();
+
   }
 }

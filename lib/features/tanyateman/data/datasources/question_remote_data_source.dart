@@ -2,7 +2,7 @@ part of '_datasources.dart';
 
 abstract class QuestionRemoteDataSource {
   Future<Parsed<List<QuestionModel>>> getAllQuestions(QueryQuestion query);
-  Future<Parsed<QuestionModel>> postQuestion(QuestionModel model);
+  Future<Parsed<Map<String,dynamic>>> postQuestion(Map<String,dynamic> model);
   Future<Parsed<void>> deleteQuestion(int id);
 }
 
@@ -31,8 +31,15 @@ class QuestionRemoteDataSourceImpl implements QuestionRemoteDataSource {
   }
 
   @override
-  Future<Parsed<QuestionModel>> postQuestion(QuestionModel model) async {
-    throw UnimplementedError();
+  Future<Parsed<Map<String,dynamic>>> postQuestion(
+    Map<String,dynamic> model) async {
+    final url = EndpointsRevamp.tanyaTeman;
+    final resp = await postIt(url, model: model);
+    return Parsed.fromJson(
+      resp.bodyAsMap,
+      200, 
+      resp.data
+    );
   }
 
   @override

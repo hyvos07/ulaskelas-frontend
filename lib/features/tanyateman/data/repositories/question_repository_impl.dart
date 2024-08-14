@@ -14,8 +14,8 @@ class QuestionRepositoryImpl implements QuestionRepository {
   }
 
   @override
-  Future<Decide<Failure, Parsed<QuestionModel>>>
-      postQuestion(QuestionModel model) {
+  Future<Decide<Failure, Parsed<Map<String,dynamic>>>>
+      postQuestion(Map<String,dynamic> model) {
     return apiCall(_remoteDataSource.postQuestion(model));
   }
 
