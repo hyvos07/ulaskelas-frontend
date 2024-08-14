@@ -12,4 +12,3 @@ import '../models/semester_model.dart';
 part 'calculator_remote_data_source.dart';
 part 'component_remote_data_source.dart';
 part 'semester_remote_data_source.dart';
-part '_dummydata.dart';

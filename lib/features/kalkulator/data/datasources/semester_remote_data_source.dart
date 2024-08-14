@@ -17,8 +17,6 @@ abstract class SemesterRemoteDataSource {
 }
 
 class SemesterRemoteDataSourceImpl extends SemesterRemoteDataSource {
-  final _dummyData = DummyData.getDummyData;
-
   @override
   Future<Parsed<List<SemesterModel>>> getSemesters() async {
     final list = <SemesterModel>[];
@@ -140,37 +138,6 @@ class SemesterRemoteDataSourceImpl extends SemesterRemoteDataSource {
   //     'status_code': 204,
   //   };
   // }
-
-  /// Calculate total SKS after adding or deleting a semester.
-  void calculateSKS() {
-    var sks = 0;
-    for (final semester in _dummyData['data']['all_semester_gpa']) {
-      sks += semester['total_sks'] as int;
-    }
-
-    _dummyData['data']['cumulative_gpa']['total_sks'] = sks;
-  }
-
-  /// Calculate cumulative GPA after adding or deleting a semester.
-  void calculateTotalGPA() {
-    var totalGPA = 0.0;
-    for (final semester in _dummyData['data']['all_semester_gpa']) {
-      totalGPA +=
-          (semester['semester_gpa'] as double) * (semester['total_sks'] as int);
-    }
-
-    _dummyData['data']['cumulative_gpa']['total_gpa'] = totalGPA;
-  }
-
-  /// Calculate new cumulative GPA.
-  void calculateNewGPA() {
-    calculateSKS();
-    calculateTotalGPA();
-
-    _dummyData['data']['cumulative_gpa']['cumulative_gpa'] = _dummyData['data']
-            ['cumulative_gpa']['total_gpa'] /
-        _dummyData['data']['cumulative_gpa']['total_sks'];
-  }
 
   @override
   Future<Parsed<List<SemesterModel>>> getAutoFillSemester() async {

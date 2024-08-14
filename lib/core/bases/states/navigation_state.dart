@@ -361,7 +361,7 @@ class NavigationServiceState implements Navigation {
   Future<void> replaceToTanyaTemanPage() {
     return nav.pushReplacement<void,void>(
       const TanyaTemanPage(),
-      RouteName.tanyaTeman
+      RouteName.tanyaTeman,
     );
   }
 }

@@ -27,7 +27,7 @@ class AskQuestionBox extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               isInDetailPage!
-                ? 'Punya solus? Ayok bantu jawab!'
+                ? 'Punya solusi? Ayok bantu jawab!'
                 : 'Kebingungan? TanyaTeman!',
               style: FontTheme.poppins12w500black().copyWith(
                 color: BaseColors.gray1.withOpacity(0.8),

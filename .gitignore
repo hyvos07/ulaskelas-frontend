@@ -45,8 +45,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Local configuration file
 .env
-/android/app/src/production/google-services.json
 /lib/core/environment/secrets.g.dart
-
+/android/app/src/production/google-services.json
 google-services.json
+*_dummydata.dart
