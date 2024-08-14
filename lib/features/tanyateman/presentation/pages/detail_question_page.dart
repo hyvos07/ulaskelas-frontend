@@ -245,6 +245,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                 ),
+                isInDetailPage: true
               )
             ],
           ),

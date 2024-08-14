@@ -118,10 +118,11 @@ class QuestionFormState {
 
   Future<void> postNewQuestion() async {
     final model = {
-      'attachment_file' : _fileImage,
-      'course_id' : _course!.id,
-      'question_text' : _questionController.text,
-      'is_anonym' : _isAnonym
+      'attachment_file' : questionFormRM.state.fileImage,
+      'course_id' : questionFormRM.state.course != null
+        ? questionFormRM.state.course!.id : null,
+      'question_text' : questionFormRM.state.questionController.text.trim(),
+      'is_anonym' : questionFormRM.state.isAnonym
     };
     final resp = await _repo.postQuestion(model);
     await resp.fold((failure) {
@@ -140,6 +141,7 @@ class QuestionFormState {
       //   _semesters = result.data;
       //   print(_semesters);
       // });
+      nav.replaceToTanyaTemanPage();
     });
     semesterRM.notify();
 

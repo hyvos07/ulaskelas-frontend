@@ -350,4 +350,11 @@ class NavigationServiceState implements Navigation {
       ViewImagePage(imageFile: imageFile, isDetail: isDetail),
     );
   }
+
+  Future<void> replaceToTanyaTemanPage() {
+    return nav.pushReplacement<void,void>(
+      const TanyaTemanPage(),
+      RouteName.tanyaTeman
+    );
+  }
 }

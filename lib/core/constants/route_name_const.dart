@@ -29,4 +29,7 @@ class RouteName {
   static const String semesterPage = 'semester-page';
   static const String editComponent = 'edit-component';
   static const String bookmarksPage = 'bookmarks';
+  static const String tanyaTeman = 'tanya-teman';
+  static const String detailQuestion = 'detail-question';
+  static const String addQuestion = 'add-question';
 }

@@ -3,10 +3,12 @@ part of '_widgets.dart';
 class AskQuestionBox extends StatelessWidget {
   const AskQuestionBox({
     this.onTap,
+    this.isInDetailPage = false,
     super.key
   });
 
   final VoidCallback? onTap;
+  final bool? isInDetailPage;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,9 @@ class AskQuestionBox extends StatelessWidget {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Kebingungan? TanyaTeman!',
+              isInDetailPage!
+                ? 'Punya solus? Ayok bantu jawab!'
+                : 'Kebingungan? TanyaTeman!',
               style: FontTheme.poppins12w500black().copyWith(
                 color: BaseColors.gray1.withOpacity(0.8),
                 fontWeight: FontWeight.w600,

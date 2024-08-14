@@ -126,52 +126,11 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   }
 
   Future<void> onSubmitCallBack(BuildContext context) async {
-    final currentFocus = FocusScope.of(context);
-    componentFormRM.state.justVisited = false;
-
-    if (!currentFocus.hasPrimaryFocus) {
-      currentFocus.unfocus();
+    if (questionFormRM.state.questionController.text != '') {
+      await questionFormRM.state.postNewQuestion();
+    } else {
+      WarningMessenger('Pertanyaan perlu diisi!').show(context);
     }
-    if (componentFormRM.state.isLoading) {
-      return;
-    }
-    MixpanelService.track('calculator_add_course_component');
-    if (componentFormRM.state.formKey.currentState!.validate() &&
-        !componentFormRM.state.scoreControllers
-            .any((element) => element.text.isEmpty)) {
-      // progressDialogue(context);
-      await componentFormRM.state.submitForm(1);
-      await Future.delayed(const Duration(milliseconds: 150));
-
-      nav.pop();
-
-      final averageScore = componentFormRM.state.averageScore();
-      final weight = componentFormRM.state.formData.weight!;
-
-      componentFormRM.state.cleanForm();
-      if (kDebugMode) {
-        print('success');
-      }
-
-      // await nav.replaceToComponentPage(
-      //   givenSemester: widget.givenSemester,
-      //   courseId: widget.courseId,
-      //   calculatorId: widget.calculatorId,
-      //   courseName: widget.courseName,
-      //   totalScore: _temporaryUpdateScore(
-      //     averageScore,
-      //     weight,
-      //   ),
-      //   totalPercentage: _temporaryUpdateWeight(
-      //     weight,
-      //   ),
-      // );
-
-      return;
-    }
-
-    WarningMessenger('Pastikan semua field sudah terisi dengan benar!')
-        .show(context);
   }
 
   void seeImage() {
