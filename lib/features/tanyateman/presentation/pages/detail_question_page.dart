@@ -76,7 +76,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                   onPressed: onBackPressed,
                 ),
                 Text(
-                  '#${widget.model.tags}',
+                  '#${widget.model.courseName}',
                   style: FontTheme.poppins12w600black().copyWith(
                     color: Colors.grey.shade600,
                   ),
@@ -245,8 +245,8 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                 ),
-                isInDetailPage: true
-              )
+                isInDetailPage: true,
+              ),
             ],
           ),
         ),

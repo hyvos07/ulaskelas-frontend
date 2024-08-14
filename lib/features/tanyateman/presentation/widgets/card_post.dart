@@ -36,7 +36,7 @@ class CardPost extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '#${model!.tags}',
+                        '#${model!.courseName}',
                         style: FontTheme.poppins10w700black().copyWith(
                           color: BaseColors.mineShaft.withOpacity(0.5),
                         ),

@@ -33,8 +33,6 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
       cacheKey: 'all-question',
       state: false,
     ).initialize();
-
-    questionsRM.setState((s) => s.retrieveData(QueryQuestion()));
   }
 
   void _onScroll() {
@@ -298,7 +296,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
   }
 
   Future<void> retrieveData() async {
-    await questionsRM.state.retrieveData(QueryQuestion());
+    await questionsRM.setState((s) => s.retrieveData(QueryQuestion()));
   }
 
   bool scrollCondition() {

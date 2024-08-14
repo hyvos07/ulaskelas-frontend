@@ -26,7 +26,7 @@ class PostContent extends StatelessWidget {
         Row(
           children: <Widget>[
             UserProfileBox(
-              name: model!.userFullName,
+              name: model!.userName,
             ),
             const WidthSpace(12),
             Expanded(
@@ -37,7 +37,7 @@ class PostContent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          model!.userFullName,
+                          model!.userName,
                           style: FontTheme.poppins12w700black().copyWith(
                             fontWeight: FontWeight.w600,
                             fontSize: 12.5,
@@ -49,7 +49,7 @@ class PostContent extends StatelessWidget {
                   ),
                   const HeightSpace(4),
                   Text(
-                    '${model!.userMajor} ${model!.userGeneration}',
+                    '${model!.userProgram} ${model!.userGeneration}',
                     style: FontTheme.poppins10w400black().copyWith(
                       fontWeight: FontWeight.w300,
                     ),
@@ -61,7 +61,7 @@ class PostContent extends StatelessWidget {
         ),
         HeightSpace(isDetail ? 15 : 13.5),
         Text(
-          model!.question,
+          model!.questionText,
           style: isDetail || isReply
               ? FontTheme.poppins14w500black().copyWith(
                   fontSize: 13,
@@ -260,7 +260,7 @@ class PostContent extends StatelessWidget {
             ),
             const WidthSpace(2),
             Text(
-              _shortenEngagement(model!.likes),
+              _shortenEngagement(model!.likeCount),
               style: FontTheme.poppins12w400black().copyWith(
                 fontSize: 11,
                 fontWeight: FontWeight.w300,
