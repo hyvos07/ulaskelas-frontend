@@ -127,7 +127,15 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
 
   Future<void> onSubmitCallBack(BuildContext context) async {
     if (questionFormRM.state.questionController.text != '') {
-      await questionFormRM.state.postNewQuestion();
+      final isSucces = await questionFormRM.state.postNewQuestion();
+      if (isSucces) {
+        nav.pop();
+        await questionsRM.setState((s) => s.retrieveData(QueryQuestion()));
+        SuccessMessenger('Pertanyaan berhasil dibuat').show(ctx!);
+      } else {
+        ErrorMessenger('Pertanyaan gagal dibuat')
+          .show(ctx!);
+      }
     } else {
       WarningMessenger('Pertanyaan perlu diisi!').show(context);
     }

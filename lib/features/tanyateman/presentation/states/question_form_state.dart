@@ -116,7 +116,9 @@ class QuestionFormState {
     return File(croppedImage.path);
   }
 
-  Future<void> postNewQuestion() async {
+  Future<bool> postNewQuestion() async {
+    var isSucces = false;
+
     final model = {
       'attachment_file' : questionFormRM.state.fileImage,
       'course_id' : questionFormRM.state.course != null
@@ -127,14 +129,13 @@ class QuestionFormState {
     };
     final resp = await _repo.postQuestion(model);
     await resp.fold((failure) {
-      ErrorMessenger('Pertanyaan gagal dibuat')
-          .show(ctx!);
+      isSucces = false;
     }, (result) async {
-      SuccessMessenger('Pertanyaan berhasil dibuat').show(ctx!);
       clearForm();
-      nav.pop();
+      isSucces = true;
     });
     semesterRM.notify();
 
+    return isSucces;
   }
 }
