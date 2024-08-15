@@ -103,28 +103,10 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                         isDetail: true,
                         onImageTap: () => seeImage(isDetail: true),
                       ),
-                      const HeightSpace(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const QuestionFormLabel(text: 'Komentar'),
-                          Row(
-                            children: [
-                              const FilterIcon(
-                                filterOn: true,
-                              ),
-                              QuestionFormLabel(
-                                text: 'Filter',
-                                color: BaseColors.primary,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),
-                const HeightSpace(20),
+                const HeightSpace(30),
                 Center(
                   child: SmoothPageIndicator(
                     controller: _pageController,
@@ -164,7 +146,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const HeightSpace(15),
+              const HeightSpace(5),
               const QuestionFormLabel(
                 text: 'Jawaban',
                 bottomPad: 10,
@@ -253,37 +235,8 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   }
 
   Future<void> onSubmitCallBack(BuildContext context) async {
-    final currentFocus = FocusScope.of(context);
-    componentFormRM.state.justVisited = false;
-
-    if (!currentFocus.hasPrimaryFocus) {
-      currentFocus.unfocus();
-    }
-    if (componentFormRM.state.isLoading) {
-      return;
-    }
-    MixpanelService.track('calculator_add_course_component');
-    if (componentFormRM.state.formKey.currentState!.validate() &&
-        !componentFormRM.state.scoreControllers
-            .any((element) => element.text.isEmpty)) {
-      await componentFormRM.state.submitForm(1);
-      await Future.delayed(const Duration(milliseconds: 150));
-
-      nav.pop();
-
-      final averageScore = componentFormRM.state.averageScore();
-      final weight = componentFormRM.state.formData.weight!;
-
-      componentFormRM.state.cleanForm();
-      if (kDebugMode) {
-        print('success');
-      }
-
-      return;
-    }
-
-    WarningMessenger('Pastikan semua field sudah terisi dengan benar!')
-        .show(context);
+    
+   
   }
 
   @override

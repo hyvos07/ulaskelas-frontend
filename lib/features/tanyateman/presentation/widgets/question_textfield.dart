@@ -26,7 +26,7 @@ class QuestionTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         hintText: isAnswer!
-          ?'Tulis jawabannya disini!'
+          ?'Tulis jawaban mu disini!'
           :'Apa yang ingin kamu tanyakan?',
       ),
       textInputAction: TextInputAction.newline,
