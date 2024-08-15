@@ -5,12 +5,14 @@ class QuestionTextField extends StatelessWidget {
     required this.controller,
     required this.onChanged,
     required this.validator,
+    this.isAnswer = false,
     super.key,
   });
 
   final TextEditingController controller;
   final void Function(String) onChanged;
   final String? Function(String?) validator;
+  final bool? isAnswer;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,9 @@ class QuestionTextField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        hintText: 'Apa yang ingin kamu tanyakan?',
+        hintText: isAnswer!
+          ?'Tulis jawabannya disini!'
+          :'Apa yang ingin kamu tanyakan?',
       ),
       textInputAction: TextInputAction.newline,
       onChanged: onChanged,

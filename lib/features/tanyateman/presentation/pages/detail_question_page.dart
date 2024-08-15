@@ -139,7 +139,8 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                 const HeightSpace(10),
                 ExpandablePageView.builder(
                     controller: _pageController,
-                    animationDuration: const Duration(milliseconds: 500),
+                    animationDuration: const Duration(milliseconds: 800),
+                    animationCurve: Curves.fastLinearToSlowEaseIn,
                     itemCount: 2,
                     itemBuilder: (context, index) {
                       if (index == 0) {
@@ -165,10 +166,11 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
             children: [
               const HeightSpace(15),
               const QuestionFormLabel(
-                text: 'Pertanyaan',
+                text: 'Jawaban',
                 bottomPad: 10,
               ),
               QuestionTextField(
+                isAnswer: true,
                 controller: questionFormRM.state.questionController,
                 onChanged: (value) {
                   if (value.trim().isEmpty) {
@@ -184,32 +186,16 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                 },
               ),
               const HeightSpace(20),
-              OnBuilder<QuestionFormState>.all(
-                listenTo: questionFormRM,
-                onIdle: WaitingView.new,
-                onWaiting: WaitingView.new,
-                onError: (dynamic error, refresh) => Text(error.toString()),
-                onData: (data) {
-                  return SendAsAnonymSwitcher(
-                    isAnonym: questionFormRM.state.isAnonym,
-                    onChanged: questionFormRM.state.setIsAnonym,
-                  );
-                },
+              SendAsAnonymSwitcher(
+                isAnonym: questionFormRM.state.isAnonym,
+                onChanged: questionFormRM.state.setIsAnonym,
               ),
               const HeightSpace(20),
-              OnBuilder<QuestionFormState>.all(
-                listenTo: questionFormRM,
-                onIdle: WaitingView.new,
-                onWaiting: WaitingView.new,
-                onError: (dynamic error, refresh) => Text(error.toString()),
-                onData: (data) {
-                  return ImagePickerBox(
-                    onTapUpload: questionFormRM.state.pickImage,
-                    onTapSeeImage: seeImage,
-                    isImageSizeTooBig: questionFormRM.state.isImageSizeTooBig,
-                  );
-                },
-              ),
+              ImagePickerBox(
+                onTapUpload: questionFormRM.state.pickImage,
+                onTapSeeImage: seeImage,
+                isImageSizeTooBig: questionFormRM.state.isImageSizeTooBig,
+              )
             ],
           ),
         ),
@@ -242,8 +228,8 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
               AskQuestionBox(
                 onTap: () => _pageController.animateToPage(
                   1, // Index of the second page
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
+                  duration: const Duration(milliseconds: 1000),
+                  curve: Curves.fastLinearToSlowEaseIn,
                 ),
                 isInDetailPage: true,
               ),
