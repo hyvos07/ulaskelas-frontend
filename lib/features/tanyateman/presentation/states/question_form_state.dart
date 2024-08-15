@@ -4,12 +4,13 @@ class QuestionFormState {
   QuestionFormState() {
     final remoteDataSource = QuestionRemoteDataSourceImpl();
     _repo = QuestionRepositoryImpl(remoteDataSource);
+    _questionController = TextEditingController();
+    formKey = GlobalKey<FormState>();
   }
 
   late QuestionRepository _repo; 
-
-  final TextEditingController _questionController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  late TextEditingController _questionController;
+  late GlobalKey formKey;
 
   String? _question;
   CourseModel? _course;

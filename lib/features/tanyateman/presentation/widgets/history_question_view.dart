@@ -20,7 +20,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
   ];
 
   List<String> filterOptionsText = [
-    'Semua',
+    'Semua Postingan',
     'Terbaru',
     'Paling banyak Disukai',
     'Terverifikasi',
@@ -64,119 +64,135 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
     return RefreshIndicator(
       key: refreshIndicatorKey,
       onRefresh: retrieveData,
-      child: Stack(
-        children: [
-          SingleChildScrollView(
-            controller: scrollController,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 15,
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                controller: scrollController,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 15,
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: Column(
                     children: [
-                      Text(
-                        'Seluruh Postingan Kamu!',
-                        style: FontTheme.poppins14w700black().copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: BaseColors.gray1,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Seluruh Postingan Kamu!',
+                              style: FontTheme.poppins14w700black().copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: BaseColors.gray1,
+                              ),
+                            ),
+                            OnReactive(_buildFilter),
+                          ],
                         ),
                       ),
-                      OnReactive(_buildFilter),
+                      const HeightSpace(15),
+                      OnBuilder<QuestionState>.all(
+                        listenTo: questionsRM,
+                        onWaiting: () => Column(
+                          children: List.generate(
+                            10,
+                            (index) => const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: SkeletonCardPost(
+                                isReply: false,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onIdle: () => Column(
+                          children: List.generate(
+                            10,
+                            (index) => const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: SkeletonCardPost(
+                                isReply: false,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onError: (dynamic error, refresh) =>
+                            Text(error.toString()),
+                        onData: (data) {
+                          return data.questions.isEmpty
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 20),
+                                  child: Text(
+                                    'Tidak ada apa-apa disini.',
+                                    style:
+                                        FontTheme.poppins12w600black().copyWith(
+                                      color: BaseColors.gray2.withOpacity(0.7),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              : ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: data.questions.length + 1,
+                                  separatorBuilder: (context, index) =>
+                                      const HeightSpace(16),
+                                  itemBuilder: (context, index) {
+                                    if (index == data.questions.length) {
+                                      return !data.hasReachedMax
+                                          ? const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 20,
+                                              ),
+                                              child: CircleLoading(
+                                                size: 25,
+                                              ),
+                                            )
+                                          : _buildBottomMax();
+                                    }
+                                    final question = data.questions[index];
+                                    return CardPost(
+                                      isInHistorySection: true,
+                                      model: question,
+                                      // onTap: () {
+                                      //   nav.goToDetailQuestionPage(question);
+                                      // },
+                                      onRefreshImage: questionsRM.notify,
+                                    );
+                                  },
+                                );
+                        },
+                      ),
                     ],
                   ),
                 ),
-                const HeightSpace(15),
-                OnBuilder<QuestionState>.all(
-                  listenTo: questionsRM,
-                  onWaiting: () => Column(
-                    children: List.generate(
-                      10,
-                      (index) => const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: SkeletonCardPost(
-                          isReply: false,
-                        ),
-                      ),
-                    ),
+              ),
+              Positioned(
+                right: 20,
+                bottom: 18,
+                child: FloatingActionButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  onIdle: () => Column(
-                    children: List.generate(
-                      10,
-                      (index) => const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: SkeletonCardPost(
-                          isReply: false,
-                        ),
-                      ),
-                    ),
+                  backgroundColor: BaseColors.purpleHearth,
+                  foregroundColor: BaseColors.white,
+                  mini: true,
+                  onPressed: _scrollToTop,
+                  child: const Icon(
+                    Icons.expand_less_rounded,
+                    size: 25,
                   ),
-                  onError: (dynamic error, refresh) => Text(error.toString()),
-                  onData: (data) {
-                    return data.questions.isEmpty
-                        ? Center(
-                            // TODO: Change this
-                            child: Text(
-                              'Belum ada pertanyaan nih',
-                              style: FontTheme.poppins14w400black(),
-                            ),
-                          )
-                        : ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: data.questions.length + 1,
-                            separatorBuilder: (context, index) =>
-                                const HeightSpace(16),
-                            itemBuilder: (context, index) {
-                              if (index == data.questions.length) {
-                                return !data.hasReachedMax
-                                    ? const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                        ),
-                                        child: CircleLoading(
-                                          size: 25,
-                                        ),
-                                      )
-                                    : _buildBottomMax();
-                              }
-                              final question = data.questions[index];
-                              return CardPost(
-                                isInHistorySection: true,
-                                model: question,
-                                // onTap: () {
-                                //   nav.goToDetailQuestionPage(question);
-                                // },
-                              );
-                            },
-                          );
-                  },
                 ),
-              ],
-            ),
-          ),
-          Positioned(
-            right: 20,
-            bottom: 18,
-            child: FloatingActionButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
               ),
-              backgroundColor: BaseColors.purpleHearth,
-              foregroundColor: BaseColors.white,
-              mini: true,
-              onPressed: _scrollToTop,
-              child: const Icon(
-                Icons.expand_less_rounded,
-                size: 25,
-              ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
@@ -196,14 +212,15 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
 
   Widget _buildBottomMax() {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        child: Text(
-          'Tidak ada pertanyaan lagi.',
-          style: FontTheme.poppins12w600black().copyWith(
-            color: BaseColors.gray2.withOpacity(0.7),
-          ),
-          textAlign: TextAlign.center,
-        ));
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Text(
+        'Tidak ada pertanyaan lagi.',
+        style: FontTheme.poppins12w600black().copyWith(
+          color: BaseColors.gray2.withOpacity(0.7),
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   Widget _buildFilter() {
@@ -228,10 +245,10 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
         items: List.generate(
           filterOptionsValue.length,
           (index) => DropdownMenuItem(
-            alignment: Alignment.topCenter,
+            alignment: Alignment.center,
             value: filterOptionsValue[index],
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: questionsRM.state.historyQuestionsFilter ==
@@ -263,7 +280,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
         dropdownStyleData: DropdownStyleData(
           width: 140,
           direction: DropdownDirection.left,
-          padding: const EdgeInsets.symmetric(vertical: 17),
+          padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: BaseColors.white,
@@ -271,8 +288,8 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
           elevation: 1,
         ),
         menuItemStyleData: const MenuItemStyleData(
-          height: 42,
-          padding: EdgeInsets.symmetric(horizontal: 14),
+          height: 45,
+          padding: EdgeInsets.zero,
         ),
       ),
     );
@@ -280,8 +297,15 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
 
   Future<void> onScroll() async {
     completer?.complete();
-    final query = QueryQuestion();
-    await questionsRM.state.retrieveMoreData(query).then((value) {
+    final selectedFilter = questionsRM.state.historyQuestionsFilter;
+    final query = QueryQuestion(
+      isHistory: true,
+      isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
+      isVerified: selectedFilter == 'terverifikasi' ? true : null,
+      isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
+    );
+    // TODO: Change to retrieveMoreHistory atau bebas si namanya
+    await questionsRM.state.retrieveMoreQuestion(query).then((value) {
       completer = Completer<void>();
       questionsRM.notify();
     }).onError((error, stackTrace) {
@@ -293,14 +317,12 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
     final selectedFilter = questionsRM.state.historyQuestionsFilter;
     final query = QueryQuestion(
       isHistory: true,
-      isMostPopular: selectedFilter == 'is_paling_banyak_disukai'
-        ? true : null,
-      isVerified: selectedFilter == 'terverifikasi'
-        ? true : null,
-      isWaitToVerify:  selectedFilter == 'menunggu_verifikasi'
-        ? true : null
+      isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
+      isVerified: selectedFilter == 'terverifikasi' ? true : null,
+      isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
     );
-    await questionsRM.setState((s) => s.retrieveData(query));
+    // TODO: Change to retrieveHistoryQuestion
+    await questionsRM.setState((s) => s.retrieveAllQuestion(query));
   }
 
   bool scrollCondition() {

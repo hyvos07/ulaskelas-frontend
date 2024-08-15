@@ -18,44 +18,7 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
-    return AppBar(
-        backgroundColor: BaseColors.neutral10,
-        elevation: 0,
-        title: GestureDetector(
-          onTap: () => {},
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Hero(
-              tag: 'search-bar',
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: BaseColors.gray3,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.search,
-                      size: 20,
-                      color: BaseColors.gray3,
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      'Cari Matkul atau Pertanyaan',
-                      style: FontTheme.poppins12w500black().copyWith(
-                        color: BaseColors.gray3,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ));
+    return null;
   }
 
   @override
@@ -64,66 +27,108 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
     SizingInformation sizeInfo,
   ) {
     return SafeArea(
-      child: DefaultTabController(
-        length: 2,
-        animationDuration: const Duration(milliseconds: 100),
-        child: Builder(
-          builder: (context) {
-            final tabController = DefaultTabController.of(context);
-            tabController.addListener(() {
-              if (!tabController.indexIsChanging) {
-                // Nanti retrieve data setiap tab diganti
-              } // NOTE: maybe nanti (else) waktu changingindex bwt clear data
-            });
-            return Column(
-              children: [
-                TabBar(
-                  indicatorPadding: const EdgeInsets.only(bottom: 5),
-                  labelPadding: EdgeInsets.zero,
-                  tabs: [
-                    Tab(
-                      child: Text(
-                        'Semua Pertanyaan',
-                        style: FontTheme.poppins12w700black(),
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'Riwayat Pertanyaan',
-                        style: FontTheme.poppins12w700black(),
-                      ),
-                    ),
-                  ],
-                  // indicator: UnderlineTabIndicator(
-                  // borderSide: const BorderSide(
-                  //   width: 2.5,
-                  //   color: BaseColors.purpleHearth,
-                  // ),
-                  // insets: const EdgeInsets.symmetric(
-                  //   horizontal: 45,
-                  // ),
-                  // borderRadius: BorderRadius.circular(10),
-                  // ),
-                  indicator: _UnderlineTab(
-                    width: 70,
-                    height: 4,
-                    color: BaseColors.purpleHearth,
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () => {
+              print('search-bar tapped'),
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 10,
+                bottom: 5,
+              ),
+              child: Hero(
+                tag: 'search-bar',
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: BaseColors.gray3,
+                    ),
                   ),
-                ),
-                const Expanded(
-                  child: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
+                  child: Row(
                     children: [
-                      SeeAllQuestion(),
-                      HistoryQuestion(),
+                      const Icon(
+                        Icons.search,
+                        size: 20,
+                        color: BaseColors.gray3,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Cari Matkul atau Pertanyaan',
+                        style: FontTheme.poppins12w500black().copyWith(
+                          color: BaseColors.gray3,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: DefaultTabController(
+              length: 2,
+              animationDuration: const Duration(milliseconds: 100),
+              child: Builder(
+                builder: (context) {
+                  return Column(
+                    children: [
+                      TabBar(
+                        indicatorPadding: const EdgeInsets.only(bottom: 5),
+                        labelPadding: EdgeInsets.zero,
+                        tabs: [
+                          Tab(
+                            child: Text(
+                              'Semua Pertanyaan',
+                              style: FontTheme.poppins12w700black(),
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'Riwayat Pertanyaan',
+                              style: FontTheme.poppins12w700black(),
+                            ),
+                          ),
+                        ],
+                        // indicator: UnderlineTabIndicator(
+                        // borderSide: const BorderSide(
+                        //   width: 2.5,
+                        //   color: BaseColors.purpleHearth,
+                        // ),
+                        // insets: const EdgeInsets.symmetric(
+                        //   horizontal: 45,
+                        // ),
+                        // borderRadius: BorderRadius.circular(10),
+                        // ),
+                        indicator: _UnderlineTab(
+                          width: 70,
+                          height: 4,
+                          color: BaseColors.purpleHearth,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      const Expanded(
+                        child: TabBarView(
+                          physics: NeverScrollableScrollPhysics(),
+                          children: [
+                            SeeAllQuestion(),
+                            HistoryQuestion(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

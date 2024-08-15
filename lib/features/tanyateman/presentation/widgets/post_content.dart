@@ -7,11 +7,13 @@ class PostContent extends StatelessWidget {
     this.isReply = false,
     this.isDetail = false,
     this.onImageTap,
+    this.onRefreshImage,
     super.key,
   });
 
   final QuestionModel? model;
   final VoidCallback? onImageTap;
+  final VoidCallback? onRefreshImage;
   final bool isReply;
   final bool isDetail;
   final bool? isInHistorySection;
@@ -57,14 +59,14 @@ class PostContent extends StatelessWidget {
                         fontWeight: FontWeight.w300,
                       ),
                     )
-                  else 
+                  else
                     Text(
                       '${model!.verificationStatus}',
                       style: FontTheme.poppins10w500black().copyWith(
-                        color: model!.verificationStatus == 'Menunggu Verifikasi'
-                          ? Colors.orange
-                          : Colors.green
-                      ),
+                          color:
+                              model!.verificationStatus == 'Menunggu Verifikasi'
+                                  ? Colors.orange
+                                  : Colors.green),
                     )
                 ],
               ),
@@ -91,29 +93,30 @@ class PostContent extends StatelessWidget {
           Column(
             children: [
               HeightSpace(isDetail ? 20 : 18),
-              GestureDetector(
-                onTap: onImageTap ?? () {},
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return isDetail
-                        ? Hero(
-                            tag: 'image-preview',
-                            child: CachedNetworkImage(
-                              imageUrl: model!.attachmentUrl!,
-                              placeholder: (context, url) => SizedBox(
-                                height: maxImageHeight,
-                                child: Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: BaseColors.gray3,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return isDetail
+                      ? Hero(
+                          tag: 'image-preview',
+                          child: CachedNetworkImage(
+                            imageUrl: model!.attachmentUrl!,
+                            placeholder: (context, url) => SizedBox(
+                              height: maxImageHeight,
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: BaseColors.gray3,
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
                               ),
-                              errorWidget: (context, url, error) => Container(
+                            ),
+                            errorWidget: (context, url, error) =>
+                                GestureDetector(
+                              onTap: onRefreshImage,
+                              child: Container(
                                 height: maxImageHeight,
                                 decoration: BoxDecoration(
                                   color: BaseColors.gray3,
@@ -138,26 +141,29 @@ class PostContent extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              imageBuilder: (context, imageProvider) {
-                                double? displayHeight;
-                                imageProvider
-                                    .resolve(ImageConfiguration.empty)
-                                    .addListener(
-                                  ImageStreamListener((ImageInfo info, bool _) {
-                                    final aspectRatio =
-                                        info.image.width / info.image.height;
-                                    final displayWidth =
-                                        constraints.maxWidth < maxImageWidth
-                                            ? constraints.maxWidth
-                                            : maxImageWidth;
-                                    displayHeight = displayWidth / aspectRatio >
-                                            maxImageHeight
-                                        ? maxImageHeight
-                                        : displayWidth / aspectRatio;
-                                  }),
-                                );
-                            
-                                return Container(
+                            ),
+                            imageBuilder: (context, imageProvider) {
+                              double? displayHeight;
+                              imageProvider
+                                  .resolve(ImageConfiguration.empty)
+                                  .addListener(
+                                ImageStreamListener((ImageInfo info, bool _) {
+                                  final aspectRatio =
+                                      info.image.width / info.image.height;
+                                  final displayWidth =
+                                      constraints.maxWidth < maxImageWidth
+                                          ? constraints.maxWidth
+                                          : maxImageWidth;
+                                  displayHeight = displayWidth / aspectRatio >
+                                          maxImageHeight
+                                      ? maxImageHeight
+                                      : displayWidth / aspectRatio;
+                                }),
+                              );
+
+                              return GestureDetector(
+                                onTap: onImageTap ?? () {},
+                                child: Container(
                                   width: maxImageWidth,
                                   height: displayHeight,
                                   decoration: BoxDecoration(
@@ -173,26 +179,30 @@ class PostContent extends StatelessWidget {
                                       width: 0.1,
                                     ),
                                   ),
-                                );
-                              },
-                            ),
-                          )
-                        : CachedNetworkImage(
-                            imageUrl: model!.attachmentUrl!,
-                            placeholder: (context, url) => SizedBox(
-                              height: maxImageHeight,
-                              child: Shimmer.fromColors(
-                                baseColor: Colors.grey.shade300,
-                                highlightColor: Colors.grey.shade100,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: BaseColors.gray3,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: model!.attachmentUrl!,
+                          placeholder: (context, url) => SizedBox(
+                            height: maxImageHeight,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: BaseColors.gray3,
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                             ),
-                            errorWidget: (context, url, error) => Container(
+                          ),
+                          errorWidget: (context, url, error) => GestureDetector(
+                            // TODO: gimana cara nge refresh image nya
+                            onTap: onRefreshImage,
+                            child: Container(
                               height: maxImageHeight,
                               decoration: BoxDecoration(
                                 color: BaseColors.gray3,
@@ -217,26 +227,29 @@ class PostContent extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            imageBuilder: (context, imageProvider) {
-                              double? displayHeight;
-                              imageProvider
-                                  .resolve(ImageConfiguration.empty)
-                                  .addListener(
-                                ImageStreamListener((ImageInfo info, bool _) {
-                                  final aspectRatio =
-                                      info.image.width / info.image.height;
-                                  final displayWidth =
-                                      constraints.maxWidth < maxImageWidth
-                                          ? constraints.maxWidth
-                                          : maxImageWidth;
-                                  displayHeight = displayWidth / aspectRatio >
-                                          maxImageHeight
-                                      ? maxImageHeight
-                                      : displayWidth / aspectRatio;
-                                }),
-                              );
+                          ),
+                          imageBuilder: (context, imageProvider) {
+                            double? displayHeight;
+                            imageProvider
+                                .resolve(ImageConfiguration.empty)
+                                .addListener(
+                              ImageStreamListener((ImageInfo info, bool _) {
+                                final aspectRatio =
+                                    info.image.width / info.image.height;
+                                final displayWidth =
+                                    constraints.maxWidth < maxImageWidth
+                                        ? constraints.maxWidth
+                                        : maxImageWidth;
+                                displayHeight =
+                                    displayWidth / aspectRatio > maxImageHeight
+                                        ? maxImageHeight
+                                        : displayWidth / aspectRatio;
+                              }),
+                            );
 
-                              return Container(
+                            return GestureDetector(
+                              onTap: onImageTap ?? () {},
+                              child: Container(
                                 width: maxImageWidth,
                                 height: displayHeight,
                                 decoration: BoxDecoration(
@@ -252,20 +265,21 @@ class PostContent extends StatelessWidget {
                                     width: 0.1,
                                   ),
                                 ),
-                              );
-                            },
-                          );
-                  },
-                ),
+                              ),
+                            );
+                          },
+                        );
+                },
               ),
               HeightSpace(isDetail ? 20 : 18),
             ],
           )
         else
           HeightSpace(isDetail ? 15 : 13.5),
-        if (model!.verificationStatus == 'Menunggu Verifikasi' && isInHistorySection! )
+        if (model!.verificationStatus == 'Menunggu Verifikasi' &&
+            isInHistorySection!)
           const SizedBox.shrink()
-        else 
+        else
           Row(
             children: [
               SvgPicture.asset(

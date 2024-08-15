@@ -130,11 +130,28 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
       final isSucces = await questionFormRM.state.postNewQuestion();
       if (isSucces) {
         nav.pop();
-        await questionsRM.setState((s) => s.retrieveData(QueryQuestion()));
+        final historyFilter = questionsRM.state.historyQuestionsFilter;
+        await questionsRM.setState(
+          (s) => s.retrieveData(
+            queryAll: QueryQuestion(
+              isMostPopular: questionsRM.state.allQuestionsFilter ==
+                      'is_paling_banyak_disukai'
+                  ? true
+                  : null,
+            ),
+            queryHistory: QueryQuestion(
+              isHistory: true,
+              isMostPopular:
+                  historyFilter == 'is_paling_banyak_disukai' ? true : null,
+              isVerified: historyFilter == 'terverifikasi' ? true : null,
+              isWaitToVerify:
+                  historyFilter == 'menunggu_verifikasi' ? true : null,
+            ),
+          ),
+        );
         SuccessMessenger('Pertanyaan berhasil dibuat').show(ctx!);
       } else {
-        ErrorMessenger('Pertanyaan gagal dibuat')
-          .show(ctx!);
+        ErrorMessenger('Pertanyaan gagal dibuat').show(ctx!);
       }
     } else {
       WarningMessenger('Pertanyaan perlu diisi!').show(context);

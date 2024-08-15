@@ -38,6 +38,7 @@ class SmallMenu extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             color: BaseColors.white,
           ),
+          elevation: 2,
         ),
         menuItemStyleData: const MenuItemStyleData(
           height: 35,

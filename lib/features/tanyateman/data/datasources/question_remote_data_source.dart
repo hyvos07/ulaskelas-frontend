@@ -15,9 +15,10 @@ class QuestionRemoteDataSourceImpl implements QuestionRemoteDataSource {
     final url = '${EndpointsRevamp.tanyaTeman}?${query.generateQueryString()}';
     final resp = await getIt(url);
 
-    print(resp.dataBodyAsMap);
-
     if (resp.data['total_page'] < query.page) {
+      if (kDebugMode) {
+        print('hasReachedMax');
+      }
       return resp.parse([]); // return empty list; trigger hasReachedMax
     }
 

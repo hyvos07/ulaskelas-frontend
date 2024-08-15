@@ -1,5 +1,3 @@
-// Created by Muhamad Fauzi Ridwan on 07/11/21.
-
 part of '_widgets.dart';
 
 class CardPost extends StatelessWidget {
@@ -9,10 +7,12 @@ class CardPost extends StatelessWidget {
     this.isReply = false,
     super.key,
     this.onTap,
+    this.onRefreshImage,
   });
 
   final QuestionModel? model;
   final VoidCallback? onTap;
+  final VoidCallback? onRefreshImage;
   final bool isReply;
   final bool? isInHistorySection;
 
@@ -65,6 +65,7 @@ class CardPost extends StatelessWidget {
                 isReply: isReply,
                 model: model,
                 onImageTap: onTap,
+                onRefreshImage: onRefreshImage,
               ),
             ),
           ],

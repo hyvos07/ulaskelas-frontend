@@ -226,6 +226,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
               child: CardPost(
                 isReply: true,
                 model: widget.model,
+                onRefreshImage: () {}, // NOTE: pake statenyaReplies.refresh()
               ),
             );
           }),
@@ -234,10 +235,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     );
   }
 
-  Future<void> onSubmitCallBack(BuildContext context) async {
-    
-   
-  }
+  Future<void> onSubmitCallBack(BuildContext context) async {}
 
   @override
   Widget buildWideLayout(

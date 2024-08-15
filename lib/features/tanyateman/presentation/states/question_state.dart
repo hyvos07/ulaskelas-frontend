@@ -16,9 +16,14 @@ class QuestionState {
 
   List<QuestionModel> get questions => _questions ?? [];
 
-  Future<void> retrieveData(QueryQuestion q) async {
+  /// Used for retrieve data on both all questions and history questions
+  Future<void> retrieveData({
+    required QueryQuestion queryAll,
+    required QueryQuestion queryHistory,
+  }) async {
     await Future.wait([
-      retrieveAllQuestion(q),
+      retrieveAllQuestion(queryAll),
+      // retrieveHistoryQuestion(q),
     ]);
   }
 
@@ -31,12 +36,15 @@ class QuestionState {
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
       _questions = result.data;
+      if (kDebugMode) {
+        print(_questions);
+      }
     });
 
     questionsRM.notify();
   }
 
-  Future<void> retrieveMoreData(QueryQuestion q) async {
+  Future<void> retrieveMoreQuestion(QueryQuestion q) async {
     ++page;
     q.page = page;
     print('retrieveMoreData, with query page: ${q.page}');
@@ -45,6 +53,9 @@ class QuestionState {
       _questions?.addAll(result.data);
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
+      if (kDebugMode) {
+        print(_questions);
+      }
     });
 
     questionsRM.notify();
