@@ -263,7 +263,9 @@ class PostContent extends StatelessWidget {
           )
         else
           HeightSpace(isDetail ? 15 : 13.5),
-        if (model!.verificationStatus == 'Terverifikasi')
+        if (model!.verificationStatus == 'Menunggu Verifikasi' && isInHistorySection! )
+          const SizedBox.shrink()
+        else 
           Row(
             children: [
               SvgPicture.asset(
@@ -315,7 +317,6 @@ class PostContent extends StatelessWidget {
               )
             ],
           )
-        else const SizedBox.shrink()
       ],
     );
   }
