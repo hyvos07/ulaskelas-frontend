@@ -4,6 +4,7 @@ part of '_widgets.dart';
 
 class CardPost extends StatelessWidget {
   const CardPost({
+    this.isInHistorySection = false,
     this.model,
     this.isReply = false,
     super.key,
@@ -13,6 +14,7 @@ class CardPost extends StatelessWidget {
   final QuestionModel? model;
   final VoidCallback? onTap;
   final bool isReply;
+  final bool? isInHistorySection;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,7 @@ class CardPost extends StatelessWidget {
             GestureDetector(
               onTap: onTap,
               child: PostContent(
+                isInHistorySection: isInHistorySection,
                 isReply: isReply,
                 model: model,
                 onImageTap: onTap,

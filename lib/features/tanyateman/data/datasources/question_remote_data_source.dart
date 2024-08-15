@@ -12,7 +12,7 @@ class QuestionRemoteDataSourceImpl implements QuestionRemoteDataSource {
     QueryQuestion query,
   ) async {
     final list = <QuestionModel>[];
-    final url = '${EndpointsRevamp.tanyaTeman}?page=${query.page}';
+    final url = '${EndpointsRevamp.tanyaTeman}?${query.generateQueryString()}';
     final resp = await getIt(url);
 
     print(resp.dataBodyAsMap);

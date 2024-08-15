@@ -2,6 +2,7 @@ part of '_widgets.dart';
 
 class PostContent extends StatelessWidget {
   const PostContent({
+    this.isInHistorySection = false,
     this.model,
     this.isReply = false,
     this.isDetail = false,
@@ -13,6 +14,7 @@ class PostContent extends StatelessWidget {
   final VoidCallback? onImageTap;
   final bool isReply;
   final bool isDetail;
+  final bool? isInHistorySection;
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +50,22 @@ class PostContent extends StatelessWidget {
                     ],
                   ),
                   const HeightSpace(4),
-                  Text(
-                    '${model!.userProgram} ${model!.userGeneration}',
-                    style: FontTheme.poppins10w400black().copyWith(
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
+                  if (!isInHistorySection!)
+                    Text(
+                      '${model!.userProgram} ${model!.userGeneration}',
+                      style: FontTheme.poppins10w400black().copyWith(
+                        fontWeight: FontWeight.w300,
+                      ),
+                    )
+                  else 
+                    Text(
+                      '${model!.verificationStatus}',
+                      style: FontTheme.poppins10w500black().copyWith(
+                        color: model!.verificationStatus == 'Menunggu Verifikasi'
+                          ? Colors.orange
+                          : Colors.green
+                      ),
+                    )
                 ],
               ),
             ),
@@ -251,57 +263,59 @@ class PostContent extends StatelessWidget {
           )
         else
           HeightSpace(isDetail ? 15 : 13.5),
-        Row(
-          children: [
-            SvgPicture.asset(
-              'assets/icons/thumbsup.svg',
-              height: 24,
-              width: 24,
-            ),
-            const WidthSpace(2),
-            Text(
-              _shortenEngagement(model!.likeCount),
-              style: FontTheme.poppins12w400black().copyWith(
-                fontSize: 11,
-                fontWeight: FontWeight.w300,
+        if (model!.verificationStatus == 'Terverifikasi')
+          Row(
+            children: [
+              SvgPicture.asset(
+                'assets/icons/thumbsup.svg',
+                height: 24,
+                width: 24,
               ),
-            ),
-            if (!isReply)
-              Row(
-                children: [
-                  const WidthSpace(10),
-                  SvgPicture.asset(
-                    'assets/icons/comment.svg',
-                    height: 16,
-                    width: 16,
-                  ),
-                  const WidthSpace(6),
-                  Text(
-                    _shortenEngagement(model!.answers),
-                    style: FontTheme.poppins12w400black().copyWith(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w300,
+              const WidthSpace(2),
+              Text(
+                _shortenEngagement(model!.likeCount),
+                style: FontTheme.poppins12w400black().copyWith(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              if (!isReply)
+                Row(
+                  children: [
+                    const WidthSpace(10),
+                    SvgPicture.asset(
+                      'assets/icons/comment.svg',
+                      height: 16,
+                      width: 16,
                     ),
-                  ),
-                ],
+                    const WidthSpace(6),
+                    Text(
+                      _shortenEngagement(model!.answers),
+                      style: FontTheme.poppins12w400black().copyWith(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
+                ),
+              const WidthSpace(10),
+              Text(
+                '|',
+                style: FontTheme.poppins14w400black().copyWith(
+                  fontWeight: FontWeight.w300,
+                ),
               ),
-            const WidthSpace(10),
-            Text(
-              '|',
-              style: FontTheme.poppins14w400black().copyWith(
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            const WidthSpace(10),
-            Text(
-              model!.exactDateTime,
-              style: FontTheme.poppins12w400black().copyWith(
-                fontSize: 11,
-                fontWeight: FontWeight.w300,
-              ),
-            )
-          ],
-        )
+              const WidthSpace(10),
+              Text(
+                model!.exactDateTime,
+                style: FontTheme.poppins12w400black().copyWith(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w300,
+                ),
+              )
+            ],
+          )
+        else const SizedBox.shrink()
       ],
     );
   }
