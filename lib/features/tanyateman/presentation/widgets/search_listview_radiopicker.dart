@@ -67,17 +67,7 @@ class SearchListViewRadioPicker extends StatelessWidget {
 Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata kunci lain.''',
                   );
                 }
-
-                
-                /////       /////       /////       /////
-                searchCourseRM.state.selectedCourses.add(
-                    questionFormRM.state.course != null
-                      ? questionFormRM.state.course!
-                      : searchCourseRM.state.filteredCourses[0]
-                  );
-                /////       /////       /////       /////
-                
-                
+                                
                 return ListView.separated(
                   controller: scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -93,8 +83,12 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
                       return const CircleLoading(size: 25);
                     }
                     final course = courses[i];
-                    return CardCourseRadio(
-                      model: course,
+                    return GestureDetector(
+                      onTap: () => searchCourseRM.state
+                            .addCourseRadioType(course),
+                      child: CardCourseRadio(
+                        model: course,
+                      ),
                     );
                   },
                 );

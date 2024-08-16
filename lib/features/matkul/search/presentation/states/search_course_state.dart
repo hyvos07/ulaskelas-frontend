@@ -207,13 +207,18 @@ class SearchCourseState
   }
 
   void addCourseRadioType(CourseModel course) {
-    if (_selectedCourses.contains(course)) {
-      _selectedCourses.remove(course);
+    if (_selectedCourses.isNotEmpty) {
+      if (_selectedCourses[0].id == course.id) {
+        _selectedCourses..clear();
+      } else {
+        _selectedCourses..clear()..add(course);
+      }
     } else {
       _selectedCourses..clear()..add(course);
     }
-
-    print(_selectedCourses);
+    for (final i in _selectedCourses) {
+      print(i.name);
+    }
     
     searchCourseRM.notify();
   }

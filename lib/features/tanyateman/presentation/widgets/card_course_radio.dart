@@ -11,49 +11,37 @@ class CardCourseRadio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        searchCourseRM.state.addCourseRadioType(model);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 15,
-        ),
-        decoration: BoxDecoration(
-          color: BaseColors.white,
-          boxShadow: BoxShadowDecorator().defaultShadow(context),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    model.name.toString(),
-                    style: FontTheme.poppins12w400black(),
-                  ),
-                ],
-              ),
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 20,
+      ),
+      decoration: BoxDecoration(
+        color: searchCourseRM.state.selectedCourses.isNotEmpty
+               && searchCourseRM.state.selectedCourses[0].id == model.id
+                  ? BaseColors.accentColor
+                  : BaseColors.white,
+        boxShadow: BoxShadowDecorator().defaultShadow(context),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  model.name.toString(),
+                  style: 
+                    searchCourseRM.state.selectedCourses.isNotEmpty
+                    && searchCourseRM.state.selectedCourses[0].id == model.id
+                      ? FontTheme.poppins12w700white()
+                      : FontTheme.poppins12w400black()
+                ),
+              ],
             ),
-            const WidthSpace(20),
-            Radio(
-              activeColor: BaseColors.accentColor,
-              visualDensity: const VisualDensity(
-                horizontal: VisualDensity.minimumDensity,
-                vertical: VisualDensity.minimumDensity,
-              ),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              value: model,
-              groupValue: searchCourseRM.state.selectedCourses[0],
-              onChanged: (e) {
-                searchCourseRM.state.addCourseRadioType(model);
-              }
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

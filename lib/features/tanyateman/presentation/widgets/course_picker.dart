@@ -33,11 +33,15 @@ class CoursePicker extends StatelessWidget {
               style: FontTheme.poppins12w400black().copyWith(
                 color: Colors.grey.shade600
               ),
+              overflow: TextOverflow.fade,
             ),
-            Icon(
-              Icons.arrow_drop_down_rounded,
-              size: 28,
-              color: Colors.grey.shade600,
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Icon(
+                Icons.arrow_drop_down_rounded,
+                size: 28,
+                color: Colors.grey.shade600,
+              ),
             )
           ],
         )

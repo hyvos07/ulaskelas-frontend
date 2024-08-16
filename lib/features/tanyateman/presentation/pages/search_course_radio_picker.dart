@@ -23,6 +23,10 @@ class _SearchCourseRadioPickerState
         searchCourseRM.setState((s) => s.addToHistory(controller.text));
       }
     });
+    if (questionFormRM.state.course != null) {
+      searchCourseRM.state.selectedCourses.add(
+        questionFormRM.state.course!,);
+    }
   }
 
   @override
@@ -50,7 +54,7 @@ class _SearchCourseRadioPickerState
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return BaseAppBar(
-      label: 'Tambah Mata Kuliah',
+      label: 'Pilih Mata Kuliah',
     );
   }
 
@@ -70,15 +74,7 @@ class _SearchCourseRadioPickerState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                ),
-                child: Text(
-                  'Pilih Mata Kuliah yang kamu cari!',
-                  style: FontTheme.poppins12w600black(),
-                ),
-              ),
+              const HeightSpace(10),
               OnReactive(
                 () => SearchField(
                   hintText: 'Cari mata kuliah',
@@ -118,14 +114,17 @@ class _SearchCourseRadioPickerState
         ),
         OnReactive(() 
           => ExpandedButton(
-              text: 'Tambahkan',
+              isOtherTheme: true,
+              text: searchCourseRM.state.selectedCourses.isEmpty
+                ? 'Kosongkan'
+                : 'Tambahkan',
               onTap: () {
                 if (searchCourseRM.state.selectedCourses.isEmpty) {
-                  ErrorMessenger('Pilih minimal satu mata kuliah').show(context);
-                  return;
+                  questionFormRM.state.clearCourse();
+                } else {
+                  final selectedCourses = searchCourseRM.state.selectedCourses[0];
+                  questionFormRM.state.setCourse(selectedCourses);
                 }
-                final selectedCourses = searchCourseRM.state.selectedCourses[0];
-                questionFormRM.state.setCourse(selectedCourses);
                 searchCourseRM.state.clearSelectedCourses();
                 nav.pop();
             }, 
@@ -147,7 +146,10 @@ class _SearchCourseRadioPickerState
   @override
   Future<bool> onBackPressed() async {
     focusNode.unfocus();
-    await searchCourseRM.setState((s) => s.selectedCourses.clear());
+    await searchCourseRM.setState((s) {
+      s.controller.clear();
+      s.selectedCourses.clear();
+    });
     return true;
   }
 

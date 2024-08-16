@@ -56,6 +56,12 @@ class QuestionFormState {
       print('Course: ${_course!.name}');
     }
   }
+  void clearCourse() {
+    _course = null;
+    if (kDebugMode) {
+      print('No selected course');
+    }
+  }
 
   void setIsAnonym(bool newIsAnonym) {
     _isAnonym = newIsAnonym;
