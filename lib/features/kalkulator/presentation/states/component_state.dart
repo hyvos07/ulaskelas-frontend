@@ -72,14 +72,14 @@ class ComponentState{
       canGiveRecom = maxPossibleScore >= 55 
                       && allScoreFilled == false 
                         ? true : false;
-      if (canGiveRecom) {
+      if (maxPossibleScore >= 55 && allScoreFilled == false ) {
         if (target == null) {
           target = 85;
           while (target! > maxPossibleScore &&  target! >= 55) {
             target = target! - 5;}
         }
         canPass = true;
-      } else if (maxPossibleScore < 55 ){
+      } else {
         target = 85;
         canPass = false;
       }
