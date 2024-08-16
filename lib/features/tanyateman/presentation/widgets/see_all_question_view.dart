@@ -131,7 +131,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                         ),
                         onError: (error, refresh) => Text(error.toString()),
                         onData: (data) {
-                          return data.questions.isEmpty
+                          return data.allQuestions.isEmpty
                               ? Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 30),
@@ -147,11 +147,11 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                               : ListView.separated(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: data.questions.length + 1,
+                                  itemCount: data.allQuestions.length + 1,
                                   separatorBuilder: (context, index) =>
                                       const HeightSpace(16),
                                   itemBuilder: (context, index) {
-                                    if (index == data.questions.length) {
+                                    if (index == data.allQuestions.length) {
                                       return !data.hasReachedMax
                                           ? const Padding(
                                               padding: EdgeInsets.symmetric(
@@ -163,7 +163,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                                             )
                                           : _buildBottomMax();
                                     }
-                                    final question = data.questions[index];
+                                    final question = data.allQuestions[index];
                                     return CardPost(
                                       model: question,
                                       onTap: () {
@@ -309,7 +309,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
               ? true
               : null,
     );
-    await questionsRM.state.retrieveMoreQuestion(query).then((value) {
+    await questionsRM.state.retrieveMoreAllQuestion(query).then((value) {
       completer = Completer<void>();
       questionsRM.notify();
     }).onError((error, stackTrace) {

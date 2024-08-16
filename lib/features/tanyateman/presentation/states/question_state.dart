@@ -12,9 +12,11 @@ class QuestionState {
   bool hasReachedMax = false;
   String allQuestionsFilter = 'semua';
   String historyQuestionsFilter = 'semua';
-  List<QuestionModel>? _questions;
+  List<QuestionModel>? _allQuestions;
+  List<QuestionModel>? _historyQuestions;
 
-  List<QuestionModel> get questions => _questions ?? [];
+  List<QuestionModel> get allQuestions => _allQuestions ?? [];
+  List<QuestionModel> get historyQuestions => _historyQuestions ?? [];
 
   /// Used for retrieve data on both all questions and history questions
   Future<void> retrieveData({
@@ -23,7 +25,7 @@ class QuestionState {
   }) async {
     await Future.wait([
       retrieveAllQuestion(queryAll),
-      // retrieveHistoryQuestion(q),
+      // retrieveHistoryQuestions(q),
     ]);
   }
 
@@ -35,26 +37,58 @@ class QuestionState {
     resp.fold((failure) => throw failure, (result) {
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
-      _questions = result.data;
+      _allQuestions = result.data;
       if (kDebugMode) {
-        print(_questions);
+        print(_allQuestions);
       }
     });
 
     questionsRM.notify();
   }
 
-  Future<void> retrieveMoreQuestion(QueryQuestion q) async {
+  Future<void> retrieveMoreAllQuestion(QueryQuestion q) async {
     ++page;
     q.page = page;
     print('retrieveMoreData, with query page: ${q.page}');
     final resp = await _repo.getAllQuestions(q);
     resp.fold((failure) => throw failure, (result) {
-      _questions?.addAll(result.data);
+      _allQuestions?.addAll(result.data);
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
       if (kDebugMode) {
-        print(_questions);
+        print(_allQuestions);
+      }
+    });
+
+    questionsRM.notify();
+  }
+
+  Future<void> retrieveHistoryQuestions(QueryQuestion q) async {
+    page = 1;
+    q.page = page;
+    final resp = await _repo.getHistoryQuestions(q);
+    resp.fold((failure) => throw failure, (result) {
+      final lessThanLimit = result.data.length < 10;
+      hasReachedMax = result.data.isEmpty || lessThanLimit;
+      _historyQuestions = result.data;
+      if (kDebugMode) {
+        print(_historyQuestions);
+      }
+    });
+
+    questionsRM.notify();
+  }
+
+  Future<void> retrieveMoreHistoryQuestion(QueryQuestion q) async {
+    ++page;
+    q.page = page;
+    final resp = await _repo.getHistoryQuestions(q);
+    resp.fold((failure) => throw failure, (result) {
+      _historyQuestions?.addAll(result.data);
+      final lessThanLimit = result.data.length < 10;
+      hasReachedMax = result.data.isEmpty || lessThanLimit;
+      if (kDebugMode) {
+        print(_historyQuestions);
       }
     });
 

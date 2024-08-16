@@ -124,7 +124,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                         onError: (dynamic error, refresh) =>
                             Text(error.toString()),
                         onData: (data) {
-                          return data.questions.isEmpty
+                          return data.historyQuestions.isEmpty
                               ? Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 20),
@@ -140,11 +140,11 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                               : ListView.separated(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: data.questions.length + 1,
+                                  itemCount: data.historyQuestions.length + 1,
                                   separatorBuilder: (context, index) =>
                                       const HeightSpace(16),
                                   itemBuilder: (context, index) {
-                                    if (index == data.questions.length) {
+                                    if (index == data.historyQuestions.length) {
                                       return !data.hasReachedMax
                                           ? const Padding(
                                               padding: EdgeInsets.symmetric(
@@ -156,7 +156,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                             )
                                           : _buildBottomMax();
                                     }
-                                    final question = data.questions[index];
+                                    final question = data.historyQuestions[index];
                                     return CardPost(
                                       isInHistorySection: true,
                                       model: question,
@@ -304,8 +304,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
       isVerified: selectedFilter == 'terverifikasi' ? true : null,
       isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
     );
-    // TODO: Change to retrieveMoreHistory atau bebas si namanya
-    await questionsRM.state.retrieveMoreQuestion(query).then((value) {
+    await questionsRM.state.retrieveMoreHistoryQuestion(query).then((value) {
       completer = Completer<void>();
       questionsRM.notify();
     }).onError((error, stackTrace) {
@@ -321,8 +320,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
       isVerified: selectedFilter == 'terverifikasi' ? true : null,
       isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
     );
-    // TODO: Change to retrieveHistoryQuestion
-    await questionsRM.setState((s) => s.retrieveAllQuestion(query));
+    await questionsRM.setState((s) => s.retrieveHistoryQuestions(query));
   }
 
   bool scrollCondition() {

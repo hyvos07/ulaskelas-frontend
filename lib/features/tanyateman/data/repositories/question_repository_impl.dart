@@ -12,6 +12,12 @@ class QuestionRepositoryImpl implements QuestionRepository {
       getAllQuestions(QueryQuestion query) {
     return apiCall(_remoteDataSource.getAllQuestions(query));
   }
+  
+  @override
+  Future<Decide<Failure, Parsed<List<QuestionModel>>>>
+      getHistoryQuestions(QueryQuestion query) {
+    return apiCall(_remoteDataSource.getHistoryQuestions(query));
+  }
 
   @override
   Future<Decide<Failure, Parsed<Map<String,dynamic>>>>
