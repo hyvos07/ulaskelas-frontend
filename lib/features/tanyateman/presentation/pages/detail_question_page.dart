@@ -75,21 +75,23 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                   ),
                   onPressed: onBackPressed,
                 ),
-                Text(
-                  '#${widget.model.courseName}',
-                  style: FontTheme.poppins12w600black().copyWith(
-                    color: Colors.grey.shade600,
+                Expanded(
+                  child: Text(
+                    '#${widget.model.courseName}',
+                    style: FontTheme.poppins12w600black().copyWith(
+                      color: Colors.grey.shade600,
+                    ),
+                    overflow: TextOverflow.ellipsis
                   ),
                 ),
+                const WidthSpace(20),
+                Icon(
+                  Icons.more_horiz,
+                  color: Colors.grey.shade900,
+                ),
+                const WidthSpace(20),
               ],
             ),
-            actions: [
-              Icon(
-                Icons.more_horiz,
-                color: Colors.grey.shade900,
-              ),
-              const WidthSpace(20),
-            ],
           ),
           SliverList(
             delegate: SliverChildListDelegate(

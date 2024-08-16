@@ -24,19 +24,20 @@ class CoursePicker extends StatelessWidget {
           )
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              questionFormRM.state.course == null
-                ?'Matkul Terkait'
-                : questionFormRM.state.course!.name!,
-              style: FontTheme.poppins12w400black().copyWith(
-                color: Colors.grey.shade600
+            Expanded(
+              flex: 11,
+              child: Text(
+                questionFormRM.state.course == null
+                  ?'Matkul Terkait'
+                  : questionFormRM.state.course!.name!,
+                style: FontTheme.poppins12w400black().copyWith(
+                  color: Colors.grey.shade600
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
-              overflow: TextOverflow.fade,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
+            Expanded(
               child: Icon(
                 Icons.arrow_drop_down_rounded,
                 size: 28,
