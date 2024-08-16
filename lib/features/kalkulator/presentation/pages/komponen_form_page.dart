@@ -114,6 +114,7 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
     if (componentFormRM.state.formKey.currentState!.validate() &&
         (!oneIsEmpty || allIsEmpty || isSingleSubcomponent)) {
       // progressDialogue(context);
+      await componentRM.setState((s) => s.componentChange = true);
       await componentFormRM.state.submitForm(widget.calculatorId);
       await Future.delayed(const Duration(milliseconds: 150));
 

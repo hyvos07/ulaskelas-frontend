@@ -171,6 +171,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
 
     if (componentFormRM.state.formKey.currentState!.validate() &&
         (!oneIsEmpty || allIsEmpty || isSingleSubcomponent)) {
+      await componentRM.setState((s) => s.componentChange = true);
       await componentFormRM.state.submitEditForm(widget.id);
       await Future.delayed(const Duration(milliseconds: 150));
 

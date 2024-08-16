@@ -387,16 +387,8 @@ class _CalculatorComponentPageState
 
   Future<void> retrieveData() async {
     await componentRM.setState(
-      (s) => s.retrieveData(
-        componentRM.state.target == null
-          ? QueryComponent(
-              calculatorId: widget.calculatorId,
-            )
-          : QueryComponent(
-              calculatorId: widget.calculatorId,
-              targetScore: componentRM.state.target
-            ),
-      ),
+      (s) => s.retrieveData(QueryComponent(
+              calculatorId: widget.calculatorId)),
     );
   }
 }

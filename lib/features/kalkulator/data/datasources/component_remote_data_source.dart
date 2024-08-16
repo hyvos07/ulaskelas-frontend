@@ -24,7 +24,8 @@ class ComponentRemoteDataSourceImpl extends ComponentRemoteDataSource {
     var ts = 85; // default target score
     if (maxPossibleScore < ts && q.targetScore == null){
       while (ts > maxPossibleScore && ts >= 55) {ts -= 5;}
-      url = '${EndpointsRevamp.components}?$q&target_score=$ts';
+      final id = q.calculatorId;
+      url = '${EndpointsRevamp.components}?calculator_id=$id&target_score=$ts';
       resp = await getIt(url);
     }
 
@@ -35,7 +36,6 @@ class ComponentRemoteDataSourceImpl extends ComponentRemoteDataSource {
     final result = {
       'recommended_score': resp.dataBodyAsMap['recommended_score'],
       'max_possible_score' : resp.dataBodyAsMap['max_possible_score'],
-      'target_score' : q.targetScore,
       'components': list,
     };
 

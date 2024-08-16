@@ -14,6 +14,7 @@ class ComponentState{
   bool canGiveRecom = false;
   bool canPass = true;
   bool allScoreFilled = false;
+  bool componentChange = true;
 
   double totalScore = 0;
   int totalWeight = 0;
@@ -30,8 +31,13 @@ class ComponentState{
   }
 
   Future<void> retrieveData(QueryComponent query) async {
-    int? targetScore;
-
+    if (componentChange) {
+      componentChange = false;
+      target = null;
+    }
+    if (target != null) {
+      query.targetScore = target;
+    }
     final resp = await _repo.getAllComponent(query);
     resp.fold((failure) {
       return failure;
@@ -45,7 +51,6 @@ class ComponentState{
         recommendedScore = 0.0;
       }
       maxPossibleScore =  result.data['max_possible_score'];
-      targetScore = result.data['target_score'];
     },);
     /////////////////////////////////////////////////////
     totalWeight = _components!.fold(
@@ -67,13 +72,15 @@ class ComponentState{
       canGiveRecom = maxPossibleScore >= 55 
                       && allScoreFilled == false 
                         ? true : false;
-      target = 85;
       if (canGiveRecom) {
-        while (target! > maxPossibleScore &&  target! >= 55) {
-          target = target! - 5;}
-        if (targetScore != null) target = targetScore;
+        if (target == null) {
+          target = 85;
+          while (target! > maxPossibleScore &&  target! >= 55) {
+            target = target! - 5;}
+        }
         canPass = true;
       } else if (maxPossibleScore < 55 ){
+        target = 85;
         canPass = false;
       }
     } else {
