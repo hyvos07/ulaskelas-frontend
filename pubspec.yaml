@@ -45,6 +45,8 @@ dependencies:
   smooth_page_indicator: ^1.2.0+3
   expandable_page_view: ^1.0.17
   cached_network_image: ^3.1.0
+  image_cropper: ^5.0.1
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
@@ -52,17 +54,15 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
 
-  # Help optimization.
+  # Help optimization.=
   very_good_analysis: ^5.0.0+1
 
   #  provides a concrete way of generating files using Dart code.
-  build_runner: ^2.4.6
+  # build_runner: ^2.4.6
 
   # See envify.
 #  envify_generator: ^2.0.2
   envied_generator: ^0.3.0+3
-  image_picker: ^1.0.7
-  image_cropper: ^5.0.1
 
 flutter:
 
