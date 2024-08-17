@@ -62,8 +62,10 @@ class TargetScoreDropdown extends StatelessWidget {
                     .map<Widget>((String value) {
                   return Center(
                     child: GradientText(
-                      _getFinalScoreAndGrade(
-                        double.parse(value)),
+                      canGiveRecom && hasReachedMax
+                        ? _getFinalScoreAndGrade(
+                        double.parse(value),)
+                        : '-- -- -- --',
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,

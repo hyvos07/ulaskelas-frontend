@@ -61,10 +61,12 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
                   },
                 ),
                 const HeightSpace(15),
-                CoursePicker(
-                  onTap: () {
-                    nav.goToSearchCourseRadioPick();
-                  },
+                OnReactive(
+                  () => CoursePicker(
+                    onTap: () {
+                      nav.goToSearchCourseRadioPick();
+                    },
+                  ),
                 ),
                 const HeightSpace(20),
                 OnBuilder<QuestionFormState>.all(
@@ -126,7 +128,8 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   }
 
   Future<void> onSubmitCallBack(BuildContext context) async {
-    if (questionFormRM.state.questionController.text != '') {
+    if (questionFormRM.state.questionController.text != ''
+        && questionFormRM.state.course != null) {
       final isSucces = await questionFormRM.state.postNewQuestion();
       if (isSucces) {
         nav.pop();
@@ -154,7 +157,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
         ErrorMessenger('Pertanyaan gagal dibuat').show(ctx!);
       }
     } else {
-      WarningMessenger('Pertanyaan perlu diisi!').show(context);
+      WarningMessenger('Pertanyaan dan matkul terkait perlu diisi!').show(context);
     }
   }
 

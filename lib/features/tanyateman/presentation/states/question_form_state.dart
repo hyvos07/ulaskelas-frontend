@@ -44,10 +44,12 @@ class QuestionFormState {
 
   void setQuestion(String newQuestion) {
     _question = newQuestion;
+    questionFormRM.notify();
   }
 
   void setImage(File newFile) {
     _fileImage = newFile;
+    questionFormRM.notify();
   }
 
   void setCourse(CourseModel newCourse) {
@@ -55,12 +57,14 @@ class QuestionFormState {
     if (kDebugMode) {
       print('Course: ${_course!.name}');
     }
+    questionFormRM.notify();
   }
   void clearCourse() {
     _course = null;
     if (kDebugMode) {
       print('No selected course');
     }
+    questionFormRM.notify();
   }
 
   void setIsAnonym(bool newIsAnonym) {
