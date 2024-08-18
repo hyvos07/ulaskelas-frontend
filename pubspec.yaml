@@ -58,7 +58,7 @@ dev_dependencies:
   very_good_analysis: ^5.0.0+1
 
   #  provides a concrete way of generating files using Dart code.
-  # build_runner: ^2.4.6
+  build_runner: ^2.4.6
 
   # See envify.
 #  envify_generator: ^2.0.2
