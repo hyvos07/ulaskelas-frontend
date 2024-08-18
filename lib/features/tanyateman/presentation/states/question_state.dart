@@ -12,6 +12,7 @@ class QuestionState {
   bool hasReachedMax = false;
   String allQuestionsFilter = 'semua';
   String historyQuestionsFilter = 'semua';
+
   List<QuestionModel>? _allQuestions;
   List<QuestionModel>? _historyQuestions;
 
@@ -25,9 +26,13 @@ class QuestionState {
   }) async {
     await Future.wait([
       retrieveAllQuestion(queryAll),
-      // retrieveHistoryQuestions(q),
+      retrieveHistoryQuestions(queryHistory),
     ]);
   }
+
+  ////////////////////
+  /// All Question ///
+  ////////////////////
 
   Future<void> retrieveAllQuestion(QueryQuestion q) async {
     page = 1;
@@ -62,6 +67,10 @@ class QuestionState {
 
     questionsRM.notify();
   }
+
+  ////////////////////////
+  /// History Question ///
+  ////////////////////////
 
   Future<void> retrieveHistoryQuestions(QueryQuestion q) async {
     page = 1;

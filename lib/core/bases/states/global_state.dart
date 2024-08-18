@@ -88,6 +88,10 @@ final questionsRM = RM.inject(
   QuestionState.new,
 );
 
+final searchQuestionRM = RM.inject(
+  SearchQuestionState.new,
+);
+
 final answersRM = RM.inject(
   AnswerState.new,
 );
@@ -116,6 +120,7 @@ class GlobalState {
       Inject(CalculatorState.new),
       Inject(SemesterState.new),
       Inject(QuestionState.new),
+      Inject(SearchQuestionState.new),
       Inject(AnswerState.new),
       Inject(QuestionFormState.new),
     ];
@@ -132,6 +137,7 @@ class GlobalState {
     Inject(CalculatorState.new),
     Inject(SemesterState.new),
     Inject(QuestionState.new),
+    Inject(SearchQuestionState.new),
     Inject(AnswerState.new),
     Inject(QuestionFormState.new),
   ];

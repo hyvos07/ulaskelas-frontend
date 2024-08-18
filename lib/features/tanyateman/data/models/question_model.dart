@@ -48,7 +48,9 @@ class QuestionModel {
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       verificationStatus: json['verification_status'],
-      attachmentUrl: json['attachment_url'],
+      attachmentUrl: !json['attachment_url'].contains('.pdf')
+          ? json['attachment_url']
+          : null,
     );
   }
 

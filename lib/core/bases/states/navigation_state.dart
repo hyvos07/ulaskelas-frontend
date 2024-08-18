@@ -339,8 +339,7 @@ class NavigationServiceState implements Navigation {
   }
 
   Future<void> goToSearchCourseRadioPick() {
-    return nav.push<void>(
-      const SearchCourseRadioPicker());
+    return nav.push<void>(const SearchCourseRadioPicker());
   }
 
   Future<void> goToViewImagePage(
@@ -352,14 +351,15 @@ class NavigationServiceState implements Navigation {
     );
   }
 
-  Future<void> goToTanyaTemanPage() {
-    return nav.push(
-      const TanyaTemanPage(),
-      RouteName.tanyaTeman);
+  Future<void> goToSearchQuestionPage() {
+    return nav.push<void>(
+      const SearchQuestionPage(),
+      RouteName.searchQuestion,
+    );
   }
 
   Future<void> replaceToTanyaTemanPage() {
-    return nav.pushReplacement<void,void>(
+    return nav.pushReplacement<void, void>(
       const TanyaTemanPage(),
       RouteName.tanyaTeman,
     );

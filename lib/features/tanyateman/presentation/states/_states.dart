@@ -18,3 +18,4 @@ import '../../domain/repositories/_repositories.dart';
 part 'answer_state.dart';
 part 'question_form_state.dart';
 part 'question_state.dart';
+part 'search_question_state.dart';

@@ -32,4 +32,5 @@ class RouteName {
   static const String tanyaTeman = 'tanya-teman';
   static const String detailQuestion = 'detail-question';
   static const String addQuestion = 'add-question';
+  static const String searchQuestion = 'search-question';
 }

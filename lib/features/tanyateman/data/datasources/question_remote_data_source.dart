@@ -28,21 +28,6 @@ class QuestionRemoteDataSourceImpl implements QuestionRemoteDataSource {
     }
 
     return resp.parse(list);
-
-    // final resp = {
-    //   'data': _dummyData['data'].sublist(
-    //     (query.page! - 1) * query.limit,
-    //     query.page! * query.limit > 25 ? 25 : query.page! * query.limit,
-    //   ),
-    // };
-    // for (var i = 0; i < resp['data'].length; i++) {
-    //   list.add(QuestionModel.fromJson(resp['data'][i]));
-    // }
-    // return Parsed.fromJson(
-    //   resp,
-    //   200,
-    //   list,
-    // );
   }
 
   @override

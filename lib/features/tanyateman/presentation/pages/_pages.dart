@@ -37,3 +37,4 @@ part 'add_question_page.dart';
 part 'detail_question_page.dart';
 part 'search_course_radio_picker.dart';
 part 'view_image_page.dart';
+part 'search_question_page.dart';

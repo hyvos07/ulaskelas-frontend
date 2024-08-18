@@ -9,7 +9,11 @@ class TanyaTemanPage extends StatefulWidget {
 
 class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
   @override
-  void init() {}
+  void init() {
+    searchQuestionRM.setState(
+      (s) => s.searchData = SearchData(),
+    );
+  }
 
   @override
   ScaffoldAttribute buildAttribute() {
@@ -29,103 +33,93 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
     return SafeArea(
       child: Column(
         children: [
-          GestureDetector(
-            onTap: () => {
-              print('search-bar tapped'),
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 16,
-                right: 16,
+          OnReactive(
+            () => Padding(
+              padding: EdgeInsets.only(
+                left: searchQuestionRM.state.searchData?.text != null ? 22 : 24,
+                right:
+                    searchQuestionRM.state.searchData?.text != null ? 22 : 24,
                 top: 10,
-                bottom: 5,
+                bottom: 2,
               ),
-              child: Hero(
-                tag: 'search-bar',
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: BaseColors.gray3,
+              child: Row(
+                children: [
+                  if (searchQuestionRM.state.searchData?.text != null)
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => {
+                            searchQuestionRM.setState(
+                              (s) => s.searchData = SearchData(),
+                            ),
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back_rounded,
+                            size: 24,
+                            color: BaseColors.gray2,
+                          ),
+                          splashRadius: 20,
+                          constraints: const BoxConstraints(),
+                          padding: const EdgeInsets.all(4),
+                        ),
+                        const SizedBox(width: 10),
+                      ],
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.search,
-                        size: 20,
-                        color: BaseColors.gray3,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        'Cari Matkul atau Pertanyaan',
-                        style: FontTheme.poppins12w500black().copyWith(
-                          color: BaseColors.gray3,
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => {
+                        nav.goToSearchQuestionPage(),
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: BaseColors.gray3,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.search,
+                              size: 20,
+                              color: BaseColors.gray3,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                searchQuestionRM.state.searchData?.text ??
+                                    'Cari Matkul atau Pertanyaan',
+                                style: FontTheme.poppins12w500black().copyWith(
+                                  color: BaseColors.gray3,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
           Expanded(
-            child: DefaultTabController(
-              length: 2,
-              animationDuration: const Duration(milliseconds: 100),
-              child: Builder(
-                builder: (context) {
-                  return Column(
-                    children: [
-                      TabBar(
-                        indicatorPadding: const EdgeInsets.only(bottom: 5),
-                        labelPadding: EdgeInsets.zero,
-                        tabs: [
-                          Tab(
-                            child: Text(
-                              'Semua Pertanyaan',
-                              style: FontTheme.poppins12w700black(),
-                            ),
-                          ),
-                          Tab(
-                            child: Text(
-                              'Riwayat Pertanyaan',
-                              style: FontTheme.poppins12w700black(),
-                            ),
-                          ),
-                        ],
-                        // indicator: UnderlineTabIndicator(
-                        // borderSide: const BorderSide(
-                        //   width: 2.5,
-                        //   color: BaseColors.purpleHearth,
-                        // ),
-                        // insets: const EdgeInsets.symmetric(
-                        //   horizontal: 45,
-                        // ),
-                        // borderRadius: BorderRadius.circular(10),
-                        // ),
-                        indicator: _UnderlineTab(
-                          width: 70,
-                          height: 4,
-                          color: BaseColors.purpleHearth,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      const Expanded(
-                        child: TabBarView(
-                          physics: NeverScrollableScrollPhysics(),
-                          children: [
-                            SeeAllQuestion(),
-                            HistoryQuestion(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+            child: OnBuilder<SearchQuestionState>.all(
+              listenTo: searchQuestionRM,
+              onIdle: () => const CircleLoading(),
+              onWaiting: () => const CircleLoading(),
+              onError: (error, refreshError) => Text(error.toString()),
+              onData: (data) {
+                if (searchQuestionRM.state.searchData?.text != null) {
+                  return _buildSearchResult();
+                }
+                return _buildNormalResult();
+              },
             ),
           ),
         ],
@@ -144,6 +138,68 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
   @override
   Future<bool> onBackPressed() async {
     return true;
+  }
+
+  Widget _buildSearchResult() {
+    return const SearchQuestionView();
+  }
+
+  Widget _buildNormalResult() {
+    return DefaultTabController(
+      length: 2,
+      animationDuration: const Duration(milliseconds: 100),
+      child: Builder(
+        builder: (context) {
+          return Column(
+            children: [
+              TabBar(
+                indicatorPadding: const EdgeInsets.only(bottom: 5),
+                labelPadding: EdgeInsets.zero,
+                tabs: [
+                  Tab(
+                    child: Text(
+                      'Semua Pertanyaan',
+                      style: FontTheme.poppins12w700black(),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'Riwayat Pertanyaan',
+                      style: FontTheme.poppins12w700black(),
+                    ),
+                  ),
+                ],
+                // indicator: UnderlineTabIndicator(
+                // borderSide: const BorderSide(
+                //   width: 2.5,
+                //   color: BaseColors.purpleHearth,
+                // ),
+                // insets: const EdgeInsets.symmetric(
+                //   horizontal: 45,
+                // ),
+                // borderRadius: BorderRadius.circular(10),
+                // ),
+                indicator: _UnderlineTab(
+                  width: 70,
+                  height: 4,
+                  color: BaseColors.purpleHearth,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              const Expanded(
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    SeeAllQuestion(),
+                    HistoryQuestion(),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }
 
