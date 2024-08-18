@@ -209,7 +209,7 @@ class SearchCourseState
   void addCourseRadioType(CourseModel course) {
     if (_selectedCourses.isNotEmpty) {
       if (_selectedCourses[0].id == course.id) {
-        _selectedCourses..clear();
+        _selectedCourses.clear();
       } else {
         _selectedCourses..clear()..add(course);
       }

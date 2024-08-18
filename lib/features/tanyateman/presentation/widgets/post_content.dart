@@ -24,81 +24,209 @@ class PostContent extends StatelessWidget {
     final maxImageHeight =
         MediaQuery.of(context).size.width - (isDetail ? 20 * 2 : 20 * 4);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: <Widget>[
-            UserProfileBox(
-              name: model!.userName,
-            ),
-            const WidthSpace(12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          model!.userName,
-                          style: FontTheme.poppins12w700black().copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12.5,
-                          ),
-                          overflow: TextOverflow.visible,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const HeightSpace(4),
-                  if (!isInHistorySection!)
-                    Text(
-                      '${model!.userProgram} ${model!.userGeneration}',
-                      style: FontTheme.poppins10w400black().copyWith(
-                        fontWeight: FontWeight.w300,
-                      ),
-                    )
-                  else
-                    Text(
-                      '${model!.verificationStatus}',
-                      style: FontTheme.poppins10w500black().copyWith(
-                          color:
-                              model!.verificationStatus == 'Menunggu Verifikasi'
-                                  ? Colors.orange
-                                  : Colors.green),
-                    )
-                ],
+    // Detect if the user is the one who posted the question
+    final isUserThemself = model!.userName == profileRM.state.profile.name;
+
+    return Container(
+      decoration: const BoxDecoration(
+        color: BaseColors.transparent,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: <Widget>[
+              UserProfileBox(
+                name: model!.isAnonym && !isUserThemself
+                    ? 'Anon Nimus'
+                    : model!.userName,
               ),
-            ),
-          ],
-        ),
-        HeightSpace(isDetail ? 15 : 13.5),
-        Text(
-          model!.questionText,
-          style: isDetail || isReply
-              ? FontTheme.poppins14w500black().copyWith(
-                  fontSize: 13,
-                  height: 1.75,
-                )
-              : FontTheme.poppins14w600black().copyWith(
-                  fontSize: 13,
-                  height: 1.7,
+              const WidthSpace(12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: model!.isAnonym && !isUserThemself
+                                      ? 'Anonymous'
+                                      : model!.userName,
+                                  style:
+                                      FontTheme.poppins12w700black().copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12.5,
+                                  ),
+                                ),
+                                if (model!.isAnonym && isUserThemself)
+                                  WidgetSpan(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 6,
+                                      ),
+                                      child: SvgPicture.asset(
+                                        SvgIcons.incognito,
+                                        width: 16,
+                                        height: 16,
+                                        colorFilter: const ColorFilter.mode(
+                                          BaseColors.gray2,
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            style: FontTheme.poppins12w700black().copyWith(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12.5,
+                            ),
+                            overflow: TextOverflow.clip,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const HeightSpace(4),
+                    if (!isInHistorySection!)
+                      Text(
+                        model!.isAnonym && !isUserThemself
+                            ? 'Mahasiswa UI'
+                            : '${model!.userProgram} ${model!.userGeneration}',
+                        style: FontTheme.poppins10w400black().copyWith(
+                          fontWeight: FontWeight.w300,
+                        ),
+                      )
+                    else
+                      Text(
+                        '${model!.verificationStatus}',
+                        style: FontTheme.poppins10w500black().copyWith(
+                            color: model!.verificationStatus ==
+                                    'Menunggu Verifikasi'
+                                ? Colors.orange
+                                : Colors.green),
+                      )
+                  ],
                 ),
-          maxLines: isDetail ? null : 3,
-          overflow: isDetail ? TextOverflow.visible : TextOverflow.ellipsis,
-          textAlign: TextAlign.left,
-        ),
-        if (model!.attachmentUrl != null)
-          Column(
-            children: [
-              HeightSpace(isDetail ? 20 : 18),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  return isDetail
-                      ? Hero(
-                          tag: 'image-preview',
-                          child: CachedNetworkImage(
+              ),
+            ],
+          ),
+          HeightSpace(isDetail ? 15 : 13.5),
+          Text(
+            model!.questionText,
+            style: isDetail || isReply
+                ? FontTheme.poppins14w500black().copyWith(
+                    fontSize: 13,
+                    height: 1.75,
+                  )
+                : FontTheme.poppins14w600black().copyWith(
+                    fontSize: 13,
+                    height: 1.7,
+                  ),
+            maxLines: isDetail ? null : 3,
+            overflow: isDetail ? TextOverflow.visible : TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+          ),
+          if (model!.attachmentUrl != null)
+            Column(
+              children: [
+                HeightSpace(isDetail ? 20 : 18),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return isDetail
+                        ? Hero(
+                            tag: 'image-preview',
+                            child: CachedNetworkImage(
+                              imageUrl: model!.attachmentUrl!,
+                              placeholder: (context, url) => SizedBox(
+                                height: maxImageHeight,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: BaseColors.gray3,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  GestureDetector(
+                                onTap: onRefreshImage,
+                                child: Container(
+                                  height: maxImageHeight,
+                                  decoration: BoxDecoration(
+                                    color: BaseColors.gray3,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.warning_rounded,
+                                          color: BaseColors.gray1,
+                                          size: 40,
+                                        ),
+                                        const HeightSpace(10),
+                                        Text(
+                                          'Gagal memuat gambar!'
+                                          '\nKlik untuk mencoba lagi.',
+                                          style: FontTheme.poppins12w600black(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              imageBuilder: (context, imageProvider) {
+                                double? displayHeight;
+                                imageProvider
+                                    .resolve(ImageConfiguration.empty)
+                                    .addListener(
+                                  ImageStreamListener((ImageInfo info, bool _) {
+                                    final aspectRatio =
+                                        info.image.width / info.image.height;
+                                    final displayWidth =
+                                        constraints.maxWidth < maxImageWidth
+                                            ? constraints.maxWidth
+                                            : maxImageWidth;
+                                    displayHeight = displayWidth / aspectRatio >
+                                            maxImageHeight
+                                        ? maxImageHeight
+                                        : displayWidth / aspectRatio;
+                                  }),
+                                );
+
+                                return GestureDetector(
+                                  onTap: onImageTap ?? () {},
+                                  child: Container(
+                                    width: maxImageWidth,
+                                    height: displayHeight,
+                                    decoration: BoxDecoration(
+                                      color: BaseColors.gray4.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(6),
+                                      image: DecorationImage(
+                                        alignment: Alignment.topCenter,
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      border: Border.all(
+                                        color: BaseColors.gray1,
+                                        width: 0.1,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : CachedNetworkImage(
                             imageUrl: model!.attachmentUrl!,
                             placeholder: (context, url) => SizedBox(
                               height: maxImageHeight,
@@ -115,6 +243,7 @@ class PostContent extends StatelessWidget {
                             ),
                             errorWidget: (context, url, error) =>
                                 GestureDetector(
+                              // TODO: gimana cara nge refresh image nya
                               onTap: onRefreshImage,
                               child: Container(
                                 height: maxImageHeight,
@@ -182,156 +311,71 @@ class PostContent extends StatelessWidget {
                                 ),
                               );
                             },
-                          ),
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: model!.attachmentUrl!,
-                          placeholder: (context, url) => SizedBox(
-                            height: maxImageHeight,
-                            child: Shimmer.fromColors(
-                              baseColor: Colors.grey.shade300,
-                              highlightColor: Colors.grey.shade100,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: BaseColors.gray3,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => GestureDetector(
-                            // TODO: gimana cara nge refresh image nya
-                            onTap: onRefreshImage,
-                            child: Container(
-                              height: maxImageHeight,
-                              decoration: BoxDecoration(
-                                color: BaseColors.gray3,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.warning_rounded,
-                                      color: BaseColors.gray1,
-                                      size: 40,
-                                    ),
-                                    const HeightSpace(10),
-                                    Text(
-                                      'Gagal memuat gambar!'
-                                      '\nKlik untuk mencoba lagi.',
-                                      style: FontTheme.poppins12w600black(),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          imageBuilder: (context, imageProvider) {
-                            double? displayHeight;
-                            imageProvider
-                                .resolve(ImageConfiguration.empty)
-                                .addListener(
-                              ImageStreamListener((ImageInfo info, bool _) {
-                                final aspectRatio =
-                                    info.image.width / info.image.height;
-                                final displayWidth =
-                                    constraints.maxWidth < maxImageWidth
-                                        ? constraints.maxWidth
-                                        : maxImageWidth;
-                                displayHeight =
-                                    displayWidth / aspectRatio > maxImageHeight
-                                        ? maxImageHeight
-                                        : displayWidth / aspectRatio;
-                              }),
-                            );
-
-                            return GestureDetector(
-                              onTap: onImageTap ?? () {},
-                              child: Container(
-                                width: maxImageWidth,
-                                height: displayHeight,
-                                decoration: BoxDecoration(
-                                  color: BaseColors.gray4.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(6),
-                                  image: DecorationImage(
-                                    alignment: Alignment.topCenter,
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  border: Border.all(
-                                    color: BaseColors.gray1,
-                                    width: 0.1,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                },
-              ),
-              HeightSpace(isDetail ? 20 : 18),
-            ],
-          )
-        else
-          HeightSpace(isDetail ? 15 : 13.5),
-        if (model!.verificationStatus == 'Menunggu Verifikasi' &&
-            isInHistorySection!)
-          const SizedBox.shrink()
-        else
-          Row(
-            children: [
-              SvgPicture.asset(
-                'assets/icons/thumbsup.svg',
-                height: 24,
-                width: 24,
-              ),
-              const WidthSpace(2),
-              Text(
-                _shortenEngagement(model!.likeCount),
-                style: FontTheme.poppins12w400black().copyWith(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w300,
+                          );
+                  },
                 ),
-              ),
-              if (!isReply)
-                Row(
-                  children: [
-                    const WidthSpace(10),
-                    SvgPicture.asset(
-                      'assets/icons/comment.svg',
-                      height: 16,
-                      width: 16,
-                    ),
-                    const WidthSpace(6),
-                    Text(
-                      _shortenEngagement(model!.answers),
-                      style: FontTheme.poppins12w400black().copyWith(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w300,
+                HeightSpace(isDetail ? 20 : 18),
+              ],
+            )
+          else
+            HeightSpace(isDetail ? 15 : 13.5),
+          if (model!.verificationStatus == 'Menunggu Verifikasi' &&
+              isInHistorySection!)
+            const SizedBox.shrink()
+          else
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/thumbsup.svg',
+                  height: 24,
+                  width: 24,
+                ),
+                const WidthSpace(2),
+                Text(
+                  _shortenEngagement(model!.likeCount),
+                  style: FontTheme.poppins12w400black().copyWith(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                if (!isReply)
+                  Row(
+                    children: [
+                      const WidthSpace(10),
+                      SvgPicture.asset(
+                        'assets/icons/comment.svg',
+                        height: 16,
+                        width: 16,
                       ),
-                    ),
-                  ],
+                      const WidthSpace(6),
+                      Text(
+                        _shortenEngagement(model!.answers),
+                        style: FontTheme.poppins12w400black().copyWith(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                const WidthSpace(10),
+                Text(
+                  '|',
+                  style: FontTheme.poppins14w400black().copyWith(
+                    fontWeight: FontWeight.w300,
+                  ),
                 ),
-              const WidthSpace(10),
-              Text(
-                '|',
-                style: FontTheme.poppins14w400black().copyWith(
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              const WidthSpace(10),
-              Text(
-                model!.exactDateTime,
-                style: FontTheme.poppins12w400black().copyWith(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w300,
-                ),
-              )
-            ],
-          )
-      ],
+                const WidthSpace(10),
+                Text(
+                  model!.exactDateTime,
+                  style: FontTheme.poppins12w400black().copyWith(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300,
+                  ),
+                )
+              ],
+            )
+        ],
+      ),
     );
   }
 

@@ -44,7 +44,7 @@ class CardPost extends StatelessWidget {
                         ),
                       ),
                       SmallMenu(
-                        choices: const ['Report', 'Salin Tautan'],
+                        choices: const ['Report'],
                         onChanged: (value) {
                           if (kDebugMode) {
                             print('User choose to: $value');

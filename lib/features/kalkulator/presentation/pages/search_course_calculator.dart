@@ -26,6 +26,7 @@ class _SearchCourseCalculatorState
         searchCourseRM.setState((s) => s.addToHistory(controller.text));
       }
     });
+    searchCourseRM.state.controller.clear();
   }
 
   @override
