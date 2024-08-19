@@ -166,10 +166,19 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                                     final question = data.allQuestions[index];
                                     return CardPost(
                                       model: question,
+                                      imageTag: 'post-image-preview'
+                                          '?id=${question.id}',
                                       onTap: () {
                                         nav.goToDetailQuestionPage(question);
                                       },
                                       onRefreshImage: questionsRM.notify,
+                                      optionChoices: const ['Report'],
+                                      onOptionChoosed: (value) {
+                                        if (value == 'Report') {
+                                          print('report question!');
+                                          // report question here
+                                        }
+                                      },
                                     );
                                   },
                                 );

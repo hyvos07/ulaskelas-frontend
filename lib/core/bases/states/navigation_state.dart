@@ -344,10 +344,15 @@ class NavigationServiceState implements Navigation {
 
   Future<void> goToViewImagePage(
     ImageProvider imageFile, {
-    bool isDetail = false,
+    String? imageTag,
+    bool enableImagePreview = false
   }) {
     return nav.push<void>(
-      ViewImagePage(imageFile: imageFile, isDetail: isDetail),
+      ViewImagePage(
+        imageFile: imageFile,
+        imageTag: imageTag,
+        enableImagePreview: enableImagePreview,
+      ),
     );
   }
 

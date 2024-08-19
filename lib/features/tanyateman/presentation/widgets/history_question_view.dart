@@ -156,14 +156,31 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                             )
                                           : _buildBottomMax();
                                     }
-                                    final question = data.historyQuestions[index];
+                                    final question =
+                                        data.historyQuestions[index];
                                     return CardPost(
                                       isInHistorySection: true,
                                       model: question,
-                                      // onTap: () {
-                                      //   nav.goToDetailQuestionPage(question);
-                                      // },
+                                      imageTag: 'post-image-preview'
+                                          '?id=${question.id}',
+                                      onImageTap: () {
+                                        nav.goToViewImagePage(
+                                          CachedNetworkImageProvider(
+                                            question.attachmentUrl!,
+                                          ),
+                                          imageTag: 'post-image-preview'
+                                              '?id=${question.id}',
+                                          enableImagePreview: true,
+                                        );
+                                      },
                                       onRefreshImage: questionsRM.notify,
+                                      optionChoices: const ['Hapus'],
+                                      onOptionChoosed: (value) {
+                                        if (value == 'Hapus') {
+                                          print('hapus');
+                                          // Hapus
+                                        }
+                                      },
                                     );
                                   },
                                 );

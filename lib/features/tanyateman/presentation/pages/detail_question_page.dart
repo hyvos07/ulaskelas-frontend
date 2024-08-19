@@ -40,11 +40,20 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
   void seeImage({
     bool isDetail = false,
+    bool isReply = false,
+    String? replyId,
   }) {
     if (isDetail) {
       nav.goToViewImagePage(
         CachedNetworkImageProvider(widget.model.attachmentUrl!),
-        isDetail: isDetail,
+        imageTag: 'post-image-preview?id=${widget.model.id}',
+        enableImagePreview: isDetail,
+      );
+    } else if (isReply) {
+      nav.goToViewImagePage(
+        CachedNetworkImageProvider(widget.model.attachmentUrl!),
+        imageTag: 'reply-image-preview?id=$replyId',
+        enableImagePreview: isReply,
       );
     } else {
       nav.goToViewImagePage(FileImage(questionFormRM.state.fileImage!));
@@ -76,13 +85,11 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                   onPressed: onBackPressed,
                 ),
                 Expanded(
-                  child: Text(
-                    '#${widget.model.courseName}',
-                    style: FontTheme.poppins12w600black().copyWith(
-                      color: Colors.grey.shade600,
-                    ),
-                    overflow: TextOverflow.ellipsis
-                  ),
+                  child: Text('#${widget.model.courseName}',
+                      style: FontTheme.poppins12w600black().copyWith(
+                        color: Colors.grey.shade600,
+                      ),
+                      overflow: TextOverflow.ellipsis),
                 ),
                 const WidthSpace(20),
                 Icon(
@@ -104,6 +111,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                         model: widget.model,
                         isDetail: true,
                         onImageTap: () => seeImage(isDetail: true),
+                        imageTag: 'post-image-preview?id=${widget.model.id}',
                       ),
                     ],
                   ),
@@ -228,7 +236,19 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
               child: CardPost(
                 isReply: true,
                 model: widget.model,
+                imageTag: 'reply-image-preview?id=$index',
                 onRefreshImage: () {}, // NOTE: pake statenyaReplies.refresh()
+                onImageTap: () => seeImage(
+                  isReply: true,
+                  replyId: index.toString(), // change this to the real reply id
+                ),
+                optionChoices: const ['Report'],
+                onOptionChoosed: (value) {
+                  if (value == 'Report') {
+                    print('report reply!');
+                    // report reply here
+                  }
+                },
               ),
             );
           }),

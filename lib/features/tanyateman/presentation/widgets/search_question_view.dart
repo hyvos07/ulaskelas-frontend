@@ -70,7 +70,7 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
               controller: scrollController,
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
-                vertical: 15,
+                vertical: 14,
               ),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -94,7 +94,8 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
                                 fontWeight: FontWeight.w600,
                                 color: BaseColors.gray1,
                               ),
-                              overflow: TextOverflow.visible,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                             ),
                           ),
                           const WidthSpace(25),
@@ -152,12 +153,13 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       HeightSpace(
-                                          sizeInfo.screenSize.height * .05),
+                                        sizeInfo.screenSize.height * .05,
+                                      ),
                                       Image.asset(
                                         Ilustration.notfound,
                                         width: sizeInfo.screenSize.width * .6,
                                       ),
-                                      const HeightSpace(25),
+                                      const HeightSpace(27),
                                       Text(
                                         'Pertanyaan Tidak Ditemukan',
                                         style: FontTheme.poppins14w700black()
@@ -167,12 +169,12 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
                                               .primary,
                                         ),
                                       ),
-                                      const HeightSpace(10),
+                                      const HeightSpace(7),
                                       Text(
                                         'Pertanyaan yang kamu cari tidak '
                                         'ditemukan. Silakan coba lagi dengan '
-                                        'kata kunci maupun filter lainnya, '
-                                        'atau ajukan langsung pertanyaanmu.',
+                                        'cara lainnya atau ajukan '
+                                        'langsung pertanyaanmu.',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall,
@@ -205,10 +207,17 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
                                       data.searchedQuestions[index];
                                   return CardPost(
                                     model: question,
-                                    // onTap: () {
-                                    //   nav.goToDetailQuestionPage(question);
-                                    // },
+                                    onTap: () {
+                                      nav.goToDetailQuestionPage(question);
+                                    },
                                     onRefreshImage: questionsRM.notify,
+                                    optionChoices: const ['Report'],
+                                    onOptionChoosed: (value) {
+                                      if (value == 'Report') {
+                                        print('report question!');
+                                        // report question here
+                                      }
+                                    },
                                   );
                                 },
                               );

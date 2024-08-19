@@ -3,12 +3,14 @@ part of '_pages.dart';
 class ViewImagePage extends StatefulWidget {
   const ViewImagePage({
     required this.imageFile,
-    this.isDetail = false,
+    this.imageTag,
+    this.enableImagePreview = false,
     super.key,
   });
 
   final ImageProvider imageFile;
-  final bool isDetail;
+  final bool enableImagePreview;
+  final String? imageTag;
 
   @override
   State<ViewImagePage> createState() => _ViewImagePageState();
@@ -20,6 +22,7 @@ class _ViewImagePageState extends State<ViewImagePage> {
   @override
   Widget build(BuildContext context) {
     final phoneWidth = MediaQuery.of(context).size.width;
+    print('displaying ${widget.imageTag}');
     return Scaffold(
       body: Stack(
         children: [
@@ -35,9 +38,9 @@ class _ViewImagePageState extends State<ViewImagePage> {
                 decoration: const BoxDecoration(
                   color: Colors.black,
                 ),
-                child: widget.isDetail
+                child: widget.enableImagePreview
                     ? Hero(
-                        tag: 'image-preview',
+                        tag: '${widget.imageTag}',
                         flightShuttleBuilder: (
                           flightContext,
                           animation,
@@ -56,7 +59,7 @@ class _ViewImagePageState extends State<ViewImagePage> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: widget.imageFile,
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.fitWidth,
                                 ),
                               ),
                             ),

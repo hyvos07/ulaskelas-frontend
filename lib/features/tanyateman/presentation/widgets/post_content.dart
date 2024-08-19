@@ -4,6 +4,7 @@ class PostContent extends StatelessWidget {
   const PostContent({
     this.isInHistorySection = false,
     this.model,
+    this.imageTag,
     this.isReply = false,
     this.isDetail = false,
     this.onImageTap,
@@ -12,6 +13,7 @@ class PostContent extends StatelessWidget {
   });
 
   final QuestionModel? model;
+  final String? imageTag;
   final VoidCallback? onImageTap;
   final VoidCallback? onRefreshImage;
   final bool isReply;
@@ -136,9 +138,15 @@ class PostContent extends StatelessWidget {
                 HeightSpace(isDetail ? 20 : 18),
                 LayoutBuilder(
                   builder: (context, constraints) {
-                    return isDetail
+                    return isDetail || isInHistorySection! || isReply
                         ? Hero(
-                            tag: 'image-preview',
+                            tag: '$imageTag',
+                            createRectTween: (begin, end) {
+                              return RectTween(
+                                begin: begin,
+                                end: end,
+                              );
+                            },
                             child: CachedNetworkImage(
                               imageUrl: model!.attachmentUrl!,
                               placeholder: (context, url) => SizedBox(
@@ -212,7 +220,6 @@ class PostContent extends StatelessWidget {
                                       color: BaseColors.gray4.withOpacity(0.2),
                                       borderRadius: BorderRadius.circular(6),
                                       image: DecorationImage(
-                                        alignment: Alignment.topCenter,
                                         image: imageProvider,
                                         fit: BoxFit.cover,
                                       ),

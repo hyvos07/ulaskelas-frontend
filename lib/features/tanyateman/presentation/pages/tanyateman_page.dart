@@ -40,7 +40,7 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
                 right:
                     searchQuestionRM.state.searchData?.text != null ? 22 : 24,
                 top: 10,
-                bottom: 2,
+                bottom: 3,
               ),
               child: Row(
                 children: [
@@ -60,7 +60,7 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
                           ),
                           splashRadius: 20,
                           constraints: const BoxConstraints(),
-                          padding: const EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(5),
                         ),
                         const SizedBox(width: 10),
                       ],
@@ -152,38 +152,49 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
         builder: (context) {
           return Column(
             children: [
-              TabBar(
-                indicatorPadding: const EdgeInsets.only(bottom: 5),
-                labelPadding: EdgeInsets.zero,
-                tabs: [
-                  Tab(
-                    child: Text(
-                      'Semua Pertanyaan',
-                      style: FontTheme.poppins12w700black(),
+              Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: BaseColors.gray3,
+                      width: 0.3,
                     ),
                   ),
-                  Tab(
-                    child: Text(
-                      'Riwayat Pertanyaan',
-                      style: FontTheme.poppins12w700black(),
+                ),
+                child: TabBar(
+                  labelPadding: EdgeInsets.zero,
+                  tabs: [
+                    Tab(
+                      height: 45,
+                      child: Text(
+                        'Semua Pertanyaan',
+                        style: FontTheme.poppins12w700black(),
+                      ),
                     ),
+                    Tab(
+                      height: 45,
+                      child: Text(
+                        'Riwayat Pertanyaan',
+                        style: FontTheme.poppins12w700black(),
+                      ),
+                    ),
+                  ],
+                  // indicator: UnderlineTabIndicator(
+                  // borderSide: const BorderSide(
+                  //   width: 2.5,
+                  //   color: BaseColors.purpleHearth,
+                  // ),
+                  // insets: const EdgeInsets.symmetric(
+                  //   horizontal: 45,
+                  // ),
+                  // borderRadius: BorderRadius.circular(10),
+                  // ),
+                  indicator: _UnderlineTab(
+                    width: 70,
+                    height: 4,
+                    color: BaseColors.purpleHearth,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ],
-                // indicator: UnderlineTabIndicator(
-                // borderSide: const BorderSide(
-                //   width: 2.5,
-                //   color: BaseColors.purpleHearth,
-                // ),
-                // insets: const EdgeInsets.symmetric(
-                //   horizontal: 45,
-                // ),
-                // borderRadius: BorderRadius.circular(10),
-                // ),
-                indicator: _UnderlineTab(
-                  width: 70,
-                  height: 4,
-                  color: BaseColors.purpleHearth,
-                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               const Expanded(
@@ -203,6 +214,7 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
   }
 }
 
+/// Custom underline tab indicator.
 class _UnderlineTab extends Decoration {
   final double width;
   final double height;
