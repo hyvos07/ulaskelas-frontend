@@ -9,4 +9,5 @@ class EndpointsRevamp {
   static final subcomponents = '$baseUrl/api/course-subcomponent';
   static final autofill = '$baseUrl/api/calculator-gpa?is_auto_fill=true';
   static final tanyaTeman = '$baseUrl/api/tanya-teman';
+  static final jawabTeman = '$baseUrl/api/jawab-teman';
 }
