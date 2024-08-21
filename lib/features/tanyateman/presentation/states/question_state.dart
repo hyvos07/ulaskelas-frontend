@@ -104,18 +104,21 @@ class QuestionState {
     questionsRM.notify();
   }
 
-  Future<void> deleteQuestion(int id) async {
+  Future<bool> deleteQuestion(int id) async {
+    var isSucces = false;
     final resp = await _repo.deleteQuestion(id);
     resp.fold(
       (failure) {
         ErrorMessenger(
-          'Gagal menghapus pertanyaan!').show(ctx!);}, 
+          'Gagal menghapus pertanyaan!',).show(ctx!);}, 
       (result) {
         SuccessMessenger(
-          'Berhasil menghapus pertanyaan!').show(ctx!);}
+          'Berhasil menghapus pertanyaan!',).show(ctx!);
+          isSucces = true;}
     );
 
     questionsRM.notify();
+    return isSucces;
   }
 
 }
