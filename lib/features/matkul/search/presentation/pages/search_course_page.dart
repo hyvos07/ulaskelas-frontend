@@ -28,6 +28,17 @@ class _SearchCoursePageState
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Pref.getBool('doneAppTour') == false ||
+          Pref.getBool('doneAppTour') == null) {
+        showcaseSearchPage();
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _debounce?.cancel();
     super.dispose();
@@ -60,48 +71,67 @@ class _SearchCoursePageState
     ReactiveModel<SearchCourseState> k,
     SizingInformation sizeInfo,
   ) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
-          child: Column(
-            children: [
-              OnReactive(
-                () => SearchField(
-                  hintText: 'Cari mata kuliah',
-                  focusNode: focusNode,
-                  controller: searchCourseRM.state.controller,
-                  onClear: () {
-                    focusNode.unfocus();
-                    searchCourseRM.state.controller.clear();
-                  },
-                  onFieldSubmitted: (val) =>
-                      searchCourseRM.state.addToHistory(val),
-                  onChange: onQueryChanged,
-                ),
+    return ShowCaseWidget(
+      builder: (context) {
+        searchPageContext = context;
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
               ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: OnReactive(() {
-            if (focusNode.hasFocus &&
-                searchCourseRM.state.controller.text.isEmpty) {
-              return _buildHistory();
-            } else {
-              return SearchListView(
-                refreshIndicatorKey: refreshIndicatorKey,
-                scrollController: scrollController,
-                onScroll: onScroll,
-                onRefresh: retrieveData,
-              );
-            }
-          }),
-        ),
-      ],
+              child: Column(
+                children: [
+                  Showcase.withWidget(
+                    key: inAppTourKeys.searchBarSP,
+                    overlayColor: BaseColors.neutral100,
+                    overlayOpacity: 0.5,
+                    targetPadding: const EdgeInsets.all(10),
+                    blurValue: 1,
+                    height: 0,
+                    width: 350,
+                    disposeOnTap: false,
+                    disableBarrierInteraction: true,
+                    disableMovingAnimation: true,
+                    onTargetClick: () {},
+                    container: searchBarSPShowcase(context),
+                    child: OnReactive(
+                      () => SearchField(
+                        hintText: 'Cari mata kuliah',
+                        focusNode: focusNode,
+                        controller: searchCourseRM.state.controller,
+                        onClear: () {
+                          focusNode.unfocus();
+                          searchCourseRM.state.controller.clear();
+                        },
+                        onFieldSubmitted: (val) =>
+                            searchCourseRM.state.addToHistory(val),
+                        onChange: onQueryChanged,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: OnReactive(() {
+                if (focusNode.hasFocus &&
+                    searchCourseRM.state.controller.text.isEmpty) {
+                  return _buildHistory();
+                } else {
+                  return SearchListView(
+                    refreshIndicatorKey: refreshIndicatorKey,
+                    scrollController: scrollController,
+                    onScroll: onScroll,
+                    onRefresh: retrieveData,
+                  );
+                }
+              }),
+            ),
+          ],
+        );
+      },
     );
   }
 

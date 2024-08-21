@@ -36,16 +36,30 @@ class SearchListView extends StatelessWidget {
                 StateBuilder(
                   observe: () => filterRM,
                   builder: (context, snapshot) {
-                    return FilterButton(
-                      hasFilter: filterRM.state.hasFilter,
-                      text: 'Filter',
-                      onPressed: () async {
-                        await nav.goToFilterPage();
+                    return Showcase.withWidget(
+                      key: inAppTourKeys.filterSP,
+                      overlayColor: BaseColors.neutral100,
+                      overlayOpacity: 0.5,
+                      targetPadding: const EdgeInsets.all(5),
+                      blurValue: 1,
+                      height: 200,
+                      width: 320,
+                      disposeOnTap: false,
+                      disableBarrierInteraction: true,
+                      disableMovingAnimation: true,
+                      onTargetClick: () {},
+                      container: filterSPShowcase(context),
+                      child: FilterButton(
+                        hasFilter: filterRM.state.hasFilter,
+                        text: 'Filter',
+                        onPressed: () async {
+                          await nav.goToFilterPage();
 
-                        if (filterRM.state.hasFilter) {
-                          await refreshIndicatorKey.currentState?.show();
-                        }
-                      },
+                          if (filterRM.state.hasFilter) {
+                            await refreshIndicatorKey.currentState?.show();
+                          }
+                        },
+                      ),
                     );
                   },
                 ),
@@ -117,6 +131,35 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
                       return const CircleLoading(size: 25);
                     }
                     final course = courses[i];
+                    if (i == 2) {
+                      return Showcase.withWidget(
+                        key: inAppTourKeys.coursecardSP,
+                        overlayColor: BaseColors.neutral100,
+                        overlayOpacity: 0.5,
+                        targetPadding: const EdgeInsets.all(10),
+                        blurValue: 1,
+                        height: 0,
+                        width: 350,
+                        disposeOnTap: false,
+                        disableBarrierInteraction: true,
+                        disableMovingAnimation: true,
+                        onTargetClick: () {
+                          ShowCaseWidget.of(context).dismiss();
+                          nav.goToDetailMatkulPage(
+                            course.id!,
+                            course.code!,
+                          );
+                        },
+                        container: cardCourseSPShowcase(context),
+                        child: CardCourse(
+                          model: course,
+                          onTap: () => nav.goToDetailMatkulPage(
+                            course.id!,
+                            course.code!,
+                          ),
+                        ),
+                      );
+                    }
                     return CardCourse(
                       model: course,
                       onTap: () => nav.goToDetailMatkulPage(

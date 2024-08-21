@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:ulaskelas/features/kalkulator/presentation/pages/_pages.dart';
 import 'package:ulaskelas/services/_services.dart';
 import 'package:ulaskelas/src/bar/_bar.dart';
 import 'core/bases/states/_states.dart';
+import 'core/utils/in_app_tour/showcase_flow.dart';
 import 'features/home/presentation/pages/_pages.dart';
 import 'features/leaderboard/presentation/pages/_pages.dart';
 import 'features/matkul/search/presentation/pages/_pages.dart';
@@ -42,6 +44,17 @@ class _MainPageState extends BaseStateful<MainPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Pref.getBool('doneAppTour') == false ||
+          Pref.getBool('doneAppTour') == null) {
+        showInAppTourOpening(navbarContext!);
+      }
+    });
+  }
+
+  @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return null;
   }
@@ -75,47 +88,52 @@ class _MainPageState extends BaseStateful<MainPage> {
   }
 
   Widget? _convexNavigation() {
-    return NewRistekBotNavBar(
-      initialActiveIndex: _selectedIndex,
-      onTap: (int index) {
-        switch (index) {
-          case 1:
-            MixpanelService.track('open_courses');
-          case 2:
-            MixpanelService.track('open_askfriends');
-          case 3:
-            MixpanelService.track('open_calculator');
-          case 4:
-            MixpanelService.track('open_profile');
-        }
-        setState(() => _selectedIndex = index);
+    return ShowCaseWidget(
+      builder: (context) {
+        navbarContext = context;
+        return NewRistekBotNavBar(
+          initialActiveIndex: _selectedIndex,
+          onTap: (int index) {
+            switch (index) {
+              case 1:
+                MixpanelService.track('open_courses');
+              case 2:
+                MixpanelService.track('open_askfriends');
+              case 3:
+                MixpanelService.track('open_calculator');
+              case 4:
+                MixpanelService.track('open_profile');
+            }
+            setState(() => _selectedIndex = index);
+          },
+          items: const [
+            NewRistekBotNavItem(
+              icon: Icons.home,
+              text: 'Beranda',
+            ),
+            NewRistekBotNavItem(
+              icon: Icons.list_alt,
+              text: 'Matkul',
+            ),
+            // RistekBotNavItem(            this page has been shut down
+            //   icon: Icons.leaderboard,      for ulaskelas revamp
+            //   text: 'Klasemen',               changed into tanya teman
+            // ),
+            NewRistekBotNavItem(
+              svgIcon: 'assets/icons/tanyateman.svg',
+              text: 'Tanya Teman',
+            ),
+            NewRistekBotNavItem(
+              icon: Icons.calculate,
+              text: 'Kalkulator',
+            ),
+            NewRistekBotNavItem(
+              icon: Icons.account_circle,
+              text: 'Profil',
+            ),
+          ],
+        );
       },
-      items: const [
-        NewRistekBotNavItem(
-          icon: Icons.home,
-          text: 'Beranda',
-        ),
-        NewRistekBotNavItem(
-          icon: Icons.list_alt,
-          text: 'Matkul',
-        ),
-        // RistekBotNavItem(            this page has been shut down
-        //   icon: Icons.leaderboard,      for ulaskelas revamp 
-        //   text: 'Klasemen',               changed into tanya teman
-        // ),
-        NewRistekBotNavItem(
-          svgIcon: 'assets/icons/tanyateman.svg',
-          text: 'Tanya Teman',
-        ),
-        NewRistekBotNavItem(
-          icon: Icons.calculate,
-          text: 'Kalkulator',
-        ),
-        NewRistekBotNavItem(
-          icon: Icons.account_circle,
-          text: 'Profil',
-        ),
-      ],
     );
   }
 

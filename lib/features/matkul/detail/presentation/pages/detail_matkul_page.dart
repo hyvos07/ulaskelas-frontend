@@ -24,6 +24,15 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
   late ScrollController scrollController;
   Completer<void>? completer;
 
+  bool scrollable = !(Pref.getBool('doneAppTour') == false ||
+      Pref.getBool('doneAppTour') == null);
+
+  void isScrollable(bool value) {
+    setState(() {
+      scrollable = value;
+    });
+  }
+
   @override
   void init() {
     scrollController = ScrollController();
@@ -34,6 +43,17 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
       cacheKey: 'detail-course',
       state: false,
     ).initialize();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (Pref.getBool('doneAppTour') == false ||
+          Pref.getBool('doneAppTour') == null) {
+        showcaseCourseDetail();
+      }
+    });
   }
 
   void _onScroll() {
@@ -47,10 +67,12 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
   }
 
   void onScroll() {
-    // Solution Issue #35 : Detail Matkul Page tidak perlu melakukan onScroll 
-    // ketika sudah mencapai bottom of the page, karena page ini tidak 
-    // seharusnya melakukan retrieveMoreData (seperti yang ada di Main Page)
-    // ketika sudah mencapai bottom. (CMIIW hehehe)
+    /*
+    Solution Issue #35 : Detail Matkul Page tidak perlu melakukan onScroll 
+    ketika sudah mencapai bottom of the page, karena page ini tidak 
+    seharusnya melakukan retrieveMoreData (seperti yang ada di Main Page)
+    ketika sudah mencapai bottom. (CMIIW hehehe)
+    */
     completer?.complete();
     final query = QueryReview(courseCode: widget.courseCode);
     reviewCourseRM.state.retrieveMoreData(query).then((value) {
@@ -97,68 +119,118 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
     BuildContext context,
     SizingInformation sizeInfo,
   ) {
-    return Column(
-      children: [
-        Expanded(
-          child: RefreshIndicator(
-            key: refreshIndicatorKey,
-            onRefresh: retrieveData,
-            child: OnBuilder<CourseDetailState>.all(
-              listenTo: courseDetailRM,
-              onIdle: WaitingView.new,
-              onWaiting: WaitingView.new,
-              onError: (dynamic error, refresh) => const Text('error'),
-              onData: (data) {
-                final course = data.detailCourse;
-                return ListView(
-                  shrinkWrap: true,
-                  controller: scrollController,
-                  padding: const EdgeInsets.all(24),
-                  children: [
-                    TitleAndBookMark(course: course),
-                    const HeightSpace(24),
-                    if (course.tags?.isNotEmpty ?? false)
-                      _buildMatkulTag(course),
-                    const HeightSpace(16),
-                    _buildMatkulDescription(course),
-                    const HeightSpace(32),
-                    _buildMatkulPrerequisite(course),
-                    const HeightSpace(32),
-                    _buildReviewBySelf(),
-                    _buildReviews(course),
-                    const HeightSpace(16),
-                    if (course.reviewCount! > 3)
-                      InkWell(
-                        onTap: () => nav.goToAllReviewMatkulPage(
-                          courseId: widget.courseId,
-                          courseCode: widget.courseCode,
-                          course: course,
+    return ShowCaseWidget(
+      builder: (context) {
+        detailMatkulContext = context;
+        return Column(
+          children: [
+            Expanded(
+              child: RefreshIndicator(
+                key: refreshIndicatorKey,
+                onRefresh: retrieveData,
+                child: OnBuilder<CourseDetailState>.all(
+                  listenTo: courseDetailRM,
+                  onIdle: WaitingView.new,
+                  onWaiting: WaitingView.new,
+                  onError: (dynamic error, refresh) => const Text('error'),
+                  onData: (data) {
+                    final course = data.detailCourse;
+                    return ListView(
+                      shrinkWrap: true,
+                      controller: scrollController,
+                      physics: scrollable
+                          ? null
+                          : const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(24),
+                      children: [
+                        Showcase.withWidget(
+                          key: inAppTourKeys.courseDetailDM,
+                          overlayColor: BaseColors.neutral100,
+                          overlayOpacity: 0.5,
+                          targetPadding: const EdgeInsets.all(14),
+                          blurValue: 1,
+                          height: 0,
+                          width: 325,
+                          disposeOnTap: false,
+                          disableBarrierInteraction: true,
+                          disableMovingAnimation: true,
+                          onTargetClick: () {},
+                          container: detailCourseDMShowCase(
+                            context,
+                            scrollController,
+                            isScrollable,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TitleAndBookMark(course: course),
+                              const HeightSpace(24),
+                              if (course.tags?.isNotEmpty ?? false)
+                                _buildMatkulTag(course),
+                              const HeightSpace(16),
+                              _buildMatkulDescription(course),
+                              const HeightSpace(32),
+                              _buildMatkulPrerequisite(course),
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Lihat Semua Ulasan',
-                              style: FontTheme.poppins13w400purple(),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_rounded,
-                              color: BaseColors.purpleHearth,
-                              size: 18,
-                            ),
-                          ],
+                        const HeightSpace(32),
+                        Showcase.withWidget(
+                          key: inAppTourKeys.reviewBySelfDM,
+                          overlayColor: BaseColors.neutral100,
+                          overlayOpacity: 0.5,
+                          targetPadding: const EdgeInsets.all(14),
+                          blurValue: 1,
+                          height: 0,
+                          width: 350,
+                          disposeOnTap: false,
+                          disableBarrierInteraction: true,
+                          disableMovingAnimation: true,
+                          onTargetClick: () {},
+                          container: reviewByYouDMShowcase(
+                            context,
+                            scrollController,
+                            isScrollable,
+                          ),
+                          child: _buildReviewBySelf(),
                         ),
-                      ),
-                  ],
-                );
-              },
+                        const HeightSpace(32),
+                        _buildReviews(course),
+                        const HeightSpace(16),
+                        if (course.reviewCount! > 3)
+                          InkWell(
+                            onTap: () => nav.goToAllReviewMatkulPage(
+                              courseId: widget.courseId,
+                              courseCode: widget.courseCode,
+                              course: course,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Lihat Semua Ulasan',
+                                  style: FontTheme.poppins13w400purple(),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward_rounded,
+                                  color: BaseColors.purpleHearth,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
@@ -189,19 +261,47 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Ulasan',
-          style: FontTheme.poppins14w700black(),
+        Showcase.withWidget(
+          key: inAppTourKeys.reviewsDM,
+          overlayColor: BaseColors.neutral100,
+          overlayOpacity: 0.5,
+          targetPadding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
+          blurValue: 1,
+          height: 0,
+          width: 350,
+          disposeOnTap: false,
+          disableBarrierInteraction: true,
+          disableMovingAnimation: true,
+          onTargetClick: () {},
+          container: reviewsDMShowcase(
+            detailMatkulContext!,
+            scrollController,
+            isScrollable,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Ulasan',
+                style: FontTheme.poppins14w700black(),
+              ),
+              const HeightSpace(8),
+              const Divider(
+                height: 1,
+                thickness: 1,
+                color: Color(0xFFE0E0E0),
+              ),
+              const HeightSpace(12),
+              _buildAllRatings(course),
+              const HeightSpace(12),
+              if (Pref.getBool('doneAppTour') == false ||
+                  Pref.getBool('doneAppTour') == null)
+                ReviewCard(
+                  review: ReviewModel.fromJson(_dummyJson),
+                ),
+            ],
+          ),
         ),
-        const HeightSpace(8),
-        const Divider(
-          height: 1,
-          thickness: 1,
-          color: Color(0xFFE0E0E0),
-        ),
-        const HeightSpace(12),
-        _buildAllRatings(course),
-        const HeightSpace(12),
         OnBuilder<ReviewCourseState>.all(
           listenTo: reviewCourseRM,
           onIdle: () => const CircleLoading(),
@@ -371,7 +471,6 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
             );
           },
         ),
-        const HeightSpace(32),
       ],
     );
   }
@@ -429,6 +528,43 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
 
   @override
   Future<bool> onBackPressed() async {
-    return true;
+    // Prevent user on pressing back button when showcase is running
+    return !(Pref.getBool('doneAppTour') == false ||
+        Pref.getBool('doneAppTour') == null);
   }
+
+  /// Preview only
+  final Map<String, dynamic> _dummyJson = {
+    'id': 270,
+    'user': 1022,
+    'course': 3,
+    'created_at': '2023-07-29T02:13:30.135920Z',
+    'updated_at': '2023-07-29T02:39:56.480157Z',
+    'academic_year': '2021/2022',
+    'semester': 2,
+    'content': 'Berguna banget soalnya di matkul ini belajar OOP '
+        'yang bakal terus kepake kedepannya! Harus banget ngerti '
+        'matkul yang satu ini sih...',
+    'hate_speech_status': 'APPROVED',
+    'sentimen': 0,
+    'is_anonym': true,
+    'is_active': true,
+    'is_reviewed': false,
+    'rating_understandable': 5.0,
+    'rating_fit_to_credit': 5.0,
+    'rating_fit_to_study_book': 5.0,
+    'rating_beneficial': 5.0,
+    'rating_recommended': 5.0,
+    'author': 'muhammad.azmy',
+    'author_generation': '2022',
+    'author_study_program': 'Ilmu Komputer',
+    'course_code': 'CSGE601021',
+    'course_code_desc': 'Wajib Fakultas',
+    'course_name': 'Dasar-Dasar Pemrograman 2',
+    'course_review_count': 14,
+    'tags': [],
+    'likes_count': 0,
+    'is_liked': false,
+    'rating_average': 5.0
+  };
 }
