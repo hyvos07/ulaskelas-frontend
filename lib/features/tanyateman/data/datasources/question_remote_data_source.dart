@@ -62,6 +62,8 @@ class QuestionRemoteDataSourceImpl implements QuestionRemoteDataSource {
 
   @override
   Future<Parsed<void>> deleteQuestion(int id) async {
-    throw UnimplementedError();
+    final url = '${EndpointsRevamp.tanyaTeman}?id=$id';
+    final resp = await deleteIt(url);
+    return resp.parse(null);
   }
 }

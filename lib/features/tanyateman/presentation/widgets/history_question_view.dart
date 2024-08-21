@@ -175,10 +175,12 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                       },
                                       onRefreshImage: questionsRM.notify,
                                       optionChoices: const ['Hapus'],
-                                      onOptionChoosed: (value) {
+                                      onOptionChoosed: (value) async {
                                         if (value == 'Hapus') {
-                                          print('hapus');
-                                          // Hapus
+                                          await questionsRM
+                                            .state
+                                              .deleteQuestion(question.id);
+                                          await retrieveData();
                                         }
                                       },
                                     );
