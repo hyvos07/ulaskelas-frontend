@@ -177,10 +177,10 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                       optionChoices: const ['Hapus'],
                                       onOptionChoosed: (value) async {
                                         if (value == 'Hapus') {
-                                          await questionsRM
+                                          final isSuccess = await questionsRM
                                             .state
                                               .deleteQuestion(question.id);
-                                          await retrieveData();
+                                          if (isSuccess) await retrieveData();
                                         }
                                       },
                                     );

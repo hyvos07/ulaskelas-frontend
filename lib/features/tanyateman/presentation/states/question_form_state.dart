@@ -131,13 +131,15 @@ class QuestionFormState {
     var isSucces = false;
 
     final model = {
-      'attachment_file' : questionFormRM.state.fileImage,
-      'course_id' : questionFormRM.state.course != null
-        ? '${questionFormRM.state.course!.id}' : null,
-      'question_text' : questionFormRM.state.questionController.text.trim(),
-      'is_anonym' : questionFormRM.state.isAnonym == true
+      'attachment_file' : fileImage,
+      'course_id' : course != null
+        ? '${course!.id}' : null,
+      'question_text' : questionController.text.trim(),
+      'is_anonym' : isAnonym == true
         ? '1' : '0'
     };
+    if (questionFormRM.state.fileImage == null) model.remove('attachment_file');
+
     final resp = await _repo.postQuestion(model);
     await resp.fold((failure) {
       isSucces = false;
