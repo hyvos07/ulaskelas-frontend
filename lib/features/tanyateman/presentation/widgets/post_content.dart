@@ -356,7 +356,7 @@ class PostContent extends StatelessWidget {
                       ),
                       const WidthSpace(6),
                       Text(
-                        _shortenEngagement(model!.answers),
+                        _shortenEngagement(model!.replyCount),
                         style: FontTheme.poppins12w400black().copyWith(
                           fontSize: 11,
                           fontWeight: FontWeight.w300,

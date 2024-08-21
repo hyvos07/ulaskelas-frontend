@@ -10,9 +10,8 @@ class QuestionModel {
   final String courseName;
   final bool isAnonym;
   final int likeCount;
-  final int answers;
+  final int replyCount;
   final String createdAt;
-  final String updatedAt;
   final String? verificationStatus;
   final String? attachmentUrl;
 
@@ -26,9 +25,8 @@ class QuestionModel {
     required this.courseName,
     required this.isAnonym,
     required this.likeCount,
-    required this.answers,
+    required this.replyCount,
     required this.createdAt,
-    required this.updatedAt,
     this.verificationStatus,
     this.attachmentUrl,
   });
@@ -44,11 +42,10 @@ class QuestionModel {
       courseName: json['course']['name'],
       isAnonym: json['is_anonym'] == 1,
       likeCount: json['like_count'],
-      answers: json['answers'] ?? 0,
+      replyCount: json['reply_count'],
       createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
       verificationStatus: json['verification_status'],
-      attachmentUrl: !json['attachment_url'].contains('.pdf')
+      attachmentUrl: !(json['attachment_url'] ?? '').contains('.pdf')
           ? json['attachment_url']
           : null,
     );
@@ -71,9 +68,8 @@ class QuestionModel {
     };
     data['is_anonym'] = isAnonym ? 1 : 0;
     data['like_count'] = likeCount;
-    data['answers'] = answers;
+    data['reply_count'] = replyCount;
     data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
     // data['verification_status'] = verificationStatus;
     // data['attachment_url'] = attachmentUrl;
 
@@ -81,7 +77,7 @@ class QuestionModel {
   }
 
   String get exactDateTime => DateFormat('dd MMM yyyy HH:mm')
-      .format(DateTime.parse(updatedAt).toLocal());
+      .format(DateTime.parse(createdAt).toLocal());
 
   // String get relativeDateTime {
   //   final now = DateTime.now();
