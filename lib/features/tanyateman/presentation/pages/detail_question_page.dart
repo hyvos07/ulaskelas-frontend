@@ -83,6 +83,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     bool isDetail = false,
     bool isReply = false,
     String? replyId,
+    String? replyUrlFile,
   }) {
     if (isDetail) {
       nav.goToViewImagePage(
@@ -92,7 +93,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       );
     } else if (isReply) {
       nav.goToViewImagePage(
-        CachedNetworkImageProvider(widget.model.attachmentUrl!),
+        CachedNetworkImageProvider(replyUrlFile!),
         imageTag: 'reply-image-preview?id=$replyId',
         enableImagePreview: isReply,
       );
@@ -348,6 +349,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                 onImageTap: () => seeImage(
                   isReply: true,
                   replyId: answer.id.toString(), // change this to the real reply id
+                  replyUrlFile: answer.attachmentUrl
                 ),
                 optionChoices: const ['Report'],
                 onOptionChoosed: (value) {
@@ -368,13 +370,12 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     if (answerFormRM.state.answerController.text != '') {
       final isSucces = await answerFormRM.state.postNewAnswer(widget.model.id);
       if (isSucces) {
-        await _pageController.animateToPage(
-          0, // Index of the second page
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.fastLinearToSlowEaseIn,
-        );
         SuccessMessenger('Jawaban berhasil dibuat').show(ctx!);
-        await retrieveData();
+        // await _pageController.animateToPage(
+        //   0, // Index of the second page
+        //   duration: const Duration(milliseconds: 1000),
+        //   curve: Curves.fastLinearToSlowEaseIn,
+        // );
       } else {
         ErrorMessenger('Jawaban gagal dibuat').show(ctx!);
       }

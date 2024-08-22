@@ -9,8 +9,8 @@ class QuestionModel {
   final int courseId;
   final String courseName;
   final bool isAnonym;
-  final int likeCount;
-  final int replyCount;
+  int likeCount;
+  int replyCount;
   final String createdAt;
   final String? verificationStatus;
   final String? attachmentUrl;
