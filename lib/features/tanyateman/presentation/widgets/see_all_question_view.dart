@@ -165,7 +165,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                                     }
                                     final question = data.allQuestions[index];
                                     return CardPost(
-                                      model: question,
+                                      questionModel: question,
                                       imageTag: 'post-image-preview'
                                           '?id=${question.id}',
                                       onTap: () {

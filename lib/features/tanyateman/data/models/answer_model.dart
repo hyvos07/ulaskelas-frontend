@@ -62,4 +62,19 @@ class AnswerModel {
 
   String get exactDateTime => DateFormat('dd MMM yyyy HH:mm')
       .format(DateTime.parse(createdAt).toLocal());
+  
+  void cekIsiData() {
+    print('/////////////////');
+    print('id : $id');
+    print('questionId : $questionId');
+    print('userName : $userName');
+    print('userProgram : $userProgram');
+    print('userGeneration : $userGeneration');
+    print('answerText : $answerText');
+    print('isAnonym : $isAnonym');
+    print('likeCount : $likeCount');
+    print('createdAt : $createdAt');
+    print('attachmentUrl : $attachmentUrl');
+    print('/////////////////');
+  }
 }

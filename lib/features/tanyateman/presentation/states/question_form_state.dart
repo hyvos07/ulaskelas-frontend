@@ -147,7 +147,7 @@ class QuestionFormState {
       clearForm();
       isSucces = true;
     });
-    semesterRM.notify();
+    answerFormRM.notify();
 
     return isSucces;
   }

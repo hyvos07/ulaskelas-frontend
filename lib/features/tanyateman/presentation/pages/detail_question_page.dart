@@ -17,15 +17,33 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   double pageViewHeight = 0;
   late PageController _pageController;
 
+  late ScrollController scrollController;
+  Completer<void>? completer;
+
   @override
   void init() {
-    questionFormRM.setState((s) => s.clearForm());
+    answerFormRM.setState((s) => s.clearForm());
+    scrollController = ScrollController();
+    completer = Completer<void>();
+    scrollController.addListener(_onScroll);
+    StateInitializer(
+      rIndicator: refreshIndicatorKey!,
+      cacheKey: 'detail-question',
+      state: false,
+    ).initialize();
   }
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: pageViewIndex);
+  }
+
+  void _onScroll() {
+    if (_isBottom && !completer!.isCompleted && scrollCondition()) {
+      print('${scrollCondition()}');
+      onScroll();
+    }
   }
 
   @override
@@ -56,7 +74,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
         enableImagePreview: isReply,
       );
     } else {
-      nav.goToViewImagePage(FileImage(questionFormRM.state.fileImage!));
+      nav.goToViewImagePage(FileImage(answerFormRM.state.fileImage!));
     }
   }
 
@@ -66,84 +84,88 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     SizingInformation sizeInfo,
   ) {
     return SafeArea(
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leadingWidth: MediaQuery.of(context).size.width,
-            leading: Row(
-              children: [
-                IconButton(
-                  padding: const EdgeInsets.only(
-                    left: 7.5,
+      child: RefreshIndicator(
+        key: refreshIndicatorKey,
+        onRefresh: retrieveData,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leadingWidth: MediaQuery.of(context).size.width,
+              leading: Row(
+                children: [
+                  IconButton(
+                    padding: const EdgeInsets.only(
+                      left: 7.5,
+                    ),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.grey.shade900,
+                    ),
+                    onPressed: onBackPressed,
                   ),
-                  icon: Icon(
-                    Icons.arrow_back,
+                  Expanded(
+                    child: Text('#${widget.model.courseName}',
+                        style: FontTheme.poppins12w600black().copyWith(
+                          color: Colors.grey.shade600,
+                        ),
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                  const WidthSpace(20),
+                  Icon(
+                    Icons.more_horiz,
                     color: Colors.grey.shade900,
                   ),
-                  onPressed: onBackPressed,
-                ),
-                Expanded(
-                  child: Text('#${widget.model.courseName}',
-                      style: FontTheme.poppins12w600black().copyWith(
-                        color: Colors.grey.shade600,
-                      ),
-                      overflow: TextOverflow.ellipsis),
-                ),
-                const WidthSpace(20),
-                Icon(
-                  Icons.more_horiz,
-                  color: Colors.grey.shade900,
-                ),
-                const WidthSpace(20),
-              ],
+                  const WidthSpace(20),
+                ],
+              ),
             ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Column(
-                    children: [
-                      PostContent(
-                        model: widget.model,
-                        isDetail: true,
-                        onImageTap: () => seeImage(isDetail: true),
-                        imageTag: 'post-image-preview?id=${widget.model.id}',
-                      ),
-                    ],
-                  ),
-                ),
-                const HeightSpace(30),
-                Center(
-                  child: SmoothPageIndicator(
-                    controller: _pageController,
-                    count: 2,
-                    effect: ExpandingDotsEffect(
-                      dotHeight: 8,
-                      dotWidth: 8,
-                      activeDotColor: BaseColors.primary,
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Column(
+                      children: [
+                        PostContent(
+                          questionModel: widget.model,
+                          isDetail: true,
+                          onImageTap: () => seeImage(isDetail: true),
+                          imageTag: 'post-image-preview?id=${widget.model.id}',
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const HeightSpace(10),
-                ExpandablePageView.builder(
-                    controller: _pageController,
-                    animationDuration: const Duration(milliseconds: 800),
-                    animationCurve: Curves.fastLinearToSlowEaseIn,
-                    itemCount: 2,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return _buildShowComments();
-                      }
-                      return _buildCommentForm();
-                    })
-              ],
+                  const HeightSpace(30),
+                  Center(
+                    child: SmoothPageIndicator(
+                      controller: _pageController,
+                      count: 2,
+                      effect: ExpandingDotsEffect(
+                        dotHeight: 8,
+                        dotWidth: 8,
+                        activeDotColor: BaseColors.primary,
+                      ),
+                    ),
+                  ),
+                  const HeightSpace(10),
+                  ExpandablePageView.builder(
+                      controller: _pageController,
+                      animationDuration: const Duration(milliseconds: 800),
+                      animationCurve: Curves.fastLinearToSlowEaseIn,
+                      itemCount: 2,
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          return _buildShowComments();
+                        }
+                        return _buildCommentForm();
+                      })
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -163,30 +185,34 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
               ),
               QuestionTextField(
                 isAnswer: true,
-                controller: questionFormRM.state.questionController,
+                controller: answerFormRM.state.answerController,
                 onChanged: (value) {
                   if (value.trim().isEmpty) {
-                    questionFormRM.state.questionController.text = '';
+                    answerFormRM.state.answerController.text = '';
                   }
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'This field is required.';
                   }
-                  questionFormRM.setState((s) => s.setQuestion(value));
+                  answerFormRM.setState((s) => s.setAnswer(value));
                   return null;
                 },
               ),
               const HeightSpace(20),
-              SendAsAnonymSwitcher(
-                isAnonym: questionFormRM.state.isAnonym,
-                onChanged: questionFormRM.state.setIsAnonym,
+              OnReactive(() 
+                => SendAsAnonymSwitcher(
+                  isAnonym: answerFormRM.state.isAnonym,
+                  onChanged: answerFormRM.state.setIsAnonym,
+                ),
               ),
               const HeightSpace(20),
-              ImagePickerBox(
-                onTapUpload: questionFormRM.state.pickImage,
-                onTapSeeImage: seeImage,
-                isImageSizeTooBig: questionFormRM.state.isImageSizeTooBig,
+              OnReactive(() 
+                => ImagePickerBox(
+                  onTapUpload: answerFormRM.state.pickImage,
+                  onTapSeeImage: seeImage,
+                  isImageSizeTooBig: answerFormRM.state.isImageSizeTooBig,
+                ),
               )
             ],
           ),
@@ -229,35 +255,93 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
           ),
         ),
         const HeightSpace(10),
-        Column(
-          children: List.generate(16, (index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
-              child: CardPost(
-                isReply: true,
-                model: widget.model,
-                imageTag: 'reply-image-preview?id=$index',
-                onRefreshImage: () {}, // NOTE: pake statenyaReplies.refresh()
-                onImageTap: () => seeImage(
+        OnBuilder<AnswerState>.all(
+          listenTo: answersRM,
+          onWaiting: () => Column(
+            children: List.generate(
+              10,
+              (index) => const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: SkeletonCardPost(
                   isReply: true,
-                  replyId: index.toString(), // change this to the real reply id
                 ),
-                optionChoices: const ['Report'],
-                onOptionChoosed: (value) {
-                  if (value == 'Report') {
-                    print('report reply!');
-                    // report reply here
-                  }
-                },
               ),
-            );
-          }),
+            ),
+          ),
+          onIdle: () => Column(
+            children: List.generate(
+              10,
+              (index) => const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: SkeletonCardPost(
+                  isReply: true,
+                ),
+              ),
+            ),
+          ),
+          onError: (dynamic error, refresh) =>
+              Text(error.toString()),
+          onData: (data) {
+            return answersRM.state.allAnswer.isEmpty
+              ? Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    'Tidak ada apa-apa disini.',
+                    style:
+                        FontTheme.poppins12w600black().copyWith(
+                      color: BaseColors.gray2.withOpacity(0.7),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : Column(
+                  children : data.allAnswer.map((answer) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                      child: CardPost(
+                        isReply: true,
+                        answerModel: answer,
+                        imageTag: 'reply-image-preview?id=${answer.id}',
+                        onRefreshImage: () {}, // NOTE: pake statenyaReplies.refresh()
+                        onImageTap: () => seeImage(
+                          isReply: true,
+                          replyId: answer.id.toString(), // change this to the real reply id
+                        ),
+                        optionChoices: const ['Report'],
+                        onOptionChoosed: (value) {
+                          if (value == 'Report') {
+                            print('report reply!');
+                            // report reply here
+                          }
+                        },
+                      ),
+                    );
+                  }).toList(),
+                );
+          }
         )
       ]),
     );
   }
 
-  Future<void> onSubmitCallBack(BuildContext context) async {}
+  Future<void> onSubmitCallBack(BuildContext context) async {
+    if (answerFormRM.state.answerController.text != '') {
+      final isSucces = await answerFormRM.state.postNewAnswer(widget.model.id);
+      if (isSucces) {
+        await _pageController.animateToPage(
+          0, // Index of the second page
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.fastLinearToSlowEaseIn,
+        );
+        SuccessMessenger('Jawaban berhasil dibuat').show(ctx!);
+      } else {
+        ErrorMessenger('Jawaban gagal dibuat').show(ctx!);
+      }
+    } else {
+      WarningMessenger('Jawaban perlu diisi!').show(context);
+    }
+  }
 
   @override
   Widget buildWideLayout(
@@ -269,8 +353,55 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
   @override
   Future<bool> onBackPressed() async {
-    questionFormRM.state.clearForm();
+    answerFormRM.state.clearForm();
     nav.pop<void>();
     return true;
   }
+
+
+  ///////////////////////////
+  ///////////////////////////
+  ///////////////////////////
+  
+
+
+  Future<void> onScroll() async {
+    completer?.complete();
+    final query = QueryAnswer();
+    await answersRM.state.retrieveMoreAllAnswer(query).then((value) {
+      completer = Completer<void>();
+      answersRM.notify();
+    }).onError((error, stackTrace) {
+      completer = Completer<void>();
+    });
+  }
+
+  Future<void> retrieveData() async {
+    final query = QueryAnswer(questionId: widget.model.id);
+    await answersRM.setState((s) => s.retrieveAllAnswer(query));
+  }
+
+  bool scrollCondition() {
+    return !answersRM.state.hasReachedMax;
+  }
+
+  void _scrollToTop() {
+    scrollController.animateTo(
+      scrollController.position.minScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  bool get _isBottom {
+    if (!scrollController.hasClients) {
+      if (kDebugMode) print('no client');
+      return false;
+    }
+    final maxScroll = scrollController.position.maxScrollExtent;
+    final currentScroll = scrollController.offset;
+    print(currentScroll >= (maxScroll * 0.95));
+    return currentScroll >= (maxScroll * 0.95);
+  }
+
 }

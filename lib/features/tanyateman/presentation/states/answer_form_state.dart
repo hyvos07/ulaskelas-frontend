@@ -4,29 +4,29 @@ class AnswerFormState {
   AnswerFormState() {
     final remoteDataSource = AnswerRemoteDataSourceImpl();
     _repo = AnswerRepositoryImpl(remoteDataSource);
-    _asnwerController = TextEditingController();
+    _answerController = TextEditingController();
     formKey = GlobalKey<FormState>();
   }
 
   late AnswerRepository _repo; 
-  late TextEditingController _asnwerController;
+  late TextEditingController _answerController;
   late GlobalKey formKey;
 
-  String? _question;
+  String? _answer;
   bool _isAnonym = false;
   File? _fileImage;
   ImagePicker? _imagePicker;
   bool? isImageSizeTooBig;
 
-  String get question => _question ?? '';
-  TextEditingController get asnwerController => _asnwerController;
+  String get answer => _answer ?? '';
+  TextEditingController get answerController => _answerController;
   bool get isAnonym => _isAnonym;
   File? get fileImage => _fileImage;
   ImagePicker? get imagePicker => _imagePicker;
 
   void clearForm() {
-    _asnwerController.clear();
-    _question = '';
+    _answerController.clear();
+    _answer = '';
     _isAnonym = false;
     _fileImage = null;
     _imagePicker = ImagePicker();
@@ -36,17 +36,17 @@ class AnswerFormState {
       print('Form Cleared');
     }
 
-    questionFormRM.notify();
+    answerFormRM.notify();
   }
 
-  void setQuestion(String newQuestion) {
-    _question = newQuestion;
-    questionFormRM.notify();
+  void setAnswer(String newAnswer) {
+    _answer = newAnswer;
+    answerFormRM.notify();
   }
 
   void setImage(File newFile) {
     _fileImage = newFile;
-    questionFormRM.notify();
+    answerFormRM.notify();
   }
 
   void setIsAnonym(bool newIsAnonym) {
@@ -54,7 +54,7 @@ class AnswerFormState {
     if (kDebugMode) {
       print('Is Anonym: $_isAnonym');
     }
-    questionFormRM.notify();
+    answerFormRM.notify();
   }
 
   Future<void> pickImage() async {
@@ -77,7 +77,7 @@ class AnswerFormState {
       }
     }
 
-    questionFormRM.notify();
+    answerFormRM.notify();
   }
 
   Future<File?> cropImage({required File imageFile}) async {
@@ -109,16 +109,19 @@ class AnswerFormState {
     return File(croppedImage.path);
   }
 
-  Future<bool> postNewQuestion(int id) async {
+  Future<bool> postNewAnswer(int id) async {
     var isSucces = false;
 
     final model = {
       'question_id' : id,
       'attachment_file' : fileImage,
-      'asnwer_text' : asnwerController.text.trim(),
+      'answer_text' : answerController.text.trim(),
       'is_anonym' : isAnonym == true
         ? '1' : '0'
     };
+
+    if (fileImage == null) model.remove('attachment_file');
+
     final resp = await _repo.postAnswer(model);
     await resp.fold((failure) {
       isSucces = false;
@@ -126,7 +129,7 @@ class AnswerFormState {
       clearForm();
       isSucces = true;
     });
-    semesterRM.notify();
+    answerFormRM.notify();
 
     return isSucces;
   }

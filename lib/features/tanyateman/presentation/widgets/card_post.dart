@@ -5,7 +5,8 @@ class CardPost extends StatelessWidget {
     required this.optionChoices,
     required this.onOptionChoosed,
     this.isInHistorySection = false,
-    this.model,
+    this.questionModel,
+    this.answerModel,
     this.imageTag,
     this.isReply = false,
     super.key,
@@ -14,7 +15,8 @@ class CardPost extends StatelessWidget {
     this.onRefreshImage,
   });
 
-  final QuestionModel? model;
+  final QuestionModel? questionModel;
+  final AnswerModel? answerModel;
   final String? imageTag;
   final VoidCallback? onTap;
   final VoidCallback? onImageTap;
@@ -46,7 +48,7 @@ class CardPost extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '#${model!.courseName}',
+                      '#${questionModel!.courseName}',
                       style: FontTheme.poppins10w700black().copyWith(
                         color: BaseColors.mineShaft.withOpacity(0.5),
                       ),
@@ -67,7 +69,8 @@ class CardPost extends StatelessWidget {
             child: PostContent(
               isInHistorySection: isInHistorySection,
               isReply: isReply,
-              model: model,
+              questionModel: questionModel,
+              answerModel: answerModel,
               onImageTap: onImageTap ?? onTap,
               onRefreshImage: onRefreshImage,
               imageTag: imageTag,

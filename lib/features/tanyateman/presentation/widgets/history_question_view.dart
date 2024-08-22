@@ -160,7 +160,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                         data.historyQuestions[index];
                                     return CardPost(
                                       isInHistorySection: true,
-                                      model: question,
+                                      questionModel: question,
                                       imageTag: 'post-image-preview'
                                           '?id=${question.id}',
                                       onImageTap: () {

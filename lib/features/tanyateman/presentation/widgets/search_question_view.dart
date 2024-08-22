@@ -206,7 +206,7 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
                                   final question =
                                       data.searchedQuestions[index];
                                   return CardPost(
-                                    model: question,
+                                    questionModel: question,
                                     onTap: () {
                                       nav.goToDetailQuestionPage(question);
                                     },

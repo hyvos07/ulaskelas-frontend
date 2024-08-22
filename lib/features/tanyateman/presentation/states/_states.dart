@@ -12,6 +12,7 @@ import 'package:ulaskelas/features/matkul/search/data/models/_models.dart';
 import '../../data/datasources/_datasources.dart';
 import '../../data/models/_models.dart';
 import '../../data/repositories/_repositories.dart';
+import '../../domain/entities/query_answer.dart';
 import '../../domain/entities/query_question.dart';
 import '../../domain/repositories/_repositories.dart';
 

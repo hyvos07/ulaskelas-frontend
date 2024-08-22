@@ -3,7 +3,8 @@ part of '_widgets.dart';
 class PostContent extends StatelessWidget {
   const PostContent({
     this.isInHistorySection = false,
-    this.model,
+    this.questionModel,
+    this.answerModel,
     this.imageTag,
     this.isReply = false,
     this.isDetail = false,
@@ -12,7 +13,8 @@ class PostContent extends StatelessWidget {
     super.key,
   });
 
-  final QuestionModel? model;
+  final QuestionModel? questionModel;
+  final AnswerModel? answerModel;
   final String? imageTag;
   final VoidCallback? onImageTap;
   final VoidCallback? onRefreshImage;
@@ -27,7 +29,9 @@ class PostContent extends StatelessWidget {
         MediaQuery.of(context).size.width - (isDetail ? 20 * 2 : 20 * 4);
 
     // Detect if the user is the one who posted the question
-    final isUserThemself = model!.userName == profileRM.state.profile.name;
+    final isUserThemself = questionModel != null
+      ? questionModel!.userName == profileRM.state.profile.name
+      : answerModel!.userName == profileRM.state.profile.name;;
 
     return Container(
       decoration: const BoxDecoration(
@@ -39,9 +43,13 @@ class PostContent extends StatelessWidget {
           Row(
             children: <Widget>[
               UserProfileBox(
-                name: model!.isAnonym && !isUserThemself
+                name: questionModel != null
+                  ?  questionModel!.isAnonym && !isUserThemself
                     ? 'Anon Nimus'
-                    : model!.userName,
+                    : questionModel!.userName
+                  :  answerModel!.isAnonym && !isUserThemself
+                    ? 'Anon Nimus'
+                    : answerModel!.userName,
               ),
               const WidthSpace(12),
               Expanded(
@@ -55,16 +63,22 @@ class PostContent extends StatelessWidget {
                             TextSpan(
                               children: [
                                 TextSpan(
-                                  text: model!.isAnonym && !isUserThemself
+                                  text: questionModel != null
+                                    ? questionModel!.isAnonym && !isUserThemself
                                       ? 'Anonymous'
-                                      : model!.userName,
+                                      : questionModel!.userName
+                                    : answerModel!.isAnonym && !isUserThemself
+                                      ? 'Anonymous'
+                                      : answerModel!.userName,
                                   style:
                                       FontTheme.poppins12w700black().copyWith(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 12.5,
                                   ),
                                 ),
-                                if (model!.isAnonym && isUserThemself)
+                                if (questionModel != null
+                                  ? questionModel!.isAnonym && isUserThemself
+                                  : answerModel!.isAnonym && isUserThemself)
                                   WidgetSpan(
                                     child: Padding(
                                       padding: const EdgeInsets.only(
@@ -95,18 +109,22 @@ class PostContent extends StatelessWidget {
                     const HeightSpace(4),
                     if (!isInHistorySection!)
                       Text(
-                        model!.isAnonym && !isUserThemself
+                        questionModel != null
+                          ? questionModel!.isAnonym && !isUserThemself
                             ? 'Mahasiswa UI'
-                            : '${model!.userProgram} ${model!.userGeneration}',
+                            : '${questionModel!.userProgram} ${questionModel!.userGeneration}'
+                          : answerModel!.isAnonym && !isUserThemself
+                            ? 'Mahasiswa UI'
+                            : '${answerModel!.userProgram} ${answerModel!.userGeneration}',
                         style: FontTheme.poppins10w400black().copyWith(
                           fontWeight: FontWeight.w300,
                         ),
                       )
-                    else
+                    else if (questionModel != null)
                       Text(
-                        '${model!.verificationStatus}',
+                        '${questionModel!.verificationStatus}',
                         style: FontTheme.poppins10w500black().copyWith(
-                            color: model!.verificationStatus ==
+                            color: questionModel!.verificationStatus ==
                                     'Menunggu Verifikasi'
                                 ? Colors.orange
                                 : Colors.green),
@@ -118,7 +136,9 @@ class PostContent extends StatelessWidget {
           ),
           HeightSpace(isDetail ? 15 : 13.5),
           Text(
-            model!.questionText,
+            questionModel != null
+              ? questionModel!.questionText
+              : answerModel!.answerText,
             style: isDetail || isReply
                 ? FontTheme.poppins14w500black().copyWith(
                     fontSize: 13,
@@ -132,7 +152,9 @@ class PostContent extends StatelessWidget {
             overflow: isDetail ? TextOverflow.visible : TextOverflow.ellipsis,
             textAlign: TextAlign.left,
           ),
-          if (model!.attachmentUrl != null)
+          if (questionModel != null
+            ? questionModel!.attachmentUrl != null
+            : answerModel!.attachmentUrl != null)
             Column(
               children: [
                 HeightSpace(isDetail ? 20 : 18),
@@ -148,7 +170,9 @@ class PostContent extends StatelessWidget {
                               );
                             },
                             child: CachedNetworkImage(
-                              imageUrl: model!.attachmentUrl!,
+                              imageUrl: questionModel != null
+                                ? questionModel!.attachmentUrl!
+                                : answerModel!.attachmentUrl!,
                               placeholder: (context, url) => SizedBox(
                                 height: maxImageHeight,
                                 child: Shimmer.fromColors(
@@ -234,7 +258,9 @@ class PostContent extends StatelessWidget {
                             ),
                           )
                         : CachedNetworkImage(
-                            imageUrl: model!.attachmentUrl!,
+                            imageUrl: questionModel != null
+                                ? questionModel!.attachmentUrl!
+                                : answerModel!.attachmentUrl!,
                             placeholder: (context, url) => SizedBox(
                               height: maxImageHeight,
                               child: Shimmer.fromColors(
@@ -326,7 +352,7 @@ class PostContent extends StatelessWidget {
             )
           else
             HeightSpace(isDetail ? 15 : 13.5),
-          if (model!.verificationStatus == 'Menunggu Verifikasi' &&
+          if (questionModel != null && questionModel!.verificationStatus == 'Menunggu Verifikasi' &&
               isInHistorySection!)
             const SizedBox.shrink()
           else
@@ -339,13 +365,15 @@ class PostContent extends StatelessWidget {
                 ),
                 const WidthSpace(2),
                 Text(
-                  _shortenEngagement(model!.likeCount),
+                  _shortenEngagement(questionModel != null
+                    ? questionModel!.likeCount
+                    : answerModel!.likeCount),
                   style: FontTheme.poppins12w400black().copyWith(
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                if (!isReply)
+                if (!isReply && questionModel != null)
                   Row(
                     children: [
                       const WidthSpace(10),
@@ -356,7 +384,7 @@ class PostContent extends StatelessWidget {
                       ),
                       const WidthSpace(6),
                       Text(
-                        _shortenEngagement(model!.replyCount),
+                        _shortenEngagement(questionModel!.replyCount),
                         style: FontTheme.poppins12w400black().copyWith(
                           fontSize: 11,
                           fontWeight: FontWeight.w300,
@@ -373,7 +401,9 @@ class PostContent extends StatelessWidget {
                 ),
                 const WidthSpace(10),
                 Text(
-                  model!.exactDateTime,
+                  questionModel != null
+                    ? questionModel!.exactDateTime
+                    : answerModel!.exactDateTime,
                   style: FontTheme.poppins12w400black().copyWith(
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
