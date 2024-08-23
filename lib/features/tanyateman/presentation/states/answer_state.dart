@@ -35,7 +35,7 @@ class AnswerState {
   Future<void> retrieveMoreAllAnswer(QueryAnswer q) async {
     ++page;
     q.page = page;
-    print('retrieveMoreData, with query page: ${q.page}');
+    print('retrieveMoreData, with query page: ${q.generateQueryString()}');
     final resp = await _repo.getAllAnswers(q);
     resp.fold((failure) => throw failure, (result) {
       _allAnswer?.addAll(result.data);

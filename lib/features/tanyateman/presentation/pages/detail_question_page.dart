@@ -324,31 +324,39 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
           ),
         ),
         const HeightSpace(10),
-        if (data.isEmpty) 
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 20),
-            child: Text(
-              'Tidak ada apa-apa disini.',
-              style:
-                  FontTheme.poppins12w600black().copyWith(
-                color: BaseColors.gray2.withOpacity(0.7),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          )
-        else Column(
-          children : data.map((answer) {
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: data.length + 1,
+          separatorBuilder: (context, index) =>
+              const HeightSpace(16),
+          itemBuilder: (context, index) {
+            if (index == data.length) {
+              return !answersRM.state.hasReachedMax
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
+                      child: CircleLoading(
+                        size: 25,
+                      ),
+                    )
+                  : data.length == 0
+                    ? _buildBottomMax(true)
+                    : _buildBottomMax(false);
+            }
+            final answer =
+                data[index];
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
               child: CardPost(
                 isReply: true,
                 answerModel: answer,
                 imageTag: 'reply-image-preview?id=${answer.id}',
-                onRefreshImage: () {}, // NOTE: pake statenyaReplies.refresh()
+                onRefreshImage: () => answersRM.notify(),
                 onImageTap: () => seeImage(
                   isReply: true,
-                  replyId: answer.id.toString(), // change this to the real reply id
+                  replyId: answer.id.toString(),
                   replyUrlFile: answer.attachmentUrl
                 ),
                 optionChoices: const ['Report'],
@@ -360,9 +368,24 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                 },
               ),
             );
-          }).toList(),
+          },
         )
       ]),
+    );
+  }
+
+  Widget _buildBottomMax(bool emptyList) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Text(
+        emptyList
+          ? 'Belum ada jawaban.'
+          : 'Tidak ada jawaban lagi.',
+        style: FontTheme.poppins12w600black().copyWith(
+          color: BaseColors.gray2.withOpacity(0.7),
+        ),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
@@ -408,7 +431,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
   Future<void> onScroll() async {
     completer?.complete();
-    final query = QueryAnswer();
+    final query = QueryAnswer(questionId: widget.model.id);
     await answersRM.state.retrieveMoreAllAnswer(query).then((value) {
       completer = Completer<void>();
       answersRM.notify();
@@ -426,14 +449,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     return !answersRM.state.hasReachedMax;
   }
 
-  void _scrollToTop() {
-    scrollController.animateTo(
-      scrollController.position.minScrollExtent,
-      duration: const Duration(seconds: 1),
-      curve: Curves.fastOutSlowIn,
-    );
-  }
-
   bool get _isBottom {
     if (!scrollController.hasClients) {
       if (kDebugMode) print('no client');
@@ -441,7 +456,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     }
     final maxScroll = scrollController.position.maxScrollExtent;
     final currentScroll = scrollController.offset;
-    print(currentScroll >= (maxScroll * 0.95) && _pageController.page == 0);
+    // print(currentScroll >= (maxScroll * 0.95) && _pageController.page == 0);
     return currentScroll >= (maxScroll * 0.95 ) && _pageController.page == 0;
   }
 

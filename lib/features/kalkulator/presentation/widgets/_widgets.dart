@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,22 +18,20 @@ import '../../../matkul/search/presentation/widgets/skeleton_card_course.dart';
 import '../../data/models/calculator_model.dart';
 import '../../data/models/semester_model.dart';
 
-part 'search_list_view_simplified.dart';
-part 'card_course_simplified.dart';
-part 'card_component.dart';
-part 'card_calculator.dart';
-part 'card_semester.dart';
-
-part 'simpan_button.dart';
-part 'gradient_border_button.dart';
-part 'frequency_controller.dart';
-part 'scores_field_input.dart';
-part 'recommended_score_box.dart';
-part 'gradient_text.dart';
-
-part 'card_expansion.dart';
-part 'autofill_dialog.dart';
 part 'add_semester_dialog.dart';
-part 'delete_dialog.dart';
+part 'autofill_dialog.dart';
+part 'card_calculator.dart';
+part 'card_component.dart';
+part 'card_course_simplified.dart';
+part 'card_expansion.dart';
+part 'card_semester.dart';
 part 'custom_table_row.dart';
+part 'delete_dialog.dart';
+part 'frequency_controller.dart';
+part 'gradient_border_button.dart';
+part 'gradient_text.dart';
+part 'recommended_score_box.dart';
+part 'scores_field_input.dart';
+part 'search_list_view_simplified.dart';
+part 'simpan_button.dart';
 part 'target_score_dropdown.dart';
