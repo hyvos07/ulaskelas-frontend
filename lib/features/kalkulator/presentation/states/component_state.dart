@@ -1,6 +1,6 @@
 part of '_states.dart';
 
-class ComponentState{
+class ComponentState {
   ComponentState() {
     final remoteDataSource = ComponentRemoteDataSourceImpl();
     _repo = ComponentRepositoryImpl(remoteDataSource);
@@ -39,26 +39,31 @@ class ComponentState{
       query.targetScore = target;
     }
     final resp = await _repo.getAllComponent(query);
-    resp.fold((failure) {
-      return failure;
-    }, (result) {
-      final lessThanLimit = result.data.length < 10;
-      hasReachedMax = result.data.isEmpty || lessThanLimit;
-      _components = result.data['components'];
-      if (result.data['recommended_score'] != 0) {
-        recommendedScore = result.data['recommended_score'];
-      } else {
-        recommendedScore = 0.0;
-      }
-      maxPossibleScore =  result.data['max_possible_score'];
-    },);
+    resp.fold(
+      (failure) {
+        return failure;
+      },
+      (result) {
+        final lessThanLimit = result.data.length < 10;
+        hasReachedMax = result.data.isEmpty || lessThanLimit;
+        _components = result.data['components'];
+        if (result.data['recommended_score'] != 0) {
+          recommendedScore = result.data['recommended_score'];
+        } else {
+          recommendedScore = 0.0;
+        }
+        maxPossibleScore = result.data['max_possible_score'];
+      },
+    );
     /////////////////////////////////////////////////////
     totalWeight = _components!.fold(
-      0, (int num, e) => num + e.weight!.toInt(),);
+      0,
+      (int num, e) => num + e.weight!.toInt(),
+    );
     hasReachedMax = totalWeight >= 100;
     totalScore = _components!.fold(
       // ignore: prefer_int_literals
-      0.0, 
+      0.0,
       (double num, e) {
         if (e.score != null && e.score != -1.0) {
           return num + (e.weight!.toInt() / 100 * e.score!);
@@ -69,14 +74,14 @@ class ComponentState{
     if (hasReachedMax) {
       allScoreFilled = components.every((i) => i.score != -1);
       // ignore: avoid_bool_literals_in_conditional_expressions
-      canGiveRecom = maxPossibleScore >= 55 
-                      && allScoreFilled == false 
-                        ? true : false;
-      if (maxPossibleScore >= 55 && allScoreFilled == false ) {
+      canGiveRecom =
+          maxPossibleScore >= 55 && allScoreFilled == false ? true : false;
+      if (maxPossibleScore >= 55 && allScoreFilled == false) {
         if (target == null) {
           target = 85;
-          while (target! > maxPossibleScore &&  target! >= 55) {
-            target = target! - 5;}
+          while (target! > maxPossibleScore && target! >= 55) {
+            target = target! - 5;
+          }
         }
         canPass = true;
       } else {
@@ -94,8 +99,7 @@ class ComponentState{
   Future<void> deleteComponent(QueryComponent query) async {
     final resp = await _repo.deleteComponent(query);
     await resp.fold((failure) {
-      ErrorMessenger('Komponen gagal dihapus')
-          .show(ctx!);
+      ErrorMessenger('Komponen gagal dihapus').show(ctx!);
     }, (result) async {
       SuccessMessenger('Komponen berhasil dihapus').show(ctx!);
     });
@@ -103,5 +107,28 @@ class ComponentState{
 
   void setTarget(int newTarget) {
     target = newTarget;
+  }
+
+  /// Add new components to first's matkul (for new user)
+  Future<void> addShowcaseComponent(int calculatorId) async {
+    for (final component in dummyScoreComponent['data']['score_component']) {
+      final result = <String, dynamic>{};
+
+      result['calculator_id'] = calculatorId;
+      result['name'] = component['name'];
+      result['weight'] = component['weight'];
+      result['frequency'] = 1;
+      result['scores'] = [component['score']];
+
+      final resp = await _repo.createComponent(result);
+
+      await resp.fold((failure) {
+        print('Failed to create component!');
+      }, (result) async {
+        final successSubmittedComponent = result.data;
+        print(successSubmittedComponent);
+      });
+    }
+    await retrieveData(QueryComponent(calculatorId: calculatorId));
   }
 }

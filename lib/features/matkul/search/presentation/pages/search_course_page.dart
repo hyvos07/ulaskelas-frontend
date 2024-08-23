@@ -31,8 +31,8 @@ class _SearchCoursePageState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (Pref.getBool('doneAppTour') == false ||
-          Pref.getBool('doneAppTour') == null) {
+      if ((Pref.getBool('doneAppTour') == false ||
+          Pref.getBool('doneAppTour') == null) && !backFromTanyaTeman) {
         showcaseSearchPage();
       }
     });
@@ -88,9 +88,10 @@ class _SearchCoursePageState
                     overlayColor: BaseColors.neutral100,
                     overlayOpacity: 0.5,
                     targetPadding: const EdgeInsets.all(10),
+                    targetBorderRadius: BorderRadius.circular(10),
                     blurValue: 1,
                     height: 0,
-                    width: 350,
+                    width: MediaQuery.of(context).size.width,
                     disposeOnTap: false,
                     disableBarrierInteraction: true,
                     disableMovingAnimation: true,

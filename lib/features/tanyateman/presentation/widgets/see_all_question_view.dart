@@ -93,16 +93,32 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                         ),
                       ),
                       const HeightSpace(15),
-                      Row(
-                        children: [
-                          UserProfileBox(
-                            name: profileRM.state.profile.name ?? 'Ujang Iman',
-                          ),
-                          const WidthSpace(10),
-                          AskQuestionBox(
-                            onTap: () => nav.goToAddQuestionPage(),
-                          )
-                        ],
+                      Showcase.withWidget(
+                        key: inAppTourKeys.userBoxTT,
+                        overlayColor: BaseColors.neutral100,
+                        overlayOpacity: 0.5,
+                        targetPadding: const EdgeInsets.all(10),
+                        targetBorderRadius: BorderRadius.circular(10),
+                        blurValue: 1,
+                        height: 0,
+                        width: MediaQuery.of(context).size.width,
+                        disposeOnTap: false,
+                        disableBarrierInteraction: true,
+                        disableMovingAnimation: true,
+                        onTargetClick: () {},
+                        container: userBoxTTShowcase(context),
+                        child: Row(
+                          children: [
+                            UserProfileBox(
+                              name:
+                                  profileRM.state.profile.name ?? 'Ujang Iman',
+                            ),
+                            const WidthSpace(10),
+                            AskQuestionBox(
+                              onTap: () => nav.goToAddQuestionPage(),
+                            )
+                          ],
+                        ),
                       ),
                       const HeightSpace(25),
                       OnBuilder<QuestionState>.all(

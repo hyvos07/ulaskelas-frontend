@@ -16,6 +16,17 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if ((Pref.getBool('doneAppTour') == false ||
+          Pref.getBool('doneAppTour') == null) && !backFromCalculator) {
+        showcaseTanyaTeman();
+      }
+    });
+  }
+
+  @override
   ScaffoldAttribute buildAttribute() {
     return ScaffoldAttribute();
   }
@@ -30,100 +41,124 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
     BuildContext context,
     SizingInformation sizeInfo,
   ) {
-    return SafeArea(
-      child: Column(
-        children: [
-          OnReactive(
-            () => Padding(
-              padding: EdgeInsets.only(
-                left: searchQuestionRM.state.searchData?.text != null ? 22 : 24,
-                right:
-                    searchQuestionRM.state.searchData?.text != null ? 22 : 24,
-                top: 10,
-                bottom: 3,
-              ),
-              child: Row(
-                children: [
-                  if (searchQuestionRM.state.searchData?.text != null)
-                    Row(
+    return ShowCaseWidget(
+      builder: (context) {
+        tanyaTemanContext = context;
+        return SafeArea(
+          child: Column(
+            children: [
+              OnReactive(
+                () => Padding(
+                  padding: EdgeInsets.only(
+                    left: searchQuestionRM.state.searchData?.text != null
+                        ? 22
+                        : 24,
+                    right: searchQuestionRM.state.searchData?.text != null
+                        ? 22
+                        : 24,
+                    top: 10,
+                    bottom: 3,
+                  ),
+                  child: Showcase.withWidget(
+                    key: inAppTourKeys.searchBarTT,
+                    overlayColor: BaseColors.neutral100,
+                    overlayOpacity: 0.5,
+                    targetPadding: const EdgeInsets.all(8),
+                    targetBorderRadius: BorderRadius.circular(10),
+                    blurValue: 1,
+                    height: 0,
+                    width: MediaQuery.of(context).size.width,
+                    disposeOnTap: false,
+                    disableBarrierInteraction: true,
+                    disableMovingAnimation: true,
+                    onTargetClick: () {},
+                    container: searchBarTTShowcase(context),
+                    child: Row(
                       children: [
-                        IconButton(
-                          onPressed: () => {
-                            searchQuestionRM.setState(
-                              (s) => s.searchData = SearchData(),
-                            ),
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back_rounded,
-                            size: 24,
-                            color: BaseColors.gray2,
+                        if (searchQuestionRM.state.searchData?.text != null)
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () => {
+                                  searchQuestionRM.setState(
+                                    (s) => s.searchData = SearchData(),
+                                  ),
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_back_rounded,
+                                  size: 24,
+                                  color: BaseColors.gray2,
+                                ),
+                                splashRadius: 20,
+                                constraints: const BoxConstraints(),
+                                padding: const EdgeInsets.all(5),
+                              ),
+                              const SizedBox(width: 10),
+                            ],
                           ),
-                          splashRadius: 20,
-                          constraints: const BoxConstraints(),
-                          padding: const EdgeInsets.all(5),
-                        ),
-                        const SizedBox(width: 10),
-                      ],
-                    ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => {
-                        nav.goToSearchQuestionPage(),
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: BaseColors.gray3,
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.search,
-                              size: 20,
-                              color: BaseColors.gray3,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                searchQuestionRM.state.searchData?.text ??
-                                    'Cari Matkul atau Pertanyaan',
-                                style: FontTheme.poppins12w500black().copyWith(
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => {
+                              nav.goToSearchQuestionPage(),
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
                                   color: BaseColors.gray3,
                                 ),
-                                overflow: TextOverflow.ellipsis,
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.search,
+                                    size: 20,
+                                    color: BaseColors.gray3,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      searchQuestionRM.state.searchData?.text ??
+                                          'Cari Matkul atau Pertanyaan',
+                                      style: FontTheme.poppins12w500black()
+                                          .copyWith(
+                                        color: BaseColors.gray3,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+              Expanded(
+                child: OnBuilder<SearchQuestionState>.all(
+                  listenTo: searchQuestionRM,
+                  onIdle: () => const CircleLoading(),
+                  onWaiting: () => const CircleLoading(),
+                  onError: (error, refreshError) => Text(error.toString()),
+                  onData: (data) {
+                    if (searchQuestionRM.state.searchData?.text != null) {
+                      return _buildSearchResult();
+                    }
+                    return _buildNormalResult();
+                  },
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: OnBuilder<SearchQuestionState>.all(
-              listenTo: searchQuestionRM,
-              onIdle: () => const CircleLoading(),
-              onWaiting: () => const CircleLoading(),
-              onError: (error, refreshError) => Text(error.toString()),
-              onData: (data) {
-                if (searchQuestionRM.state.searchData?.text != null) {
-                  return _buildSearchResult();
-                }
-                return _buildNormalResult();
-              },
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 

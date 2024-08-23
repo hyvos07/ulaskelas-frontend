@@ -10,14 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:ulaskelas/core/constants/_constants.dart';
+import 'package:ulaskelas/core/utils/in_app_tour/showcase_flow.dart';
 import 'package:ulaskelas/features/tanyateman/domain/entities/query_question.dart';
 import 'package:ulaskelas/features/tanyateman/presentation/states/_states.dart';
 
 import '../../../../core/bases/states/_states.dart';
 import '../../../../core/error/_error.dart';
 import '../../../../core/theme/_theme.dart';
+import '../../../../core/utils/in_app_tour/containers/_containers.dart';
 import '../../../matkul/search/data/models/_models.dart';
 import '../../../matkul/search/presentation/states/_states.dart';
 import '../../../matkul/search/presentation/widgets/_widgets.dart';

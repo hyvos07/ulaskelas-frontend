@@ -12,18 +12,19 @@ class SemesterState {
 
   List<SemesterModel> get semesters => _semesters ?? [];
   List<SemesterModel> get autoFillSemesters => _autoFillSemesters ?? [];
-  List<SemesterModel> get availableSemestersToFill => 
-    (_semesters?.isEmpty ?? true)
-      ? (_autoFillSemesters ?? [])
-      : (_autoFillSemesters ?? []).where(
-          (autoFillSemester) {
-            return !semesters.any(
-              (semester) {
-                return semester.givenSemester == autoFillSemester.givenSemester;
+  List<SemesterModel> get availableSemestersToFill =>
+      (_semesters?.isEmpty ?? true)
+          ? (_autoFillSemesters ?? [])
+          : (_autoFillSemesters ?? []).where(
+              (autoFillSemester) {
+                return !semesters.any(
+                  (semester) {
+                    return semester.givenSemester ==
+                        autoFillSemester.givenSemester;
+                  },
+                );
               },
-            );
-          },
-        ).toList();
+            ).toList();
 
   String get cumulativeGPA => _repo.gpa;
 
@@ -107,8 +108,7 @@ class SemesterState {
   Future<void> postAutoFillSemester(Map<String, dynamic> model) async {
     final resp = await _repo.postAutoFillSemester(model);
     await resp.fold((failure) {
-      ErrorMessenger('Data Semester gagal dibuat')
-          .show(ctx!);
+      ErrorMessenger('Data Semester gagal dibuat').show(ctx!);
     }, (result) async {
       SuccessMessenger('Data Semester berhasil dibuat').show(ctx!);
       final calcResp = await _repo.getSemesters();
@@ -118,8 +118,16 @@ class SemesterState {
         _semesters = result.data;
         print(_semesters);
       });
+
+      // For Showcase Purpose (new user)
+      if (Pref.getBool('doneAppTour') == false ||
+          Pref.getBool('doneAppTour') == null) {
+        final semester = _semesters!.first;
+        await calculatorRM.state.retrieveData(semester.givenSemester!);
+        final calculator = calculatorRM.state.calculators.first;
+        await componentRM.state.addShowcaseComponent(calculator.id!);
+      }
     });
     semesterRM.notify();
-
   }
 }

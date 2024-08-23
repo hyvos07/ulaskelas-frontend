@@ -9,7 +9,7 @@ class TargetScoreDropdown extends StatelessWidget {
     required this.canGiveRecom,
     this.target,
     this.voidWhenReachedMax,
-    super.key
+    super.key,
   });
   final void Function(String?)? voidWhenReachedMax;
   final VoidCallback voidWhenHasntReacedhMax;

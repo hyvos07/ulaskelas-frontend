@@ -34,6 +34,17 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Pref.getBool('doneAppTour') == false ||
+          Pref.getBool('doneAppTour') == null) {
+        showcaseSemesterPage();
+      }
+    });
+  }
+
+  @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return BaseAppBar(
       label: 'Kalkulator Nilai - $semesterName',
@@ -130,6 +141,55 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
                         return _addButton();
                       }
                       final calculator = calculators[index];
+                      if (index == 0) {
+                        return ShowCaseWidget(
+                          builder: (context) {
+                            semesterContext = context;
+                            return Showcase.withWidget(
+                              key: inAppTourKeys.courseCardGC,
+                              overlayColor: BaseColors.neutral100,
+                              overlayOpacity: 0.5,
+                              targetPadding: const EdgeInsets.all(12),
+                              targetBorderRadius: BorderRadius.circular(10),
+                              blurValue: 1,
+                              height: 0,
+                              width: MediaQuery.of(context).size.width,
+                              disposeOnTap: false,
+                              disableBarrierInteraction: true,
+                              disableMovingAnimation: true,
+                              onTargetClick: () async {
+                                ShowCaseWidget.of(context).dismiss();
+                                nav.pop();
+                                backToMatkulCalcPage =
+                                    () => nav.goToComponentCalculatorPage(
+                                          givenSemester: widget.givenSemester!,
+                                          courseId: calculator.courseId!,
+                                          calculatorId: calculator.id!,
+                                          courseName: calculator.courseName!,
+                                          totalScore: calculator.totalScore!,
+                                          totalPercentage:
+                                              calculator.totalPercentage!,
+                                        );
+                                backFromNavbarProfile = false;
+                                backToMatkulCalcPage();
+                              },
+                              container: courseCardGCShowcase(context),
+                              child: CardCalculator(
+                                model: calculator,
+                                givenSemester: widget.givenSemester!,
+                                onTap: () => nav.goToComponentCalculatorPage(
+                                  givenSemester: widget.givenSemester!,
+                                  courseId: calculator.courseId!,
+                                  calculatorId: calculator.id!,
+                                  courseName: calculator.courseName!,
+                                  totalScore: calculator.totalScore!,
+                                  totalPercentage: calculator.totalPercentage!,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
                       return CardCalculator(
                         model: calculator,
                         givenSemester: widget.givenSemester!,

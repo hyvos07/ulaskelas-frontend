@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:ulaskelas/core/bases/states/_states.dart';
 import 'package:ulaskelas/core/theme/_theme.dart';
+import 'package:ulaskelas/core/utils/in_app_tour/showcase_flow.dart';
 import 'package:ulaskelas/features/matkul/search/presentation/widgets/_widgets.dart';
 import 'package:ulaskelas/features/profile/presentation/widgets/profile_data.dart';
 import 'package:ulaskelas/services/_services.dart';
@@ -22,6 +23,17 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends BaseStateful<ProfilePage> {
   @override
   void init() {}
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Pref.getBool('doneAppTour') == false ||
+          Pref.getBool('doneAppTour') == null) {
+        showInAppTourClosing(context);
+      }
+    });
+  }
 
   @override
   ScaffoldAttribute buildAttribute() {

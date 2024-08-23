@@ -48,7 +48,7 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (Pref.getBool('doneAppTour') == false ||
           Pref.getBool('doneAppTour') == null) {
         showcaseCourseDetail();
@@ -148,9 +148,10 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
                           overlayColor: BaseColors.neutral100,
                           overlayOpacity: 0.5,
                           targetPadding: const EdgeInsets.all(14),
+                          targetBorderRadius: BorderRadius.circular(10),
                           blurValue: 1,
                           height: 0,
-                          width: 325,
+                          width: MediaQuery.of(context).size.width,
                           disposeOnTap: false,
                           disableBarrierInteraction: true,
                           disableMovingAnimation: true,
@@ -180,9 +181,10 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
                           overlayColor: BaseColors.neutral100,
                           overlayOpacity: 0.5,
                           targetPadding: const EdgeInsets.all(14),
+                          targetBorderRadius: BorderRadius.circular(10),
                           blurValue: 1,
                           height: 0,
-                          width: 350,
+                          width: MediaQuery.of(context).size.width,
                           disposeOnTap: false,
                           disableBarrierInteraction: true,
                           disableMovingAnimation: true,
@@ -266,9 +268,10 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
           overlayColor: BaseColors.neutral100,
           overlayOpacity: 0.5,
           targetPadding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
+          targetBorderRadius: BorderRadius.circular(10),
           blurValue: 1,
           height: 0,
-          width: 350,
+          width: MediaQuery.of(context).size.width,
           disposeOnTap: false,
           disableBarrierInteraction: true,
           disableMovingAnimation: true,
@@ -277,6 +280,10 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
             detailMatkulContext!,
             scrollController,
             isScrollable,
+            () => nav.goToDetailMatkulPage(
+              course.id!,
+              course.code!,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,7 +304,7 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
               if (Pref.getBool('doneAppTour') == false ||
                   Pref.getBool('doneAppTour') == null)
                 ReviewCard(
-                  review: ReviewModel.fromJson(_dummyJson),
+                  review: ReviewModel.fromJson(dummyReview),
                 ),
             ],
           ),
@@ -532,39 +539,4 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
     return !(Pref.getBool('doneAppTour') == false ||
         Pref.getBool('doneAppTour') == null);
   }
-
-  /// Preview only
-  final Map<String, dynamic> _dummyJson = {
-    'id': 270,
-    'user': 1022,
-    'course': 3,
-    'created_at': '2023-07-29T02:13:30.135920Z',
-    'updated_at': '2023-07-29T02:39:56.480157Z',
-    'academic_year': '2021/2022',
-    'semester': 2,
-    'content': 'Berguna banget soalnya di matkul ini belajar OOP '
-        'yang bakal terus kepake kedepannya! Harus banget ngerti '
-        'matkul yang satu ini sih...',
-    'hate_speech_status': 'APPROVED',
-    'sentimen': 0,
-    'is_anonym': true,
-    'is_active': true,
-    'is_reviewed': false,
-    'rating_understandable': 5.0,
-    'rating_fit_to_credit': 5.0,
-    'rating_fit_to_study_book': 5.0,
-    'rating_beneficial': 5.0,
-    'rating_recommended': 5.0,
-    'author': 'muhammad.azmy',
-    'author_generation': '2022',
-    'author_study_program': 'Ilmu Komputer',
-    'course_code': 'CSGE601021',
-    'course_code_desc': 'Wajib Fakultas',
-    'course_name': 'Dasar-Dasar Pemrograman 2',
-    'course_review_count': 14,
-    'tags': [],
-    'likes_count': 0,
-    'is_liked': false,
-    'rating_average': 5.0
-  };
 }

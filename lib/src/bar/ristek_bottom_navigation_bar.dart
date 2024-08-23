@@ -27,6 +27,8 @@ class _NewRistekBotNavBarState extends State<NewRistekBotNavBar> {
   Widget build(BuildContext context) {
     final iconSize = 22.0;
     final theme = Theme.of(context);
+    navbarController = widget.onTap;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(7, 12, 7, 0),
       decoration: BoxDecoration(
@@ -51,9 +53,10 @@ class _NewRistekBotNavBarState extends State<NewRistekBotNavBar> {
                 ),
                 blurValue: 1,
                 height: 600,
-                width: 325,
+                width: MediaQuery.of(context).size.width,
                 disposeOnTap: false,
                 disableBarrierInteraction: true,
+                disableMovingAnimation: true,
                 onTargetClick: () {
                   ShowCaseWidget.of(context).dismiss();
                   widget.onTap(widget.items.indexOf(e));
@@ -142,9 +145,13 @@ class _NewRistekBotNavBarState extends State<NewRistekBotNavBar> {
   Widget _decideContainer(String text) {
     switch (text) {
       case 'Matkul':
-        return navbarMatkulShowcase(text, widget.onTap, context);
+        return navbarMatkulShowcase(text, context);
       case 'Tanya Teman':
-        return navbarTanyaTemanShowcase(text, widget.onTap, context);
+        return navbarTanyaTemanShowcase(text, context);
+      case 'Kalkulator':
+        return navbarCalcShowcase(text, context);
+      case 'Profil':
+        return navbarProfileShowcase(text, context);
       default:
         return Container();
     }

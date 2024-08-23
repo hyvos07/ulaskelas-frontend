@@ -11,9 +11,8 @@ import 'package:ulaskelas/core/utils/in_app_tour/showcase_flow.dart';
 import 'package:ulaskelas/features/matkul/search/data/models/_models.dart';
 import 'package:ulaskelas/features/matkul/search/presentation/states/_states.dart';
 import 'package:ulaskelas/features/matkul/search/presentation/widgets/skeleton_card_course.dart';
-import 'package:ulaskelas/services/_services.dart';
 
-import '../../../../../core/utils/in_app_tour/widgets/_widgets.dart';
+import '../../../../../core/utils/in_app_tour/containers/_containers.dart';
 
 part 'base_app_bar.dart';
 part 'card_course.dart';

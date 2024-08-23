@@ -3,14 +3,16 @@ part of '_widgets.dart';
 class ExpansionCard extends StatefulWidget {
   // Semester semester => list of course dan semester ke berapa
   const ExpansionCard({
-    super.key, 
+    super.key,
     this.title,
     this.children,
+    this.forShowcase = false,
     this.onCheckboxChanged,
   });
 
   final String? title;
   final List<String>? children;
+  final bool forShowcase;
   final void Function(bool isChecked)? onCheckboxChanged;
 
   @override
@@ -20,31 +22,31 @@ class ExpansionCard extends StatefulWidget {
 class _ExpansionCardState extends State<ExpansionCard> {
   bool _isExpanded = false;
   bool? _isCheck = false;
+  bool _forShowcase = true;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      margin: const EdgeInsets.only(
-        bottom: 13, left: 16, right: 16, top: 2.5
-      ),
+      margin: const EdgeInsets.only(bottom: 13, left: 16, right: 16, top: 2.5),
       child: ListTileTheme(
         dense: true,
         horizontalTitleGap: 0.0,
         minLeadingWidth: 0,
         child: ExpansionTile(
+          initiallyExpanded: widget.forShowcase,
           title: Row(
             children: [
-              const SizedBox(width: 5,),
+              const WidthSpace(5),
               Icon(
-                _isExpanded 
-                  ? Icons.arrow_drop_down_rounded 
-                  : Icons.arrow_drop_up_rounded, 
+                _isExpanded || (widget.forShowcase && _forShowcase)
+                    ? Icons.arrow_drop_up_rounded
+                    : Icons.arrow_drop_down_rounded,
                 size: 30,
                 color: BaseColors.mineShaft.withOpacity(0.6),
               ),
               Text(
-                widget.title!, 
+                widget.title!,
                 style: FontTheme.poppins12w500black(),
               ),
             ],
@@ -53,6 +55,7 @@ class _ExpansionCardState extends State<ExpansionCard> {
           onExpansionChanged: (value) {
             setState(() {
               _isExpanded = value;
+              _forShowcase = value;
             });
           },
           trailing: Transform.scale(
@@ -64,16 +67,18 @@ class _ExpansionCardState extends State<ExpansionCard> {
               activeColor: BaseColors.accentColor,
               onChanged: (value) {
                 setState(() {
-                  _isCheck = value;
-                  widget.onCheckboxChanged!(_isCheck!);
+                  if (!widget.forShowcase) {
+                    _isCheck = value;
+                    widget.onCheckboxChanged!(_isCheck!);
+                  }
                 });
               },
-              value: _isCheck,
+              value: _isCheck! || widget.forShowcase,
             ),
           ),
           childrenPadding: const EdgeInsets.only(
-            left: 17.5, 
-            bottom: 10, 
+            left: 17.5,
+            bottom: 10,
             right: 17,
           ),
           children: widget.children!.map((e) {
@@ -83,7 +88,7 @@ class _ExpansionCardState extends State<ExpansionCard> {
                 Container(
                   margin: const EdgeInsets.only(top: 5.5),
                   child: Icon(
-                    Icons.fiber_manual_record, 
+                    Icons.fiber_manual_record,
                     size: 5,
                     color: BaseColors.mineShaft.withOpacity(0.78),
                   ),
@@ -92,10 +97,9 @@ class _ExpansionCardState extends State<ExpansionCard> {
                 Expanded(
                   child: Text(
                     e,
-                    style: FontTheme.poppins10w400black()
-                        .copyWith(
-                          color: BaseColors.mineShaft.withOpacity(0.78),
-                        ),
+                    style: FontTheme.poppins10w400black().copyWith(
+                      color: BaseColors.mineShaft.withOpacity(0.78),
+                    ),
                     overflow: TextOverflow.visible,
                     softWrap: true,
                   ),

@@ -15,7 +15,7 @@ import 'package:ulaskelas/features/matkul/search/presentation/states/_states.dar
 import 'package:ulaskelas/features/matkul/search/presentation/widgets/_widgets.dart';
 import 'package:ulaskelas/services/_services.dart';
 
-import '../../../../../core/utils/in_app_tour/widgets/_widgets.dart';
+import '../../../../../core/utils/in_app_tour/containers/_containers.dart';
 
 part 'filter_page.dart';
 part 'search_course_page.dart';
