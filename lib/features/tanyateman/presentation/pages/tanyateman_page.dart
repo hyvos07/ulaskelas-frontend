@@ -20,7 +20,8 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if ((Pref.getBool('doneAppTour') == false ||
-          Pref.getBool('doneAppTour') == null) && !backFromCalculator) {
+              Pref.getBool('doneAppTour') == null) &&
+          !backFromCalculator) {
         showcaseTanyaTeman();
       }
     });

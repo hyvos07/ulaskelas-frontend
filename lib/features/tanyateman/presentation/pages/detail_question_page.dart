@@ -41,7 +41,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     _pageController = PageController(initialPage: pageViewIndex);
     _pageController.addListener(_onPageChanged);
   }
-  
+
   @override
   void dispose() {
     _pageController.removeListener(_onPageChanged);
@@ -62,7 +62,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     if (_pageController.page == 0) {
       lastScrollPosition = scrollController.offset; // Save scroll position
     }
-    
+
     if (_isBottom && !completer!.isCompleted && scrollCondition()) {
       print('${scrollCondition()}');
       onScroll();
@@ -169,7 +169,10 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                       children: List.generate(
                         10,
                         (index) => const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 20,
+                          ),
                           child: SkeletonCardPost(
                             isReply: true,
                           ),
@@ -180,41 +183,45 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                       children: List.generate(
                         10,
                         (index) => const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 20,
+                          ),
                           child: SkeletonCardPost(
                             isReply: true,
                           ),
                         ),
                       ),
                     ),
-                    onError: (dynamic error, refresh) =>
-                        Text(error.toString()),
+                    onError: (dynamic error, refresh) => Text(error.toString()),
                     onData: (data) {
                       return Column(
-                        children : [
+                        children: [
                           Center(
-                          child: SmoothPageIndicator(
-                            controller: _pageController,
-                            count: 2,
-                            effect: ExpandingDotsEffect(
-                              dotHeight: 8,
-                              dotWidth: 8,
-                              activeDotColor: BaseColors.primary,
+                            child: SmoothPageIndicator(
+                              controller: _pageController,
+                              count: 2,
+                              effect: ExpandingDotsEffect(
+                                dotHeight: 8,
+                                dotWidth: 8,
+                                activeDotColor: BaseColors.primary,
+                              ),
                             ),
                           ),
-                        ),
-                        const HeightSpace(10),
+                          const HeightSpace(10),
                           ExpandablePageView.builder(
                             controller: _pageController,
-                            animationDuration: const Duration(milliseconds: 800),
+                            animationDuration:
+                                const Duration(milliseconds: 800),
                             animationCurve: Curves.fastLinearToSlowEaseIn,
                             itemCount: 2,
                             itemBuilder: (context, index) {
                               if (index == 0) {
-                                return _buildShowComments(answersRM.state.allAnswer);
+                                return _buildShowComments(
+                                    answersRM.state.allAnswer);
                               }
                               return _buildCommentForm();
-                            }
+                            },
                           ),
                         ],
                       );
@@ -259,15 +266,15 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                 },
               ),
               const HeightSpace(20),
-              OnReactive(() 
-                => SendAsAnonymSwitcher(
+              OnReactive(
+                () => SendAsAnonymSwitcher(
                   isAnonym: answerFormRM.state.isAnonym,
                   onChanged: answerFormRM.state.setIsAnonym,
                 ),
               ),
               const HeightSpace(20),
-              OnReactive(() 
-                => ImagePickerBox(
+              OnReactive(
+                () => ImagePickerBox(
                   onTapUpload: answerFormRM.state.pickImage,
                   onTapSeeImage: seeImage,
                   isImageSizeTooBig: answerFormRM.state.isImageSizeTooBig,
@@ -309,10 +316,10 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                     duration: const Duration(milliseconds: 1000),
                     curve: Curves.fastLinearToSlowEaseIn,
                   );
-                  
+
                   if (!_isBottom) {
                     await scrollController.animateTo(
-                      scrollController.position.maxScrollExtent, 
+                      scrollController.position.maxScrollExtent,
                       duration: const Duration(milliseconds: 250),
                       curve: Curves.decelerate,
                     );
@@ -328,8 +335,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: data.length + 1,
-          separatorBuilder: (context, index) =>
-              const HeightSpace(16),
+          separatorBuilder: (context, index) => const HeightSpace(16),
           itemBuilder: (context, index) {
             if (index == data.length) {
               return !answersRM.state.hasReachedMax
@@ -341,24 +347,22 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                         size: 25,
                       ),
                     )
-                  : data.length == 0
-                    ? _buildBottomMax(true)
-                    : _buildBottomMax(false);
+                  : data.isEmpty
+                      ? _buildBottomMax(true)
+                      : _buildBottomMax(false);
             }
-            final answer =
-                data[index];
+            final answer = data[index];
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
               child: CardPost(
                 isReply: true,
                 answerModel: answer,
                 imageTag: 'reply-image-preview?id=${answer.id}',
-                onRefreshImage: () => answersRM.notify(),
+                onRefreshImage: answersRM.notify,
                 onImageTap: () => seeImage(
-                  isReply: true,
-                  replyId: answer.id.toString(),
-                  replyUrlFile: answer.attachmentUrl
-                ),
+                    isReply: true,
+                    replyId: answer.id.toString(),
+                    replyUrlFile: answer.attachmentUrl),
                 optionChoices: const ['Report'],
                 onOptionChoosed: (value) {
                   if (value == 'Report') {
@@ -378,9 +382,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Text(
-        emptyList
-          ? 'Belum ada jawaban.'
-          : 'Tidak ada jawaban lagi.',
+        emptyList ? 'Belum ada jawaban.' : 'Tidak ada jawaban lagi.',
         style: FontTheme.poppins12w600black().copyWith(
           color: BaseColors.gray2.withOpacity(0.7),
         ),
@@ -422,12 +424,9 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     return true;
   }
 
-
   ///////////////////////////
   ///////////////////////////
   ///////////////////////////
-  
-
 
   Future<void> onScroll() async {
     completer?.complete();
@@ -457,7 +456,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     final maxScroll = scrollController.position.maxScrollExtent;
     final currentScroll = scrollController.offset;
     // print(currentScroll >= (maxScroll * 0.95) && _pageController.page == 0);
-    return currentScroll >= (maxScroll * 0.95 ) && _pageController.page == 0;
+    return currentScroll >= (maxScroll * 0.95) && _pageController.page == 0;
   }
-
 }
