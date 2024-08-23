@@ -7,6 +7,9 @@ abstract class QuestionRepository {
   Future<Decide<Failure, Parsed<List<QuestionModel>>>> getHistoryQuestions(
     QueryQuestion query,
   );
+  Future<Decide<Failure, Parsed<List<QuestionModel>>>> getSearchQuestions(
+    QueryQuestion query,
+  );
   Future<Decide<Failure, Parsed<Map<String,dynamic>>>> postQuestion(
     Map<String,dynamic> model,
   );

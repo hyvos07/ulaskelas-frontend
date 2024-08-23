@@ -308,13 +308,8 @@ class _SearchQuestionPageState
       searchCourseRM.state.controller.text,
     ); // Save to history after search
     focusNode.unfocus();
-    final selectedFilter = searchQuestionRM.state.searchQuestionFilter;
     final query = QueryQuestion(
-      isHistory: true,
-      isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
-      isVerified: selectedFilter == 'terverifikasi' ? true : null,
-      isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
-    );
+      searchKeyword: searchCourseRM.state.controller.text,);
     await searchQuestionRM.setState(
       (s) => s.retrieveSearchedQuestion(query),
     );

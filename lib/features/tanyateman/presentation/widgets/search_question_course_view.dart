@@ -102,7 +102,7 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
-          vertical: 12,
+          vertical: 20,
         ),
         decoration: BoxDecoration(
           color: BaseColors.white,
@@ -119,12 +119,7 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
 
   Future<void> onSubmittingSearch(CourseModel model) async {
     final selectedFilter = searchQuestionRM.state.searchQuestionFilter;
-    final query = QueryQuestion(
-      isHistory: true,
-      isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
-      isVerified: selectedFilter == 'terverifikasi' ? true : null,
-      isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
-    );
+    final query = QueryQuestion(searchCourseId: model.id);
     await searchQuestionRM.setState((s) => s.retrieveSearchedQuestion(query));
     await searchQuestionRM.setState(
       (s) => s.searchData = SearchData(

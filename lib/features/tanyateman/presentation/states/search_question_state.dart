@@ -23,7 +23,7 @@ class SearchQuestionState {
   Future<void> retrieveSearchedQuestion(QueryQuestion q) async {
     page = 1;
     q.page = page;
-    final resp = await _repo.getHistoryQuestions(q);
+    final resp = await _repo.getSearchQuestions(q);
     resp.fold((failure) => throw failure, (result) {
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
@@ -39,7 +39,7 @@ class SearchQuestionState {
   Future<void> retrieveMoreSearchedQuestion(QueryQuestion q) async {
     ++page;
     q.page = page;
-    final resp = await _repo.getHistoryQuestions(q);
+    final resp = await _repo.getSearchQuestions(q);
     resp.fold((failure) => throw failure, (result) {
       _searchedQuestions?.addAll(result.data);
       final lessThanLimit = result.data.length < 10;

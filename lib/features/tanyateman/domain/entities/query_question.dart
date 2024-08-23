@@ -8,7 +8,9 @@ class QueryQuestion {
     this.isHistory,
     this.isMostPopular,
     this.isVerified,
-    this.isWaitToVerify
+    this.isWaitToVerify,
+    this.searchKeyword,
+    this.searchCourseId
   });
 
   int? page;
@@ -18,6 +20,8 @@ class QueryQuestion {
   bool? isMostPopular;
   bool? isVerified;
   bool? isWaitToVerify;
+  String? searchKeyword;
+  int? searchCourseId;
 
   @override
   String toString() {
@@ -29,6 +33,8 @@ class QueryQuestion {
     data['is_paling_banyak_disukai'] = isMostPopular.toString();
     data['terverifikasi'] = isVerified.toString();
     data['menunggu_verifikasi'] = isWaitToVerify.toString();
+    data['keyword'] = searchKeyword.toString();
+    data['course_id'] = searchCourseId.toString();
     return Uri(queryParameters: data).query;
   }
 
@@ -42,6 +48,8 @@ class QueryQuestion {
     if (isMostPopular != null) data['is_paling_banyak_disukai'] = isMostPopular.toString();
     if (isVerified != null) data['terverifikasi'] = isVerified.toString();
     if (isWaitToVerify != null) data['menunggu_verifikasi'] = isWaitToVerify.toString();
+    if (searchKeyword != null) data['keyword'] = searchKeyword.toString();
+    if (searchCourseId != null) data['course_id'] = searchCourseId.toString();
 
     return Uri(queryParameters: data).query;
   }
