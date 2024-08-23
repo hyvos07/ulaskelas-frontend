@@ -47,6 +47,16 @@ class SemesterState {
       print(_semesters);
     });
     semesterRM.notify();
+
+    // For Showcase Purpose (new user)
+    if (Pref.getBool('doneAppTour') == false ||
+        Pref.getBool('doneAppTour') == null) {
+      if (semesterRM.state.semesters.isEmpty) {
+        await showcaseEmptySemester();
+      } else {
+        await showcaseFilledSemester();
+      }
+    }
   }
 
   Future<void> postSemester(List<String> givenSemesters) async {
@@ -119,6 +129,8 @@ class SemesterState {
         print(_semesters);
       });
 
+      semesterRM.notify();
+
       // For Showcase Purpose (new user)
       if (Pref.getBool('doneAppTour') == false ||
           Pref.getBool('doneAppTour') == null) {
@@ -126,8 +138,9 @@ class SemesterState {
         await calculatorRM.state.retrieveData(semester.givenSemester!);
         final calculator = calculatorRM.state.calculators.first;
         await componentRM.state.addShowcaseComponent(calculator.id!);
+
+        await showcaseFilledSemester();
       }
     });
-    semesterRM.notify();
   }
 }

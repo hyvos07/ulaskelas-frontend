@@ -10,6 +10,7 @@ import 'package:ulaskelas/features/kalkulator/domain/entities/query_calculator.d
 import 'package:ulaskelas/features/kalkulator/domain/entities/query_component.dart';
 import 'package:ulaskelas/features/kalkulator/domain/repositories/_repositories.dart';
 
+import '../../../../core/utils/in_app_tour/showcase_flow.dart';
 import '../../../../core/utils/in_app_tour/showcase_preview_data.dart';
 import '../../../../core/utils/util.dart';
 import '../../../../services/_services.dart';

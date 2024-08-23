@@ -67,10 +67,10 @@ Widget finalScoreGCShowcase(BuildContext ctx) {
                   ),
                   width: 90,
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       ShowCaseWidget.of(ctx).dismiss();
                       print('User skip!');
-                      // await Pref.saveBool('doneAppTour', value: true);
+                      await Pref.saveBool('doneAppTour', value: true);
                     },
                     child: Text(
                       'Lewati',
@@ -166,10 +166,10 @@ Widget totalComponentGCShowcase(BuildContext ctx) {
                   ),
                   width: 75,
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       ShowCaseWidget.of(ctx).dismiss();
                       print('User skip!');
-                      // await Pref.saveBool('doneAppTour', value: true);
+                      await Pref.saveBool('doneAppTour', value: true);
                     },
                     child: Text(
                       'Lewati',

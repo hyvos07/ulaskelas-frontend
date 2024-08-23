@@ -22,17 +22,6 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (Pref.getBool('doneAppTour') == false ||
-          Pref.getBool('doneAppTour') == null) {
-        showcaseEmptySemester();
-      }
-    });
-  }
-
-  @override
   ScaffoldAttribute buildAttribute() {
     return ScaffoldAttribute();
   }
@@ -344,6 +333,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
               },
               container: autoFillGCShowcase(calculatorContext!),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GradientBorderButton(
                     padding: const EdgeInsets.symmetric(
@@ -364,11 +354,13 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                       showAutoFillSemesterDialog(context),
                     }, // To Be Implemented
                   ),
-                  const HeightSpace(7),
+                  const HeightSpace(5),
                   Text(
-                    '*Only available for Faculty of Computer Science for now.',
+                    '*Saat ini, fitur hanya bisa digunakan oleh '
+                    'mahasiswa/i Fakultas Ilmu Komputer.',
                     style: FontTheme.poppins10w400black().copyWith(
                       color: BaseColors.gray1,
+                      fontSize: 8,
                     ),
                   ),
                 ],

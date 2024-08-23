@@ -68,11 +68,11 @@ Widget detailCourseDMShowCase(
                             ),
                             width: 90,
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 ShowCaseWidget.of(ctx).dismiss();
                                 isScrollable(true);
                                 print('User skip!');
-                                // await Pref.saveBool('doneAppTour', value: true);
+                                await Pref.saveBool('doneAppTour', value: true);
                               },
                               child: Text(
                                 'Lewati',
@@ -207,11 +207,11 @@ Widget reviewByYouDMShowcase(
                             ),
                             width: 90,
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 ShowCaseWidget.of(ctx).dismiss();
                                 isScrollable(true);
                                 print('User skip!');
-                                // await Pref.saveBool('doneAppTour', value: true);
+                                await Pref.saveBool('doneAppTour', value: true);
                               },
                               child: Text(
                                 'Lewati',
@@ -347,11 +347,11 @@ Widget reviewsDMShowcase(
                             ),
                             width: 90,
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 ShowCaseWidget.of(ctx).dismiss();
                                 isScrollable(true);
                                 print('User skip!');
-                                // await Pref.saveBool('doneAppTour', value: true);
+                                await Pref.saveBool('doneAppTour', value: true);
                               },
                               child: Text(
                                 'Lewati',

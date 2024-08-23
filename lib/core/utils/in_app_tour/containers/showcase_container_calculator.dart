@@ -58,11 +58,11 @@ Widget emptyCalcGCShowcase(BuildContext ctx) {
                       ),
                       width: 90,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           backFromCalculator = false;
                           print('User skip!');
-                          // await Pref.saveBool('doneAppTour', value: true);
+                          await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
                           'Lewati',
@@ -190,10 +190,10 @@ Widget autoFillGCShowcase(BuildContext ctx) {
                       ),
                       width: 90,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           print('User skip!');
-                          // await Pref.saveBool('doneAppTour', value: true);
+                          await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
                           'Lewati',
@@ -251,25 +251,34 @@ Widget filledCalcGCShowcase(BuildContext ctx) {
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // const WidthSpace(5),
-          // IconButton(
-          //   onPressed: () {
-          //     // Can't use back because user view has changed
-          //   },
-          //   splashColor: BaseColors.transparent,
-          //   constraints: const BoxConstraints(),
-          //   padding: const EdgeInsets.symmetric(horizontal: 7),
-          //   icon: const Icon(
-          //     Icons.arrow_back_rounded,
-          //     color: BaseColors.white,
-          //   ),
-          // ),
-          const WidthSpace(30),
+          const WidthSpace(5),
+          if (!userHasUsedAutoFill)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: () async {
+                    ShowCaseWidget.of(ctx).dismiss();
+                    navbarController(2);
+                    await showcaseNavbarCalc();
+                  },
+                  splashColor: BaseColors.transparent,
+                  constraints: const BoxConstraints(),
+                  padding: const EdgeInsets.symmetric(horizontal: 7),
+                  icon: const Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
+                ),
+              ],
+            ),
+          const WidthSpace(10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Voila, Semester berhasil ditambahkan!',
+                'Disini lah data semester dan nilai yang\n'
+                'kamu punya disimpan!',
                 style: FontTheme.poppins14w700black().copyWith(
                   fontSize: 13,
                   color: BaseColors.white,
@@ -294,10 +303,11 @@ Widget filledCalcGCShowcase(BuildContext ctx) {
                   ),
                   width: 90,
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       ShowCaseWidget.of(ctx).dismiss();
                       print('User skip!');
-                      // await Pref.saveBool('doneAppTour', value: true);
+                      backFromCalculator = false;
+                      await Pref.saveBool('doneAppTour', value: true);
                     },
                     child: Text(
                       'Lewati',
@@ -325,6 +335,7 @@ Widget filledCalcGCShowcase(BuildContext ctx) {
                   ),
                   onPressed: () async {
                     ShowCaseWidget.of(ctx).next();
+                    backFromCalculator = false;
                   },
                 ),
               ],
@@ -412,10 +423,10 @@ Widget semesterCardGCShowcase(BuildContext ctx) {
                       ),
                       width: 90,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           print('User skip!');
-                          // await Pref.saveBool('doneAppTour', value: true);
+                          await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
                           'Lewati',

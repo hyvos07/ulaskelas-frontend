@@ -66,10 +66,10 @@ Widget navbarMatkulShowcase(
                   ),
                   width: 75,
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       ShowCaseWidget.of(ctx).dismiss();
                       print('User skip!');
-                      // await Pref.saveBool('doneAppTour', value: true);
+                      await Pref.saveBool('doneAppTour', value: true);
                     },
                     child: Text(
                       'Lewati',
@@ -176,11 +176,11 @@ Widget navbarTanyaTemanShowcase(
                       ),
                       width: 75,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           backFromTanyaTeman = false;
                           print('User skip!');
-                          // await Pref.saveBool('doneAppTour', value: true);
+                          await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
                           'Lewati',
@@ -296,11 +296,11 @@ Widget navbarCalcShowcase(
                       ),
                       width: 75,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           backFromCalculator = false;
                           print('User skip!');
-                          // await Pref.saveBool('doneAppTour', value: true);
+                          await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
                           'Lewati',
@@ -414,10 +414,10 @@ Widget navbarProfileShowcase(
                       ),
                       width: 75,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           print('User skip!');
-                          // await Pref.saveBool('doneAppTour', value: true);
+                          await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
                           'Lewati',

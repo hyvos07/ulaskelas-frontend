@@ -58,10 +58,10 @@ Widget searchBarSPShowcase(BuildContext ctx) {
                   ),
                   width: 90,
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       ShowCaseWidget.of(ctx).dismiss();
                       print('User skip!');
-                      // await Pref.saveBool('doneAppTour', value: true);
+                      await Pref.saveBool('doneAppTour', value: true);
                     },
                     child: Text(
                       'Lewati',
@@ -161,10 +161,10 @@ Widget filterSPShowcase(BuildContext ctx) {
                       ),
                       width: 90,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           print('User skip!');
-                          // await Pref.saveBool('doneAppTour', value: true);
+                          await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
                           'Lewati',
@@ -268,10 +268,10 @@ Widget cardCourseSPShowcase(BuildContext ctx) {
                       ),
                       width: 90,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           print('User skip!');
-                          // await Pref.saveBool('doneAppTour', value: true);
+                          await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
                           'Lewati',

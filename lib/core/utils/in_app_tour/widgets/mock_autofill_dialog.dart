@@ -138,8 +138,8 @@ class _MockAutoFillDialogState extends State<MockAutoFillDialog> {
                     'given_semesters': selectedSemesterList,
                   };
                   semesterRM.state.postAutoFillSemester(model);
+                  userHasUsedAutoFill = true;
                   nav.pop();
-                  showcaseFilledSemester();
                 },
                 text: 'Tambah Semester',
               ),
@@ -234,10 +234,10 @@ class _MockAutoFillDialogState extends State<MockAutoFillDialog> {
                         ),
                         width: 90,
                         child: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             nav.pop();
                             print('User skip!');
-                            // await Pref.saveBool('doneAppTour', value: true);
+                            await Pref.saveBool('doneAppTour', value: true);
                           },
                           child: Text(
                             'Lewati',

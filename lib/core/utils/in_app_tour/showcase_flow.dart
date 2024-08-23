@@ -7,6 +7,7 @@ import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:ulaskelas/core/theme/_theme.dart';
 
+import '../../../services/_services.dart';
 import '../../bases/states/_states.dart';
 import 'showcase_keys.dart';
 import 'widgets/_widgets.dart';
@@ -30,6 +31,7 @@ BuildContext? matkulCalcContext;
 bool backFromTanyaTeman = false;
 bool backFromCalculator = false;
 bool backFromNavbarProfile = false;
+bool userHasUsedAutoFill = false;
 
 Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
   if (!back) {
@@ -133,10 +135,13 @@ Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
                                 Expanded(
                                   child: Center(
                                     child: InkWell(
-                                      onTap: () {
+                                      onTap: () async {
                                         nav.pop();
                                         print('Dialog is about to be popped!');
-                                        // await Pref.saveBool('doneAppTour', value: true);
+                                        await Pref.saveBool(
+                                          'doneAppTour',
+                                          value: true,
+                                        );
                                       },
                                       child: Text(
                                         'Lewati',
@@ -259,7 +264,7 @@ Future<void> showcaseFilledSemester({
   bool previous = false,
 }) async {
   if (!(back || previous)) {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 400));
   }
 
   ShowCaseWidget.of(calculatorContext!).startShowCase([
@@ -299,6 +304,11 @@ Future<void> showcaseNavbarProfile() async {
 
 Future<void> showInAppTourClosing(BuildContext ctx) async {
   await Future.delayed(const Duration(milliseconds: 700));
+
+  backFromCalculator = false;
+  backFromNavbarProfile = false;
+  backFromTanyaTeman = false;
+  userHasUsedAutoFill = false;
 
   await showGeneralDialog(
     context: ctx,
@@ -421,8 +431,12 @@ Future<void> showInAppTourClosing(BuildContext ctx) async {
                                     text: 'Selesai',
                                     onPressed: () async {
                                       nav.pop();
-                                      print('Dialog is about to be popped!');
-                                      // await Pref.saveBool('doneAppTour', value: true);
+                                      navbarController(0);
+                                      print('User Done!');
+                                      await Pref.saveBool(
+                                        'doneAppTour',
+                                        value: true,
+                                      );
                                     },
                                   ),
                                 ),
