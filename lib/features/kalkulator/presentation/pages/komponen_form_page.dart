@@ -348,17 +348,27 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
                           ),
                         ),
                       ),
-                      const WidthSpace(12),
-                      RecommendedScoreBox(
-                        value: componentFormRM.state.recommendedScore,
-                        score:
-                            componentFormRM.state.scoreControllers.first.text,
-                      ),
+                      if (componentRM.state.hasReachedMax &&
+                          componentRM.state.canGiveRecom)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const WidthSpace(12),
+                            RecommendedScoreBox(
+                              value: componentFormRM.state.recommendedScore,
+                              score: componentFormRM
+                                  .state.scoreControllers.first.text,
+                            ),
+                          ],
+                        ),
                     ],
                   )
                 else
                   ScoresFieldInput(
                     recommendedScore: componentFormRM.state.recommendedScore,
+                    showRecommendedScore: componentRM.state.hasReachedMax &&
+                        componentRM.state.canGiveRecom,
                     averageScoreCalculation: () => data.averageScore() ?? 0,
                     onControllerEmpty: () =>
                         data.scoreControllers.add(TextEditingController()),

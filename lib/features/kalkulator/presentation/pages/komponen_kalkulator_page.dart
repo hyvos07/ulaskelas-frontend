@@ -177,16 +177,19 @@ class _CalculatorComponentPageState
                                               .state.canGiveRecom) {
                                             if (componentRM
                                                 .state.allScoreFilled) {
-                                              print(componentRM
-                                                  .state.allScoreFilled);
+                                              print(
+                                                componentRM
+                                                    .state.allScoreFilled,
+                                              );
                                               ErrorMessenger(
-                                                'Semua nilai komponen sudah terisi',
+                                                'Semua nilai komponen sudah '
+                                                'terisi',
                                               ).show(context);
                                             } else if (!componentRM
                                                 .state.canPass) {
                                               ErrorMessenger(
-                                                'Nilai tidak dapat mencapai minimal '
-                                                'target',
+                                                'Nilai tidak dapat mencapai '
+                                                'minimal target',
                                               ).show(context);
                                             }
                                           }
@@ -196,7 +199,8 @@ class _CalculatorComponentPageState
                                                 componentRM.state.canGiveRecom
                                             ? (String? newValue) {
                                                 componentRM.state.setTarget(
-                                                    int.parse(newValue!));
+                                                  int.parse(newValue!),
+                                                );
                                                 retrieveData();
                                               }
                                             : null,
@@ -308,8 +312,8 @@ class _CalculatorComponentPageState
                             components: [
                               CustomTableRowComponent(
                                 flexRatio: 50,
-                                text:
-                                    '${componentRM.state.components.length} Komponen',
+                                text: '${componentRM.state.components.length} '
+                                    'Komponen',
                               ),
                               CustomTableRowComponent(
                                 flexRatio: 25,

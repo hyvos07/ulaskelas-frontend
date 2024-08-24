@@ -7,6 +7,7 @@ class ScoresFieldInput extends StatelessWidget {
     required this.onControllerEmpty,
     required this.averageScoreCalculation,
     required this.recommendedScore,
+    required this.showRecommendedScore,
     this.onFieldChanged,
     super.key,
   });
@@ -17,6 +18,7 @@ class ScoresFieldInput extends StatelessWidget {
   final VoidCallback onControllerEmpty;
   final double Function() averageScoreCalculation;
   final double recommendedScore;
+  final bool showRecommendedScore;
 
   @override
   Widget build(BuildContext context) {
@@ -73,26 +75,31 @@ class ScoresFieldInput extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const WidthSpace(5),
-                    Container(
-                      width: 52,
-                      alignment: Alignment.center,
-                      child: GradientText(
-                        averageScore.trim() == '???'
-                            ? '???'
-                            : recommendedScore.toStringAsFixed(2),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: averageScore.trim() == '???'
-                              ? [BaseColors.error, BaseColors.error]
-                              : BaseColors.autoSystemColor,
-                        ),
-                        style: FontTheme.poppins14w600black().copyWith(
-                          fontSize: 13,
-                        ),
+                    if (showRecommendedScore)
+                      Row(
+                        children: [
+                          const WidthSpace(5),
+                          Container(
+                            width: 52,
+                            alignment: Alignment.center,
+                            child: GradientText(
+                              averageScore.trim() == '???'
+                                  ? '???'
+                                  : recommendedScore.toStringAsFixed(2),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: averageScore.trim() == '???'
+                                    ? [BaseColors.error, BaseColors.error]
+                                    : BaseColors.autoSystemColor,
+                              ),
+                              style: FontTheme.poppins14w600black().copyWith(
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    )
                   ],
                 ),
               ],
@@ -150,11 +157,18 @@ class ScoresFieldInput extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const WidthSpace(5),
-                  _buildRecommendedScore(
-                    recommendedScore,
-                    _checkController(index).text,
-                  ),
+                  if (componentRM.state.hasReachedMax &&
+                      componentRM.state.canGiveRecom)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const WidthSpace(5),
+                        _buildRecommendedScore(
+                          recommendedScore,
+                          _checkController(index).text,
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ],
