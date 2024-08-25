@@ -55,206 +55,212 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
     BuildContext context,
     SizingInformation sizeInfo,
   ) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final searchQuery = searchQuestionRM.state.searchData?.text;
-        return Stack(
-          children: [
-            SingleChildScrollView(
-              controller: scrollController,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 14,
-              ),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
+    return RefreshIndicator(
+      key: refreshIndicatorKey,
+      onRefresh: retrieveData,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final searchQuery = searchQuestionRM.state.searchData?.text;
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                controller: scrollController,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              searchQuery != null
-                                  ? searchQuery.startsWith('#')
-                                      ? searchQuery
-                                      : 'Hasil Pencarian: $searchQuery'
-                                  : 'Hasil Pencarian',
-                              style: FontTheme.poppins14w700black().copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: BaseColors.gray1,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                searchQuery != null
+                                    ? searchQuery.startsWith('#')
+                                        ? searchQuery
+                                        : 'Hasil Pencarian: $searchQuery'
+                                    : 'Hasil Pencarian',
+                                style: FontTheme.poppins14w700black().copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: BaseColors.gray1,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
                             ),
+                            const WidthSpace(25),
+                            OnReactive(_buildFilter),
+                          ],
+                        ),
+                      ),
+                      const HeightSpace(15),
+                      Row(
+                        children: [
+                          UserProfileBox(
+                            name: profileRM.state.profile.name ?? 'Ujang Iman',
                           ),
-                          const WidthSpace(25),
-                          OnReactive(_buildFilter),
+                          const WidthSpace(10),
+                          AskQuestionBox(
+                            onTap: () => nav.goToAddQuestionPage(),
+                          )
                         ],
                       ),
-                    ),
-                    const HeightSpace(15),
-                    Row(
-                      children: [
-                        UserProfileBox(
-                          name: profileRM.state.profile.name ?? 'Ujang Iman',
-                        ),
-                        const WidthSpace(10),
-                        AskQuestionBox(
-                          onTap: () => nav.goToAddQuestionPage(),
-                        )
-                      ],
-                    ),
-                    const HeightSpace(25),
-                    OnBuilder<SearchQuestionState>.all(
-                      listenTo: searchQuestionRM,
-                      onWaiting: () => Column(
-                        children: List.generate(
-                          10,
-                          (index) => const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: SkeletonCardPost(
-                              isReply: false,
+                      const HeightSpace(25),
+                      OnBuilder<SearchQuestionState>.all(
+                        listenTo: searchQuestionRM,
+                        onWaiting: () => Column(
+                          children: List.generate(
+                            10,
+                            (index) => const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: SkeletonCardPost(
+                                isReply: false,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      onIdle: () => Column(
-                        children: List.generate(
-                          10,
-                          (index) => const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: SkeletonCardPost(
-                              isReply: false,
+                        onIdle: () => Column(
+                          children: List.generate(
+                            10,
+                            (index) => const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: SkeletonCardPost(
+                                isReply: false,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      onError: (dynamic error, refresh) =>
-                          Text(error.toString()),
-                      onData: (data) {
-                        return data.searchedQuestions.isEmpty
-                            ? Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: SingleChildScrollView(
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      HeightSpace(
-                                        sizeInfo.screenSize.height * .05,
-                                      ),
-                                      Image.asset(
-                                        Ilustration.notfound,
-                                        width: sizeInfo.screenSize.width * .6,
-                                      ),
-                                      const HeightSpace(27),
-                                      Text(
-                                        'Pertanyaan Tidak Ditemukan',
-                                        style: FontTheme.poppins14w700black()
-                                            .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                        onError: (dynamic error, refresh) =>
+                            Text(error.toString()),
+                        onData: (data) {
+                          return data.searchedQuestions.isEmpty
+                              ? Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: SingleChildScrollView(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        HeightSpace(
+                                          sizeInfo.screenSize.height * .05,
                                         ),
-                                      ),
-                                      const HeightSpace(7),
-                                      Text(
-                                        'Pertanyaan yang kamu cari tidak '
-                                        'ditemukan. Silakan coba lagi dengan '
-                                        'cara lainnya atau ajukan '
-                                        'langsung pertanyaanmu.',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: data.searchedQuestions.length + 1,
-                                separatorBuilder: (context, index) =>
-                                    const HeightSpace(16),
-                                itemBuilder: (context, index) {
-                                  if (index == data.searchedQuestions.length) {
-                                    return !data.hasReachedMax
-                                        ? const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 20,
-                                            ),
-                                            child: CircleLoading(
-                                              size: 25,
-                                            ),
-                                          )
-                                        : _buildBottomMax();
-                                  }
-                                  final question =
-                                      data.searchedQuestions[index];
-                                  return CardPost(
-                                    questionModel: question,
-                                    onTap: () {
-                                      nav.goToDetailQuestionPage(
-                                        question,
-                                        fromSearch: true,
-                                      );
-                                    },
-                                    onLikeTap: () {
-                                      searchQuestionRM.state.likeQuestion(
-                                        question,
-                                      );
-                                    },
-                                    onReplyTap: () =>
-                                        nav.goToDetailQuestionPage(
-                                      question,
-                                      toReply: true,
-                                      fromSearch: true,
+                                        Image.asset(
+                                          Ilustration.notfound,
+                                          width: sizeInfo.screenSize.width * .6,
+                                        ),
+                                        const HeightSpace(27),
+                                        Text(
+                                          'Pertanyaan Tidak Ditemukan',
+                                          style: FontTheme.poppins14w700black()
+                                              .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                        ),
+                                        const HeightSpace(7),
+                                        Text(
+                                          'Pertanyaan yang kamu cari tidak '
+                                          'ditemukan. Silakan coba lagi dengan '
+                                          'cara lainnya atau ajukan '
+                                          'langsung pertanyaanmu.',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
                                     ),
-                                    onRefreshImage: questionsRM.notify,
-                                    optionChoices: const ['Report'],
-                                    onOptionChoosed: (value) {
-                                      if (value == 'Report') {
-                                        print('report question!');
-                                        // report question here
-                                      }
-                                    },
-                                  );
-                                },
-                              );
-                      },
-                    ),
-                  ],
+                                  ),
+                                )
+                              : ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: data.searchedQuestions.length + 1,
+                                  separatorBuilder: (context, index) =>
+                                      const HeightSpace(16),
+                                  itemBuilder: (context, index) {
+                                    if (index ==
+                                        data.searchedQuestions.length) {
+                                      return !data.hasReachedMax
+                                          ? const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 20,
+                                              ),
+                                              child: CircleLoading(
+                                                size: 25,
+                                              ),
+                                            )
+                                          : _buildBottomMax();
+                                    }
+                                    final question =
+                                        data.searchedQuestions[index];
+                                    return CardPost(
+                                      questionModel: question,
+                                      onTap: () {
+                                        nav.goToDetailQuestionPage(
+                                          question,
+                                          fromSearch: true,
+                                        );
+                                      },
+                                      onLikeTap: () {
+                                        searchQuestionRM.state.likeQuestion(
+                                          question,
+                                        );
+                                      },
+                                      onReplyTap: () =>
+                                          nav.goToDetailQuestionPage(
+                                        question,
+                                        toReply: true,
+                                        fromSearch: true,
+                                      ),
+                                      onRefreshImage: questionsRM.notify,
+                                      optionChoices: const ['Report'],
+                                      onOptionChoosed: (value) {
+                                        if (value == 'Report') {
+                                          print('report question!');
+                                          // report question here
+                                        }
+                                      },
+                                    );
+                                  },
+                                );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              right: 20,
-              bottom: 18,
-              child: FloatingActionButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                backgroundColor: BaseColors.purpleHearth,
-                foregroundColor: BaseColors.white,
-                mini: true,
-                onPressed: _scrollToTop,
-                child: const Icon(
-                  Icons.expand_less_rounded,
-                  size: 25,
+              Positioned(
+                right: 20,
+                bottom: 18,
+                child: FloatingActionButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  backgroundColor: BaseColors.purpleHearth,
+                  foregroundColor: BaseColors.white,
+                  mini: true,
+                  onPressed: _scrollToTop,
+                  child: const Icon(
+                    Icons.expand_less_rounded,
+                    size: 25,
+                  ),
                 ),
               ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 

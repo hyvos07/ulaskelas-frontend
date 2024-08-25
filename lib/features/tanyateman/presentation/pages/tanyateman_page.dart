@@ -52,7 +52,7 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
                 () => Padding(
                   padding: EdgeInsets.only(
                     left: searchQuestionRM.state.searchData?.text != null
-                        ? 22
+                        ? 20
                         : 24,
                     right: searchQuestionRM.state.searchData?.text != null
                         ? 22
@@ -145,6 +145,9 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
               Expanded(
                 child: OnBuilder<SearchQuestionState>.all(
                   listenTo: searchQuestionRM,
+                  shouldRebuild: (t, k) {
+                    return searchQuestionRM.state.searchData?.text == null;
+                  },
                   onIdle: () => const CircleLoading(),
                   onWaiting: () => const CircleLoading(),
                   onError: (error, refreshError) => Text(error.toString()),
