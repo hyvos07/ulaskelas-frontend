@@ -278,7 +278,7 @@ class PostContent extends StatelessWidget {
                             ),
                             errorWidget: (context, url, error) =>
                                 GestureDetector(
-                              // TODO: gimana cara nge refresh image nya
+                              // TODO(any): gimana cara nge refresh image nya
                               onTap: onRefreshImage,
                               child: Container(
                                 height: maxImageHeight,
@@ -334,7 +334,6 @@ class PostContent extends StatelessWidget {
                                     color: BaseColors.gray4.withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(6),
                                     image: DecorationImage(
-                                      alignment: Alignment.topCenter,
                                       image: imageProvider,
                                       fit: BoxFit.cover,
                                     ),
