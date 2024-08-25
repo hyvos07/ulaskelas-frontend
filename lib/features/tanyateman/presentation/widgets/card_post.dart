@@ -4,6 +4,8 @@ class CardPost extends StatelessWidget {
   const CardPost({
     required this.optionChoices,
     required this.onOptionChoosed,
+    required this.onLikeTap,
+    required this.onReplyTap,
     this.isInHistorySection = false,
     this.questionModel,
     this.answerModel,
@@ -20,6 +22,8 @@ class CardPost extends StatelessWidget {
   final String? imageTag;
   final VoidCallback? onTap;
   final VoidCallback? onImageTap;
+  final VoidCallback onLikeTap;
+  final VoidCallback onReplyTap;
   final VoidCallback? onRefreshImage;
   final List<String> optionChoices;
   final void Function(String?)? onOptionChoosed;
@@ -73,6 +77,8 @@ class CardPost extends StatelessWidget {
               answerModel: answerModel,
               onImageTap: onImageTap ?? onTap,
               onRefreshImage: onRefreshImage,
+              onReplyTap: onReplyTap,
+              onLikeTap: onLikeTap,
               imageTag: imageTag,
             ),
           ),

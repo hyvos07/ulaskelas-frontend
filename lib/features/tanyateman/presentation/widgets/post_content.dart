@@ -2,6 +2,7 @@ part of '_widgets.dart';
 
 class PostContent extends StatelessWidget {
   const PostContent({
+    required this.onLikeTap,
     this.isInHistorySection = false,
     this.questionModel,
     this.answerModel,
@@ -10,6 +11,7 @@ class PostContent extends StatelessWidget {
     this.isDetail = false,
     this.onImageTap,
     this.onRefreshImage,
+    this.onReplyTap,
     super.key,
   });
 
@@ -17,6 +19,8 @@ class PostContent extends StatelessWidget {
   final AnswerModel? answerModel;
   final String? imageTag;
   final VoidCallback? onImageTap;
+  final VoidCallback? onReplyTap;
+  final VoidCallback onLikeTap;
   final VoidCallback? onRefreshImage;
   final bool isReply;
   final bool isDetail;
@@ -114,10 +118,12 @@ class PostContent extends StatelessWidget {
                         questionModel != null
                             ? questionModel!.isAnonym && !isUserThemself
                                 ? 'Mahasiswa UI'
-                                : '${questionModel!.userProgram} ${questionModel!.userGeneration}'
+                                : '${questionModel!.userProgram} '
+                                    '${questionModel!.userGeneration}'
                             : answerModel!.isAnonym && !isUserThemself
                                 ? 'Mahasiswa UI'
-                                : '${answerModel!.userProgram} ${answerModel!.userGeneration}',
+                                : '${answerModel!.userProgram} '
+                                    '${answerModel!.userGeneration}',
                         style: FontTheme.poppins10w400black().copyWith(
                           fontWeight: FontWeight.w300,
                         ),
@@ -126,10 +132,11 @@ class PostContent extends StatelessWidget {
                       Text(
                         '${questionModel!.verificationStatus}',
                         style: FontTheme.poppins10w500black().copyWith(
-                            color: questionModel!.verificationStatus ==
-                                    'Menunggu Verifikasi'
-                                ? Colors.orange
-                                : Colors.green),
+                          color: questionModel!.verificationStatus ==
+                                  'Menunggu Verifikasi'
+                              ? Colors.orange
+                              : Colors.green,
+                        ),
                       )
                   ],
                 ),
@@ -348,11 +355,11 @@ class PostContent extends StatelessWidget {
                           );
                   },
                 ),
-                HeightSpace(isDetail ? 20 : 18),
+                HeightSpace(isDetail ? 15 : 12),
               ],
             )
           else
-            HeightSpace(isDetail ? 15 : 13.5),
+            HeightSpace(isDetail ? 13 : 11.5),
           if (questionModel != null &&
               questionModel!.verificationStatus == 'Menunggu Verifikasi' &&
               isInHistorySection!)
@@ -360,36 +367,59 @@ class PostContent extends StatelessWidget {
           else
             Row(
               children: [
-                SvgPicture.asset(
-                  'assets/icons/thumbsup.svg',
-                  height: 24,
-                  width: 24,
-                ),
-                const WidthSpace(2),
-                Text(
-                  _shortenEngagement(questionModel != null
-                      ? questionModel!.likeCount
-                      : answerModel!.likeCount),
-                  style: FontTheme.poppins12w400black().copyWith(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w300,
+                InkWell(
+                  onTap: onLikeTap,
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/thumbsup.svg',
+                        height: 26,
+                        width: 26,
+                        colorFilter: (questionModel?.likedByUser ?? false) ||
+                                (answerModel?.likedByUser ?? false)
+                            ? const ColorFilter.mode(
+                                BaseColors.purpleHearth,
+                                BlendMode.srcIn,
+                              )
+                            : null,
+                      ),
+                      const WidthSpace(2),
+                      Text(
+                        _shortenEngagement(
+                          questionModel != null
+                              ? questionModel!.likeCount
+                              : answerModel!.likeCount,
+                        ),
+                        style: FontTheme.poppins12w400black().copyWith(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 if (!isReply && questionModel != null)
                   Row(
                     children: [
                       const WidthSpace(10),
-                      SvgPicture.asset(
-                        'assets/icons/comment.svg',
-                        height: 16,
-                        width: 16,
-                      ),
-                      const WidthSpace(6),
-                      Text(
-                        _shortenEngagement(questionModel!.replyCount),
-                        style: FontTheme.poppins12w400black().copyWith(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w300,
+                      InkWell(
+                        onTap: onReplyTap,
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/comment.svg',
+                              height: 18,
+                              width: 18,
+                            ),
+                            const WidthSpace(6),
+                            Text(
+                              _shortenEngagement(questionModel!.replyCount),
+                              style: FontTheme.poppins12w400black().copyWith(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

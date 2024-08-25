@@ -11,6 +11,7 @@ class QuestionModel {
   final bool isAnonym;
   int likeCount;
   int replyCount;
+  bool likedByUser;
   final String createdAt;
   final String? verificationStatus;
   final String? attachmentUrl;
@@ -26,6 +27,7 @@ class QuestionModel {
     required this.isAnonym,
     required this.likeCount,
     required this.replyCount,
+    required this.likedByUser,
     required this.createdAt,
     this.verificationStatus,
     this.attachmentUrl,
@@ -43,6 +45,7 @@ class QuestionModel {
       isAnonym: json['is_anonym'] == 1,
       likeCount: json['like_count'],
       replyCount: json['reply_count'],
+      likedByUser: json['liked_by_user'] == 1,
       createdAt: json['created_at'],
       verificationStatus: json['verification_status'],
       attachmentUrl: !(json['attachment_url'] ?? '').contains('.pdf')
@@ -54,7 +57,6 @@ class QuestionModel {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
 
-    // NOTE: Nanti sesuaiin aja sama API nya
     data['id'] = id;
     data['user'] = {
       'name': userName,
@@ -69,6 +71,7 @@ class QuestionModel {
     data['is_anonym'] = isAnonym ? 1 : 0;
     data['like_count'] = likeCount;
     data['reply_count'] = replyCount;
+    data['liked_by_user'] = likedByUser ? 1 : 0;
     data['created_at'] = createdAt;
     // data['verification_status'] = verificationStatus;
     // data['attachment_url'] = attachmentUrl;

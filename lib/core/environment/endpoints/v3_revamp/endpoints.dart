@@ -10,4 +10,6 @@ class EndpointsRevamp {
   static final autofill = '$baseUrl/api/calculator-gpa?is_auto_fill=true';
   static final tanyaTeman = '$baseUrl/api/tanya-teman';
   static final jawabTeman = '$baseUrl/api/jawab-teman';
+  static final likePost = '$baseUrl/api/tanya-teman?is_like=true';
+  static final likeReply = '$baseUrl/api/jawab-teman?is_like=true';
 }

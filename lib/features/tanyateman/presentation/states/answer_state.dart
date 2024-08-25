@@ -4,9 +4,12 @@ class AnswerState {
   AnswerState() {
     final remoteDataSource = AnswerRemoteDataSourceImpl();
     _repo = AnswerRepositoryImpl(remoteDataSource);
+    final likeRemoteDataSource = LikeActionRemoteDataSourceImpl();
+    _likeRepo = LikeActionRepositoryImpl(likeRemoteDataSource);
   }
 
   late AnswerRepository _repo;
+  late LikeActionRepository _likeRepo;
 
   int page = 1;
   bool hasReachedMax = false;
@@ -47,5 +50,27 @@ class AnswerState {
     });
 
     answersRM.notify();
+  }
+
+  Future<void> likeAnswer(AnswerModel model) async {
+    final resp = await _likeRepo.likeAnswer(model.id);
+    resp.fold((failure) {
+      if (kDebugMode) {
+        Logger().e(failure.message);
+      }
+      ErrorMessenger(
+        'Gagal menyukai jawaban!',
+      ).show(ctx!);
+    }, (result) {
+      // Change the like status locally
+      if (model.likedByUser) {
+        model.likedByUser = false;
+        model.likeCount--;
+      } else {
+        model.likedByUser = true;
+        model.likeCount++;
+      }
+      answersRM.notify();
+    });
   }
 }

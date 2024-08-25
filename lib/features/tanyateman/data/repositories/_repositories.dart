@@ -9,3 +9,4 @@ import '../models/_models.dart';
 
 part 'question_repository_impl.dart';
 part 'answer_repository_impl.dart';
+part 'like_action_repository_impl.dart';

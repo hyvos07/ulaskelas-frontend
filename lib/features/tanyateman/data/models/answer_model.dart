@@ -8,9 +8,10 @@ class AnswerModel {
   final String userGeneration;
   final String answerText;
   final bool isAnonym;
-  final int likeCount;
   final String createdAt;
   final String? attachmentUrl;
+  int likeCount;
+  bool likedByUser;
 
   AnswerModel({
     required this.id,
@@ -21,6 +22,7 @@ class AnswerModel {
     required this.answerText,
     required this.isAnonym,
     required this.likeCount,
+    required this.likedByUser,
     required this.createdAt,
     this.attachmentUrl,
   });
@@ -36,6 +38,7 @@ class AnswerModel {
       isAnonym: json['is_anonym'] == 1,
       likeCount: json['like_count'],
       createdAt: json['created_at'],
+      likedByUser: json['liked_by_user'] == 1,
       attachmentUrl: !(json['attachment_url'] ?? '').contains('.pdf')
           ? json['attachment_url']
           : null,
@@ -45,7 +48,6 @@ class AnswerModel {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
 
-    // NOTE: Nanti sesuaiin aja sama API nya
     data['id'] = id;
     data['user'] = {
       'name': userName,
@@ -55,26 +57,28 @@ class AnswerModel {
     data['answer_text'] = answerText;
     data['is_anonym'] = isAnonym ? 1 : 0;
     data['like_count'] = likeCount;
+    data['liked_by_user'] = likedByUser ? 1 : 0;
     data['created_at'] = createdAt;
     data['question_id'] = questionId;
+    
     return data;
   }
 
   String get exactDateTime => DateFormat('dd MMM yyyy HH:mm')
       .format(DateTime.parse(createdAt).toLocal());
   
-  void cekIsiData() {
-    print('/////////////////');
-    print('id : $id');
-    print('questionId : $questionId');
-    print('userName : $userName');
-    print('userProgram : $userProgram');
-    print('userGeneration : $userGeneration');
-    print('answerText : $answerText');
-    print('isAnonym : $isAnonym');
-    print('likeCount : $likeCount');
-    print('createdAt : $createdAt');
-    print('attachmentUrl : $attachmentUrl');
-    print('/////////////////');
-  }
+  // void cekIsiData() {
+  //   print('/////////////////');
+  //   print('id : $id');
+  //   print('questionId : $questionId');
+  //   print('userName : $userName');
+  //   print('userProgram : $userProgram');
+  //   print('userGeneration : $userGeneration');
+  //   print('answerText : $answerText');
+  //   print('isAnonym : $isAnonym');
+  //   print('likeCount : $likeCount');
+  //   print('createdAt : $createdAt');
+  //   print('attachmentUrl : $attachmentUrl');
+  //   print('/////////////////');
+  // }
 }

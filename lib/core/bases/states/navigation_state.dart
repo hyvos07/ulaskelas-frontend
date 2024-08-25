@@ -335,10 +335,12 @@ class NavigationServiceState implements Navigation {
   Future<void> goToDetailQuestionPage(
     QuestionModel model, {
     bool toReply = false,
+    bool fromSearch = false,
   }) {
     return nav.push<void>(DetailQuestionPage(
       model: model,
       toReply: toReply,
+      fromSearch: fromSearch,
     ));
   }
 

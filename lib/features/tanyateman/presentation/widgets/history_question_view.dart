@@ -158,6 +158,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                         data.historyQuestions[index];
                                     return CardPost(
                                       isInHistorySection: true,
+                                      onLikeTap: () {},
                                       questionModel: question,
                                       imageTag: 'post-image-preview'
                                           '?id=${question.id}',
@@ -171,6 +172,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                           enableImagePreview: true,
                                         );
                                       },
+                                      onReplyTap: () {},
                                       onRefreshImage: questionsRM.notify,
                                       optionChoices: const ['Hapus'],
                                       onOptionChoosed: (value) async {

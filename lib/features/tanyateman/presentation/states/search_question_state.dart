@@ -4,9 +4,12 @@ class SearchQuestionState {
   SearchQuestionState() {
     final remoteDataSource = QuestionRemoteDataSourceImpl();
     _repo = QuestionRepositoryImpl(remoteDataSource);
+    final likeRemoteDataSource = LikeActionRemoteDataSourceImpl();
+    _likeRepo = LikeActionRepositoryImpl(likeRemoteDataSource);
   }
 
   late QuestionRepository _repo;
+  late LikeActionRepository _likeRepo;
 
   int page = 1;
   bool hasReachedMax = false;
@@ -50,6 +53,28 @@ class SearchQuestionState {
     });
 
     questionsRM.notify();
+  }
+
+  Future<void> likeQuestion(QuestionModel model) async {
+    final resp = await _likeRepo.likeQuestion(model.id);
+    resp.fold((failure) {
+      if (kDebugMode) {
+        Logger().e(failure.message);
+      }
+      ErrorMessenger(
+        'Gagal menyukai pertanyaan!',
+      ).show(ctx!);
+    }, (result) {
+      // Change the like status locally
+      if (model.likedByUser) {
+        model.likedByUser = false;
+        model.likeCount--;
+      } else {
+        model.likedByUser = true;
+        model.likeCount++;
+      }
+      searchQuestionRM.notify();
+    });
   }
 }
 

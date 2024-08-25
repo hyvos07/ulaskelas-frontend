@@ -4,11 +4,13 @@ class DetailQuestionPage extends StatefulWidget {
   const DetailQuestionPage({
     required this.model,
     this.toReply = false,
+    this.fromSearch = false,
     super.key,
   });
 
   final QuestionModel model;
   final bool toReply;
+  final bool fromSearch;
 
   @override
   _DetailQuestionPageState createState() => _DetailQuestionPageState();
@@ -170,11 +172,27 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 18),
                     child: Column(
                       children: [
-                        PostContent(
-                          questionModel: widget.model,
-                          isDetail: true,
-                          onImageTap: () => seeImage(isDetail: true),
-                          imageTag: 'post-image-preview?id=${widget.model.id}',
+                        OnBuilder(
+                          listenTo: questionsRM,
+                          builder: () => PostContent(
+                            onLikeTap: () async {
+                              await questionsRM.state
+                                  .likeQuestion(widget.model);
+                              if (widget.fromSearch) {
+                                searchQuestionRM.notify();
+                              }
+                            },
+                            questionModel: widget.model,
+                            isDetail: true,
+                            onImageTap: () => seeImage(isDetail: true),
+                            imageTag:
+                                'post-image-preview?id=${widget.model.id}',
+                            onReplyTap: () => _pageController.animateToPage(
+                              1,
+                              duration: const Duration(milliseconds: 1000),
+                              curve: Curves.fastLinearToSlowEaseIn,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -372,22 +390,33 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
             final answer = data[index];
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
-              child: CardPost(
-                isReply: true,
-                answerModel: answer,
-                imageTag: 'reply-image-preview?id=${answer.id}',
-                onRefreshImage: answersRM.notify,
-                onImageTap: () => seeImage(
-                    isReply: true,
-                    replyId: answer.id.toString(),
-                    replyUrlFile: answer.attachmentUrl),
-                optionChoices: const ['Report'],
-                onOptionChoosed: (value) {
-                  if (value == 'Report') {
-                    print('report reply!');
-                    // report reply here
-                  }
-                },
+              child: OnBuilder(
+                listenTo: answersRM,
+                builder: () => CardPost(
+                  isReply: true,
+                  answerModel: answer,
+                  onLikeTap: () {
+                    answersRM.state.likeAnswer(answer);
+                  },
+                  onReplyTap: () => _pageController.animateToPage(
+                    1,
+                    duration: const Duration(milliseconds: 1000),
+                    curve: Curves.fastLinearToSlowEaseIn,
+                  ),
+                  imageTag: 'reply-image-preview?id=${answer.id}',
+                  onRefreshImage: answersRM.notify,
+                  onImageTap: () => seeImage(
+                      isReply: true,
+                      replyId: answer.id.toString(),
+                      replyUrlFile: answer.attachmentUrl),
+                  optionChoices: const ['Report'],
+                  onOptionChoosed: (value) {
+                    if (value == 'Report') {
+                      print('report reply!');
+                      // report reply here
+                    }
+                  },
+                ),
               ),
             );
           },

@@ -202,8 +202,22 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
                                   return CardPost(
                                     questionModel: question,
                                     onTap: () {
-                                      nav.goToDetailQuestionPage(question);
+                                      nav.goToDetailQuestionPage(
+                                        question,
+                                        fromSearch: true,
+                                      );
                                     },
+                                    onLikeTap: () {
+                                      searchQuestionRM.state.likeQuestion(
+                                        question,
+                                      );
+                                    },
+                                    onReplyTap: () =>
+                                        nav.goToDetailQuestionPage(
+                                      question,
+                                      toReply: true,
+                                      fromSearch: true,
+                                    ),
                                     onRefreshImage: questionsRM.notify,
                                     optionChoices: const ['Report'],
                                     onOptionChoosed: (value) {

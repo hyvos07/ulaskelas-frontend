@@ -11,3 +11,4 @@ import '../entities/query_question.dart';
 
 part 'question_repository.dart';
 part 'answer_repository.dart';
+part 'like_action_repository.dart';

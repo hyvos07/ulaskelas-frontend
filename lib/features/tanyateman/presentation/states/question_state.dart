@@ -4,9 +4,12 @@ class QuestionState {
   QuestionState() {
     final remoteDataSource = QuestionRemoteDataSourceImpl();
     _repo = QuestionRepositoryImpl(remoteDataSource);
+    final likeRemoteDataSource = LikeActionRemoteDataSourceImpl();
+    _likeRepo = LikeActionRepositoryImpl(likeRemoteDataSource);
   }
 
   late QuestionRepository _repo;
+  late LikeActionRepository _likeRepo;
 
   int page = 1;
   bool hasReachedMax = false;
@@ -107,18 +110,40 @@ class QuestionState {
   Future<bool> deleteQuestion(int id) async {
     var isSucces = false;
     final resp = await _repo.deleteQuestion(id);
-    resp.fold(
-      (failure) {
-        ErrorMessenger(
-          'Gagal menghapus pertanyaan!',).show(ctx!);}, 
-      (result) {
-        SuccessMessenger(
-          'Berhasil menghapus pertanyaan!',).show(ctx!);
-          isSucces = true;}
-    );
+    resp.fold((failure) {
+      ErrorMessenger(
+        'Gagal menghapus pertanyaan!',
+      ).show(ctx!);
+    }, (result) {
+      SuccessMessenger(
+        'Berhasil menghapus pertanyaan!',
+      ).show(ctx!);
+      isSucces = true;
+    });
 
     questionsRM.notify();
     return isSucces;
   }
 
+  Future<void> likeQuestion(QuestionModel model) async {
+    final resp = await _likeRepo.likeQuestion(model.id);
+    resp.fold((failure) {
+      if (kDebugMode) {
+        Logger().e(failure.message);
+      }
+      ErrorMessenger(
+        'Gagal menyukai pertanyaan!',
+      ).show(ctx!);
+    }, (result) {
+      // Change the like status locally
+      if (model.likedByUser) {
+        model.likedByUser = false;
+        model.likeCount--;
+      } else {
+        model.likedByUser = true;
+        model.likeCount++;
+      }
+      questionsRM.notify();
+    });
+  }
 }

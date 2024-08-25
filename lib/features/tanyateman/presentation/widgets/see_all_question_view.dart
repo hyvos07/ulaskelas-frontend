@@ -185,12 +185,20 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                                       onTap: () {
                                         nav.goToDetailQuestionPage(question);
                                       },
+                                      onLikeTap: () => questionsRM.state
+                                          .likeQuestion(question),
+                                      onReplyTap: () {
+                                        print('tap');
+                                        nav.goToDetailQuestionPage(
+                                          question,
+                                          toReply: true,
+                                        );
+                                      },
                                       onRefreshImage: questionsRM.notify,
-                                      optionChoices: const ['Report'],
+                                      optionChoices: const ['Hapus'],
                                       onOptionChoosed: (value) {
-                                        if (value == 'Report') {
-                                          print('report question!');
-                                          // report question here
+                                        if (value == 'Hapus') {
+                                          // TODO
                                         }
                                       },
                                     );
