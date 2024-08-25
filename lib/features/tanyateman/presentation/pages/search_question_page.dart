@@ -22,6 +22,9 @@ class _SearchQuestionPageState
       }
     });
     searchCourseRM.state.controller.clear();
+    retrieveData(); // Sometimes they don't retrieve data at the first build
+    searchQuestionRM.state.searchData = SearchData();
+    searchQuestionRM.state.searchQuestionFilter = 'semua';
   }
 
   @override
@@ -309,7 +312,8 @@ class _SearchQuestionPageState
     ); // Save to history after search
     focusNode.unfocus();
     final query = QueryQuestion(
-      searchKeyword: searchCourseRM.state.controller.text,);
+      searchKeyword: searchCourseRM.state.controller.text,
+    );
     await searchQuestionRM.setState(
       (s) => s.retrieveSearchedQuestion(query),
     );

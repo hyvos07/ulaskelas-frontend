@@ -13,18 +13,12 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
 
   List<String> filterOptionsValue = [
     'semua',
-    'terbaru',
     'is_paling_banyak_disukai',
-    'terverifikasi',
-    'menunggu_verifikasi'
   ];
 
   List<String> filterOptionsText = [
-    'Semua Postingan',
-    'Terbaru',
+    'Semua',
     'Paling banyak Disukai',
-    'Terverifikasi',
-    'Menunggu Verifikasi'
   ];
 
   @override
@@ -333,7 +327,7 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
         dropdownStyleData: DropdownStyleData(
           width: 140,
           direction: DropdownDirection.left,
-          padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 14),
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 17),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: BaseColors.white,
@@ -354,8 +348,6 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
     final query = QueryQuestion(
       isHistory: true,
       isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
-      isVerified: selectedFilter == 'terverifikasi' ? true : null,
-      isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
     );
     await searchQuestionRM.state
         .retrieveMoreSearchedQuestion(query)
@@ -369,11 +361,14 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
 
   Future<void> retrieveData() async {
     final selectedFilter = searchQuestionRM.state.searchQuestionFilter;
+    final searchData = searchQuestionRM.state.searchData;
     final query = QueryQuestion(
-      isHistory: true,
+      searchKeyword: searchData?.course == null ? searchData?.text : null,
+      searchCourseId: searchData?.course?.id,
       isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
-      isVerified: selectedFilter == 'terverifikasi' ? true : null,
-      isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
+    );
+    await searchQuestionRM.setState(
+      (s) => s.retrieveSearchedQuestion(query),
     );
     await searchQuestionRM.setState((s) => s.retrieveSearchedQuestion(query));
   }

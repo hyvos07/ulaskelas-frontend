@@ -13,15 +13,13 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
 
   List<String> filterOptionsValue = [
     'semua',
-    'terbaru',
     'is_paling_banyak_disukai',
     'terverifikasi',
     'menunggu_verifikasi'
   ];
 
   List<String> filterOptionsText = [
-    'Semua Postingan',
-    'Terbaru',
+    'Semua',
     'Paling banyak Disukai',
     'Terverifikasi',
     'Menunggu Verifikasi'
@@ -178,7 +176,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                       onOptionChoosed: (value) async {
                                         if (value == 'Hapus') {
                                           final isSuccess = await questionsRM
-                                            .state
+                                              .state
                                               .deleteQuestion(question.id);
                                           if (isSuccess) await retrieveData();
                                         }
@@ -299,7 +297,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
         dropdownStyleData: DropdownStyleData(
           width: 140,
           direction: DropdownDirection.left,
-          padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 14),
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 17),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: BaseColors.white,

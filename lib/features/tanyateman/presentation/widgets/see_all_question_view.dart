@@ -13,13 +13,11 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
 
   List<String> filterOptionsValue = [
     'semua',
-    'terbaru',
     'is_paling_banyak_disukai',
   ];
 
   List<String> filterOptionsText = [
-    'Semua Postingan',
-    'Terbaru',
+    'Semua',
     'Paling banyak Disukai',
   ];
 
@@ -311,7 +309,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
         dropdownStyleData: DropdownStyleData(
           width: 140,
           direction: DropdownDirection.left,
-          padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 14),
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 17),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: BaseColors.white,

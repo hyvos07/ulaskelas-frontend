@@ -118,7 +118,6 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
   }
 
   Future<void> onSubmittingSearch(CourseModel model) async {
-    final selectedFilter = searchQuestionRM.state.searchQuestionFilter;
     final query = QueryQuestion(searchCourseId: model.id);
     await searchQuestionRM.setState((s) => s.retrieveSearchedQuestion(query));
     await searchQuestionRM.setState(
