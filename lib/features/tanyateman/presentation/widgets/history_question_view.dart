@@ -13,7 +13,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
 
   List<String> filterOptionsValue = [
     'semua',
-    'is_paling_banyak_disukai',
+    'paling_banyak_disukai',
     'terverifikasi',
     'menunggu_verifikasi'
   ];
@@ -319,7 +319,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
     final selectedFilter = questionsRM.state.historyQuestionsFilter;
     final query = QueryQuestion(
       isHistory: true,
-      isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
+      isMostPopular: selectedFilter == 'paling_banyak_disukai' ? true : null,
       isVerified: selectedFilter == 'terverifikasi' ? true : null,
       isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
     );
@@ -335,7 +335,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
     final selectedFilter = questionsRM.state.historyQuestionsFilter;
     final query = QueryQuestion(
       isHistory: true,
-      isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
+      isMostPopular: selectedFilter == 'paling_banyak_disukai' ? true : null,
       isVerified: selectedFilter == 'terverifikasi' ? true : null,
       isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
     );

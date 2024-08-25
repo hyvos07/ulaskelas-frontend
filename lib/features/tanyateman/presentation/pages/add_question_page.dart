@@ -138,14 +138,14 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
           (s) => s.retrieveData(
             queryAll: QueryQuestion(
               isMostPopular: questionsRM.state.allQuestionsFilter ==
-                      'is_paling_banyak_disukai'
+                      'paling_banyak_disukai'
                   ? true
                   : null,
             ),
             queryHistory: QueryQuestion(
               isHistory: true,
               isMostPopular:
-                  historyFilter == 'is_paling_banyak_disukai' ? true : null,
+                  historyFilter == 'paling_banyak_disukai' ? true : null,
               isVerified: historyFilter == 'terverifikasi' ? true : null,
               isWaitToVerify:
                   historyFilter == 'menunggu_verifikasi' ? true : null,

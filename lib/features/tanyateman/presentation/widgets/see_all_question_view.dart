@@ -13,7 +13,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
 
   List<String> filterOptionsValue = [
     'semua',
-    'is_paling_banyak_disukai',
+    'paling_banyak_disukai',
   ];
 
   List<String> filterOptionsText = [
@@ -336,7 +336,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
     completer?.complete();
     final query = QueryQuestion(
       isMostPopular:
-          questionsRM.state.allQuestionsFilter == 'is_paling_banyak_disukai'
+          questionsRM.state.allQuestionsFilter == 'paling_banyak_disukai'
               ? true
               : null,
     );
@@ -353,7 +353,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
       (s) => s.retrieveAllQuestion(
         QueryQuestion(
           isMostPopular:
-              questionsRM.state.allQuestionsFilter == 'is_paling_banyak_disukai'
+              questionsRM.state.allQuestionsFilter == 'paling_banyak_disukai'
                   ? true
                   : null,
         ),

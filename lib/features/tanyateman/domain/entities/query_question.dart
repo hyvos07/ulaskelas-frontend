@@ -30,7 +30,7 @@ class QueryQuestion {
     data['limit'] = limit.toString();
     data['by_user'] = byUser.toString();
     data['is_history'] = isHistory.toString();
-    data['is_paling_banyak_disukai'] = isMostPopular.toString();
+    data['paling_banyak_disukai'] = isMostPopular.toString();
     data['terverifikasi'] = isVerified.toString();
     data['menunggu_verifikasi'] = isWaitToVerify.toString();
     data['keyword'] = searchKeyword.toString();
@@ -45,7 +45,7 @@ class QueryQuestion {
     if (limit != null) data['limit'] = limit.toString();
     if (byUser != null) data['by_user'] = byUser.toString();
     if (isHistory != null) data['is_history'] = isHistory.toString();
-    if (isMostPopular != null) data['is_paling_banyak_disukai'] = isMostPopular.toString();
+    if (isMostPopular != null) data['paling_banyak_disukai'] = isMostPopular.toString();
     if (isVerified != null) data['terverifikasi'] = isVerified.toString();
     if (isWaitToVerify != null) data['menunggu_verifikasi'] = isWaitToVerify.toString();
     if (searchKeyword != null) data['keyword'] = searchKeyword.toString();

@@ -13,7 +13,7 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
 
   List<String> filterOptionsValue = [
     'semua',
-    'is_paling_banyak_disukai',
+    'paling_banyak_disukai',
   ];
 
   List<String> filterOptionsText = [
@@ -361,7 +361,7 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
     final selectedFilter = searchQuestionRM.state.searchQuestionFilter;
     final query = QueryQuestion(
       isHistory: true,
-      isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
+      isMostPopular: selectedFilter == 'paling_banyak_disukai' ? true : null,
     );
     await searchQuestionRM.state
         .retrieveMoreSearchedQuestion(query)
@@ -379,7 +379,7 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
     final query = QueryQuestion(
       searchKeyword: searchData?.course == null ? searchData?.text : null,
       searchCourseId: searchData?.course?.id,
-      isMostPopular: selectedFilter == 'is_paling_banyak_disukai' ? true : null,
+      isMostPopular: selectedFilter == 'paling_banyak_disukai' ? true : null,
     );
     await searchQuestionRM.setState(
       (s) => s.retrieveSearchedQuestion(query),
