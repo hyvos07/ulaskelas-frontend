@@ -332,9 +332,13 @@ class NavigationServiceState implements Navigation {
     return nav.push<void>(const AddQuestionPage());
   }
 
-  Future<void> goToDetailQuestionPage(QuestionModel model) {
+  Future<void> goToDetailQuestionPage(
+    QuestionModel model, {
+    bool toReply = false,
+  }) {
     return nav.push<void>(DetailQuestionPage(
       model: model,
+      toReply: toReply,
     ));
   }
 
@@ -342,11 +346,8 @@ class NavigationServiceState implements Navigation {
     return nav.push<void>(const SearchCourseRadioPicker());
   }
 
-  Future<void> goToViewImagePage(
-    ImageProvider imageFile, {
-    String? imageTag,
-    bool enableImagePreview = false
-  }) {
+  Future<void> goToViewImagePage(ImageProvider imageFile,
+      {String? imageTag, bool enableImagePreview = false}) {
     return nav.push<void>(
       ViewImagePage(
         imageFile: imageFile,

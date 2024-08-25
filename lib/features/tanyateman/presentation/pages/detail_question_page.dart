@@ -3,10 +3,12 @@ part of '_pages.dart';
 class DetailQuestionPage extends StatefulWidget {
   const DetailQuestionPage({
     required this.model,
+    this.toReply = false,
     super.key,
   });
 
   final QuestionModel model;
+  final bool toReply;
 
   @override
   _DetailQuestionPageState createState() => _DetailQuestionPageState();
@@ -40,6 +42,19 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     super.initState();
     _pageController = PageController(initialPage: pageViewIndex);
     _pageController.addListener(_onPageChanged);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // TODO(any): find a better approach
+      await Future.delayed(const Duration(milliseconds: 1000));
+      if (_pageController.hasClients && widget.toReply) {
+        print('Animating to page 1');
+        await _pageController.animateToPage(
+          1,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.fastLinearToSlowEaseIn,
+        );
+      }
+    });
   }
 
   @override
@@ -131,11 +146,13 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                     onPressed: onBackPressed,
                   ),
                   Expanded(
-                    child: Text('#${widget.model.courseName}',
-                        style: FontTheme.poppins12w600black().copyWith(
-                          color: Colors.grey.shade600,
-                        ),
-                        overflow: TextOverflow.ellipsis),
+                    child: Text(
+                      '#${widget.model.courseName}',
+                      style: FontTheme.poppins12w600black().copyWith(
+                        color: Colors.grey.shade600,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   const WidthSpace(20),
                   Icon(
@@ -218,7 +235,8 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                             itemBuilder: (context, index) {
                               if (index == 0) {
                                 return _buildShowComments(
-                                    answersRM.state.allAnswer);
+                                  answersRM.state.allAnswer,
+                                );
                               }
                               return _buildCommentForm();
                             },
