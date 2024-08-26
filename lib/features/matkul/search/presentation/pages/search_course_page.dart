@@ -25,6 +25,7 @@ class _SearchCoursePageState
         searchCourseRM.setState((s) => s.addToHistory(controller.text));
       }
     });
+    searchCourseRM.state.controller.clear();
   }
 
   @override
@@ -32,7 +33,8 @@ class _SearchCoursePageState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if ((Pref.getBool('doneAppTour') == false ||
-          Pref.getBool('doneAppTour') == null) && !backFromTanyaTeman) {
+              Pref.getBool('doneAppTour') == null) &&
+          !backFromTanyaTeman) {
         showcaseSearchPage();
       }
     });
@@ -105,6 +107,8 @@ class _SearchCoursePageState
                         onClear: () {
                           focusNode.unfocus();
                           searchCourseRM.state.controller.clear();
+                          onQueryChanged('');
+                          searchCourseRM.notify();
                         },
                         onFieldSubmitted: (val) =>
                             searchCourseRM.state.addToHistory(val),
