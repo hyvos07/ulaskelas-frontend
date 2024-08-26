@@ -428,13 +428,16 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   Widget _buildBottomMax(bool emptyList) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
-      child: Text(
-        emptyList ? 'Belum ada jawaban.' : 'Tidak ada jawaban lagi.',
-        style: FontTheme.poppins12w600black().copyWith(
-          color: BaseColors.gray2.withOpacity(0.7),
+      child: Container(
+        height: MediaQuery.of(context).size.height  * 7 / 10,
+        child: Text(
+          emptyList ? 'Belum ada jawaban.' : 'Tidak ada jawaban lagi.',
+          style: FontTheme.poppins12w600black().copyWith(
+            color: BaseColors.gray2.withOpacity(0.7),
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center,
-      ),
+      )
     );
   }
 
