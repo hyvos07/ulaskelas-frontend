@@ -53,8 +53,10 @@ class CardCalculator extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(model.courseName.toString(),
-                          style: FontTheme.poppins14w500black(),),
+                      Text(
+                        model.courseName.toString(),
+                        style: FontTheme.poppins14w500black(),
+                      ),
                       const HeightSpace(4),
                       Text(
                         _getFinalScoreAndGrade(model.totalScore!),
@@ -81,7 +83,7 @@ class CardCalculator extends StatelessWidget {
                     horizontal: 3,
                   ),
                   constraints: const BoxConstraints(),
-                  onPressed: _deleteCard,
+                  onPressed: () async => _deleteCard(context),
                   icon: SvgPicture.asset(
                     SvgIcons.trash,
                     width: 16,
@@ -97,13 +99,24 @@ class CardCalculator extends StatelessWidget {
     );
   }
 
-  void _deleteCard() {
-    calculatorRM.setState(
-      (s) => s.deleteCalculator(
-        query: QueryCalculator(courseId: model.courseId),
-        givenSemester: givenSemester,
-        courseName: model.courseName!,
-        totalScore: model.totalScore!,
+  Future<void> _deleteCard(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) => DeleteDialog(
+        title: 'Hapus Matkul',
+        content: 'Apakah kamu yakin ingin menghapus '
+            'Kalkulator ${model.courseName}?',
+        onConfirm: () async {
+          nav.pop();
+          await calculatorRM.setState(
+            (s) => s.deleteCalculator(
+              query: QueryCalculator(courseId: model.courseId),
+              givenSemester: givenSemester,
+              courseName: model.courseName!,
+              totalScore: model.totalScore!,
+            ),
+          );
+        },
       ),
     );
   }

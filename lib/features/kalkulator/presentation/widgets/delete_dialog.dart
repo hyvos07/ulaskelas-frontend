@@ -22,14 +22,15 @@ class DeleteDialog extends StatelessWidget {
         horizontal: 40,
         vertical: 70,
       ),
+      titlePadding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
       title: Text(
         title ?? 'Penghapusan',
         textAlign: TextAlign.center,
         style: FontTheme.poppins16w700black(),
       ),
       contentPadding: const EdgeInsets.only(
-        left: 16,
-        right: 16,
+        left: 24,
+        right: 24,
         top: 20,
         bottom: 12,
       ),
