@@ -156,12 +156,12 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const WidthSpace(20),
-                  Icon(
-                    Icons.more_horiz,
-                    color: Colors.grey.shade900,
-                  ),
-                  const WidthSpace(20),
+                  // const WidthSpace(20),
+                  // Icon(
+                  //   Icons.more_horiz,
+                  //   color: Colors.grey.shade900,
+                  // ),
+                  // const WidthSpace(20),
                 ],
               ),
             ),

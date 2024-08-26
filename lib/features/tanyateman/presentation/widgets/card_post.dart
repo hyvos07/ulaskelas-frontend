@@ -57,10 +57,11 @@ class CardPost extends StatelessWidget {
                         color: BaseColors.mineShaft.withOpacity(0.5),
                       ),
                     ),
-                    SmallMenu(
-                      choices: optionChoices,
-                      onChanged: onOptionChoosed,
-                    )
+                    if (isInHistorySection!)
+                      SmallMenu(
+                        choices: optionChoices,
+                        onChanged: onOptionChoosed,
+                      )
                   ],
                 ),
                 const HeightSpace(10)
