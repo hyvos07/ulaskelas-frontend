@@ -109,11 +109,11 @@ A new version of this app available on the store, please update into the newer v
                 children: [
                   RichText(
                     text: TextSpan(
-                      text: 'Ulas',
+                      text: 'Teman',
                       style: FontTheme.poppins20w700white(),
                       children: const <TextSpan>[
                         TextSpan(
-                          text: 'Kelas',
+                          text: 'Kuliah',
                           style: TextStyle(
                             color: BaseColors.malibu,
                           ),

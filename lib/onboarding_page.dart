@@ -1,5 +1,7 @@
 // Created by Muhamad Fauzi Ridwan on 08/11/21.
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:ulaskelas/core/theme/_theme.dart';
@@ -22,18 +24,35 @@ class _OnboardingPageState extends BaseStateful<OnboardingPage> {
   int pageIndex = 0;
 
   List<String> titles = [
-    'Selamat datang di UlasKelas!',
-    'Lihat Ulasan Dari Temanmu',
-    'Berikan Ulasanmu',
+    'Selamat datang di TemanKuliah!',
+    'Dikusi dan Ulasan Kelas',
+    'Kalkulator Menghitung Nilai',
   ];
 
-  List<String> descriptions = [
-    '''
-UlasKelas merupakan aplikasi ulasan untuk mata kuliah Fasilkom UI. Dengan aplikasi ini, kamu tidak perlu lagi kebingungan dalam memilih kelas!''',
-    '''
-Di UlasKelas, kamu bisa melihat ulasan untuk mata kuliah Fasilkom UI dari teman-temanmu yang sudah mengambil.''',
-    '''
-Kamu juga dapat memberikan ulasan terhadap mata kuliah yang sudah kamu ambil. Ulasanmu dapat dilihat oleh seluruh teman-temanmu di Fasilkom UI.''',
+  List<Widget> descriptionWidgets = [
+    buildDescription(
+      '''
+  TemanKuliah adalah All-in-One App yang 
+  akan menemani perjalanan kuliahmu 
+  dengan fitur - fitur yang ada''',
+      'All-in-One App',
+    ),
+    Text(
+      '''
+  Kamu dapat berdiskusi melalui forum 
+  diskusi dan kamu juga dapat memberi serta 
+  membaca ulasan seluruh kelas loh!''',
+      style: FontTheme.poppins14w400black(),
+      textAlign: TextAlign.center,
+    ),
+    Text(
+      '''
+  Tidak perlu bingung melakukan kalkulasi 
+  nilai, terdapat fitur untuk menghitung nilai, 
+  IPK, dan rekomendasi nilai terbaik!''',
+      style: FontTheme.poppins14w400black(),
+      textAlign: TextAlign.center,
+    ),
   ];
 
   @override
@@ -57,12 +76,30 @@ Kamu juga dapat memberikan ulasan terhadap mata kuliah yang sudah kamu ambil. Ul
     final width = sizeInfo.screenSize.width;
     final height = sizeInfo.screenSize.height;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: BaseColors.gray5,
-        elevation: 0,
-        actions: [
-          if (pageIndex != 2)
-            Container(
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: pageController,
+            onPageChanged: (value) {
+              setState(() {
+                pageIndex = value;
+              });
+            },
+            itemCount: titles.length,
+            itemBuilder: (context, index) {
+              return OnboardingPageBody(
+                index: index,
+                height: height,
+                width: width,
+                title: titles[index],
+                descriptionWidgets: descriptionWidgets[index],
+                image: 'assets/images/ilust_onboard${index + 1}.png',
+              );
+            },
+          ),
+          Positioned(
+            top: height / 17.5, right: 0,
+            child: Container(
               alignment: Alignment.centerRight,
               padding: EdgeInsets.only(right: width / 20),
               child: InkWell(
@@ -75,26 +112,8 @@ Kamu juga dapat memberikan ulasan terhadap mata kuliah yang sudah kamu ambil. Ul
                 ),
               ),
             ),
+          )
         ],
-      ),
-      body: PageView.builder(
-        controller: pageController,
-        onPageChanged: (value) {
-          setState(() {
-            pageIndex = value;
-          });
-        },
-        itemCount: titles.length,
-        itemBuilder: (context, index) {
-          return OnboardingPageBody(
-            index: index,
-            height: height,
-            width: width,
-            title: titles[index],
-            description: descriptions[index],
-            image: 'assets/images/ilust_onboard${index + 1}.png',
-          );
-        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Column(
@@ -150,7 +169,7 @@ class OnboardingPageBody extends StatelessWidget {
     required this.height,
     required this.width,
     required this.title,
-    required this.description,
+    required this.descriptionWidgets,
     required this.image,
     super.key,
   });
@@ -159,7 +178,7 @@ class OnboardingPageBody extends StatelessWidget {
   final double height;
   final double width;
   final String title;
-  final String description;
+  final Widget descriptionWidgets;
   final String image;
 
   @override
@@ -170,17 +189,15 @@ class OnboardingPageBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            flex: 5,
-            child: Container(
-              padding: EdgeInsets.only(
-                top: height / 30,
-                bottom: height / 20,
-                left: width / 6,
-                right: width / 6,
-              ),
-              color: BaseColors.gray5,
-              child: Image.asset(image),
-            ),
+            flex: 8,
+            child: Stack(
+              children: [
+                Container(
+                    color: Colors.grey.withOpacity(0.1), 
+                  ),
+                buildIllustration(index)
+              ],
+            )
           ),
           Expanded(
             flex: 3,
@@ -201,11 +218,7 @@ class OnboardingPageBody extends StatelessWidget {
                   SizedBox(
                     height: height / 53.33,
                   ),
-                  Text(
-                    description,
-                    style: FontTheme.poppins14w400black(),
-                    textAlign: TextAlign.center,
-                  ),
+                  descriptionWidgets
                 ],
               ),
             ),
@@ -214,4 +227,148 @@ class OnboardingPageBody extends StatelessWidget {
       ),
     );
   }
+
+  Stack buildIllustration(int pageIndex) {
+    if (pageIndex == 0)  {
+      return Stack(
+        children: [
+          Positioned(
+            bottom: - (height / 3.5),
+            child: Image.asset(
+              'assets/onboarding/dragon_scales.png',
+              scale: 1.75,
+            ),
+          ),
+          Image.asset(
+            'assets/onboarding/aurora_top_left_1.png',
+            scale: 1.75,
+          ),
+          Center(
+            child: Image.asset(
+              'assets/ruby/ruby_wave_rotate.png',
+              scale: 3,
+              ),
+          ),
+          Transform.translate(
+            offset: Offset(width / 4, - (height/10)),
+            child: Center(
+              child: Image.asset(
+                'assets/onboarding/hi_dialog.png',
+                scale:1.75,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    
+    if (pageIndex == 1) {
+      return Stack(
+        children: [
+          Image.asset(
+            'assets/onboarding/aurora_top_left_2.png',
+            scale: 1.75,
+          ),
+          Positioned(
+            bottom: - (height/3.5),
+            right: 0,
+            child: Image.asset(
+              'assets/onboarding/aurora_bottom_right_2.png',
+              scale: 1.75,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  const Expanded(flex: 2,child: SizedBox.shrink(),),
+                  Expanded(
+                    flex: 10,
+                    child: Image.asset(
+                      'assets/onboarding/ulasan_papers.png',
+                      scale: 1.5,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+          Positioned(
+            top: height / 4.25,
+            child: Image.asset(
+              'assets/ruby/ruby_left_question_mark.png',
+              scale: 1.8,
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: height / 4.75,
+            child: Image.asset(
+              'assets/ruby/ruby_right_exclamation_mark.png',
+              scale: 1.8,
+            ),
+          )
+        ],
+      );
+    }
+
+    return Stack(
+      children: [
+        Positioned(
+          bottom: - (height/4),
+          child: Image.asset(
+            'assets/onboarding/aurora_bottom_left_3.png',
+            scale: 1.75,
+          ),
+        ),
+        Positioned(
+          bottom: - (height/5),
+          right: 0,
+          child: Image.asset(
+            'assets/onboarding/aurora_bottom_right_3.png',
+            scale: 1.75,
+          ),
+        ),
+         Positioned(
+            bottom: - (height / 50),
+            left: width / 2.75,
+            child: Image.asset(
+              'assets/onboarding/target_scores.png',
+              scale: 1.6,
+            ),
+          ),
+        Transform.translate(
+          offset: Offset(- (width/7), -(height/20)),
+          child: Center(
+            child: Image.asset(
+              'assets/ruby/ruby_calculate.png',
+              scale: 1.5,
+            ),
+          ),
+        ), 
+      ],
+    );
+  }
+}
+
+Widget buildDescription(String text, String italicPart) {
+  List<TextSpan> spans = [];
+  List<String> parts = text.split(italicPart);
+
+  spans.add(TextSpan(text: parts[0], style: FontTheme.poppins14w400black()));
+
+  spans.add(TextSpan(
+    text: italicPart,
+    style: FontTheme.poppins14w400black().copyWith(fontStyle: FontStyle.italic),
+  ));
+
+  if (parts.length > 1) {
+    spans.add(TextSpan(text: parts[1], style: FontTheme.poppins14w400black()));
+  }
+
+  return Text.rich(
+    TextSpan(children: spans),
+    textAlign: TextAlign.center,
+  );
 }

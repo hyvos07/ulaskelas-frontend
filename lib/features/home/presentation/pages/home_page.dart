@@ -44,11 +44,14 @@ class _HomePageState extends BaseStateful<HomePage> {
     return AppBar(
       backgroundColor: BaseColors.white,
       title: Container(
-        width: MediaQuery.of(context).size.width / 3,
-        padding: const EdgeInsets.only(left: 10),
-        child: Image.asset(
-          ImageConst.primaryLogo,
-          fit: BoxFit.fitWidth,
+        width: MediaQuery.of(context).size.width / 2.75,
+        padding: const EdgeInsets.only(left: 15),
+        child: Transform.scale(
+          scale: 1.15,
+          child: Image.asset(
+            ImageConst.newPrimaryLogo,
+            fit: BoxFit.fitWidth,
+          ),
         ),
       ),
       centerTitle: false,
