@@ -35,14 +35,15 @@ class _OnboardingPageState extends BaseStateful<OnboardingPage> {
   TemanKuliah adalah All-in-One App yang 
   akan menemani perjalanan kuliahmu 
   dengan fitur - fitur yang ada''',
-      'All-in-One App',
+      'All-in-One',
     ),
     Text(
       '''
   Kamu dapat berdiskusi melalui forum 
-  diskusi dan kamu juga dapat memberi serta 
-  membaca ulasan seluruh kelas loh!''',
+  diskusi dan kamu juga dapat memberi 
+  serta membaca ulasan seluruh kelas loh!''',
       style: FontTheme.poppins14w400black(),
+      maxLines: 3,
       textAlign: TextAlign.center,
     ),
     Text(
@@ -51,6 +52,7 @@ class _OnboardingPageState extends BaseStateful<OnboardingPage> {
   nilai, terdapat fitur untuk menghitung nilai, 
   IPK, dan rekomendasi nilai terbaik!''',
       style: FontTheme.poppins14w400black(),
+      maxLines: 3,
       textAlign: TextAlign.center,
     ),
   ];
@@ -189,7 +191,7 @@ class OnboardingPageBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            flex: 8,
+            flex: 9,
             child: Stack(
               children: [
                 Container(
@@ -241,7 +243,7 @@ class OnboardingPageBody extends StatelessWidget {
       return Stack(
         children: [
           Positioned(
-            bottom: - (height / 3.5),
+            bottom: - (height / 3.1),
             child: Image.asset(
               'assets/onboarding/dragon_scales.png',
               scale: 1.75,
@@ -249,20 +251,20 @@ class OnboardingPageBody extends StatelessWidget {
           ),
           Image.asset(
             'assets/onboarding/aurora_top_left_1.png',
-            scale: 1.75,
+            scale: 2,
           ),
           Center(
             child: Image.asset(
               'assets/ruby/ruby_wave_rotate.png',
-              scale: 3,
+              scale: 3.5,
               ),
           ),
           Transform.translate(
-            offset: Offset(width / 4, - (height/10)),
+            offset: Offset(width / 4, - (height/15)),
             child: Center(
               child: Image.asset(
                 'assets/onboarding/hi_dialog.png',
-                scale:1.75,
+                scale:2,
               ),
             ),
           ),
@@ -295,7 +297,7 @@ class OnboardingPageBody extends StatelessWidget {
                     flex: 10,
                     child: Image.asset(
                       'assets/onboarding/ulasan_papers.png',
-                      scale: 1.5,
+                      scale: 1.75,
                     ),
                   )
                 ],
@@ -303,18 +305,18 @@ class OnboardingPageBody extends StatelessWidget {
             ],
           ),
           Positioned(
-            top: height / 4.25,
+            top: height / 4,
             child: Image.asset(
               'assets/ruby/ruby_left_question_mark.png',
-              scale: 1.8,
+              scale: 2,
             ),
           ),
           Positioned(
             right: 0,
-            top: height / 4.75,
+            top: height / 5,
             child: Image.asset(
               'assets/ruby/ruby_right_exclamation_mark.png',
-              scale: 1.8,
+              scale: 2,
             ),
           )
         ],
@@ -340,18 +342,18 @@ class OnboardingPageBody extends StatelessWidget {
         ),
          Positioned(
             bottom: - (height / 50),
-            left: width / 2.75,
+            left: width / 3,
             child: Image.asset(
               'assets/onboarding/target_scores.png',
-              scale: 1.6,
+              scale: 1.8,
             ),
           ),
         Transform.translate(
-          offset: Offset(- (width/7), -(height/20)),
+          offset: Offset(- (width/7), -(height/50)),
           child: Center(
             child: Image.asset(
               'assets/ruby/ruby_calculate.png',
-              scale: 1.5,
+              scale: 1.7,
             ),
           ),
         ), 
@@ -378,5 +380,6 @@ Widget buildDescription(String text, String italicPart) {
   return Text.rich(
     TextSpan(children: spans),
     textAlign: TextAlign.center,
+    maxLines: 3,
   );
 }

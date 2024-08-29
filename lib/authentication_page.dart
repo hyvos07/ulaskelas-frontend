@@ -25,7 +25,7 @@ class AuthenticationPage extends StatelessWidget {
                 Transform.scale(
                   scale: 1.7,
                   child: Transform.translate(
-                    offset: Offset(- (size.width / 20), - (size.height / 20)),
+                    offset: Offset(- (size.width / 20), - (size.height / 10)),
                     child: Stack(
                       children: List.generate(1, (index) {
                         return Image.asset(
@@ -77,7 +77,7 @@ class AuthenticationPage extends StatelessWidget {
                 Transform.scale(
                   scale: 1.75,
                   child: Transform.translate(
-                    offset: Offset(size.width / 10, size.height / 2.6),
+                    offset: Offset(size.width / 10, size.height / 2.4),
                     child: Stack(
                       children: List.generate(1, (index) {
                         return Image.asset(
