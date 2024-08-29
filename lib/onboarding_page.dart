@@ -218,7 +218,15 @@ class OnboardingPageBody extends StatelessWidget {
                   SizedBox(
                     height: height / 53.33,
                   ),
-                  descriptionWidgets
+                  Flexible(
+                    child: LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints constraints) 
+                        => SingleChildScrollView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: descriptionWidgets,
+                        )
+                    ),
+                  ),
                 ],
               ),
             ),

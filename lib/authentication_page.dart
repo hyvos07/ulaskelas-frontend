@@ -96,41 +96,61 @@ class AuthenticationPage extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Stack(
                     children: [
-                      Center(
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          scale: 6,
-                        ),
-                      ),
-                      const HeightSpace(10),
-                      RichText(
-                        text: TextSpan(
-                          children: <InlineSpan>[
-                            TextSpan(
-                              text: 'Teman',
-                              style: FontTheme.poppins24w700black(),
+                      // Center(
+                      //   child: Transform.rotate(
+                      //     angle: - 0.4,
+                      //     child: Transform.translate(
+                      //       offset: Offset(- (size.width/15), - (size.height/12.5)),
+                      //       child: Transform.flip(
+                      //         flipX: true,
+                      //         child: Image.asset(
+                      //           'assets/ruby/ruby_wave_rotate.png',
+                      //           scale:8,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Image.asset(
+                              'assets/images/logo.png',
+                              scale: 6,
                             ),
-                            TextSpan(
-                              text: 'Kuliah',
-                              style: FontTheme.poppins24w700black().copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
+                          ),
+                          const HeightSpace(10),
+                          RichText(
+                            text: TextSpan(
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text: 'Teman',
+                                  style: FontTheme.poppins24w700black(),
+                                ),
+                                TextSpan(
+                                  text: 'Kuliah',
+                                  style: FontTheme.poppins24w700black().copyWith(
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const HeightSpace(10),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              'Your All-in-One Solution for Academic Success',
+                              style: FontTheme.poppins14w500black(),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
                       ),
-                      const HeightSpace(10),
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          'Your All-in-One Solution for Academic Success',
-                          style: FontTheme.poppins14w500black(),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                      
                     ],
                   ),
                 ),

@@ -52,8 +52,13 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
         print('Animating to page 1');
         await _pageController.animateToPage(
           1,
-          duration: const Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 600),
           curve: Curves.fastLinearToSlowEaseIn,
+        );
+        await scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.decelerate,
         );
       }
     });
