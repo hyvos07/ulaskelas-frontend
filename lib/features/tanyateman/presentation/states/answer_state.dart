@@ -18,7 +18,8 @@ class AnswerState {
 
   List<AnswerModel> get allAnswer => _allAnswer ?? [];
 
-  Future<void> retrieveAllAnswer(QueryAnswer q) async {
+  Future<Map<String,dynamic>> retrieveAllAnswer(QueryAnswer q) async {
+    final data = <String,dynamic>{};
     page = 1;
     q.page = page;
     print('retrieveAnswer, with query page: ${q.page}');
@@ -26,13 +27,17 @@ class AnswerState {
     resp.fold((failure) => throw failure, (result) {
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
-      _allAnswer = result.data;
+      _allAnswer = result.data['answers'];
+      data['like_count'] = result.data['like_count'];
+      data['reply_count'] = result.data['reply_count'];
       if (kDebugMode) {
         print(_allAnswer);
+        print(data);
       }
     });
 
     answersRM.notify();
+    return data;
   }
 
   Future<void> retrieveMoreAllAnswer(QueryAnswer q) async {
@@ -41,7 +46,7 @@ class AnswerState {
     print('retrieveMoreData, with query page: ${q.generateQueryString()}');
     final resp = await _repo.getAllAnswers(q);
     resp.fold((failure) => throw failure, (result) {
-      _allAnswer?.addAll(result.data);
+      _allAnswer?.addAll(result.data['answers']);
       final lessThanLimit = result.data.length < 10;
       hasReachedMax = result.data.isEmpty || lessThanLimit;
       if (kDebugMode) {

@@ -207,7 +207,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                     listenTo: answersRM,
                     onWaiting: () => Column(
                       children: List.generate(
-                        10,
+                        5,
                         (index) => const Padding(
                           padding: EdgeInsets.symmetric(
                             vertical: 8,
@@ -221,7 +221,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                     ),
                     onIdle: () => Column(
                       children: List.generate(
-                        10,
+                        5,
                         (index) => const Padding(
                           padding: EdgeInsets.symmetric(
                             vertical: 8,
@@ -327,7 +327,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
         const HeightSpace(40),
         OnReactive(
           () => ExpandedButton(
-            isLoading: componentFormRM.state.isLoading,
+            isLoading: answerFormRM.state.isLoading,
             text: 'Posting',
             onTap: () async {
               await onSubmitCallBack(context);
@@ -451,11 +451,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       final isSucces = await answerFormRM.state.postNewAnswer(widget.model.id);
       if (isSucces) {
         SuccessMessenger('Jawaban berhasil dibuat').show(ctx!);
-        // await _pageController.animateToPage(
-        //   0, // Index of the second page
-        //   duration: const Duration(milliseconds: 1000),
-        //   curve: Curves.fastLinearToSlowEaseIn,
-        // );
       } else {
         ErrorMessenger('Jawaban gagal dibuat').show(ctx!);
       }
@@ -495,9 +490,23 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   }
 
   Future<void> retrieveData() async {
-    final query = QueryAnswer(questionId: widget.model.id);
-    await answersRM.setState((s) => s.retrieveAllAnswer(query));
-  }
+  final query = QueryAnswer(questionId: widget.model.id);
+
+  await answersRM.setState((s) async {
+    final data = await s.retrieveAllAnswer(query);
+
+    if (data['like_count'] != widget.model.likeCount ||
+        data['reply_count'] != widget.model.replyCount) {
+      await questionsRM.setState((s) => s.updateLikeANDComment(
+          widget.model.id, data,),);
+      setState(() {
+        widget.model.likeCount = data['like_count'];
+        widget.model.replyCount = data['reply_count'];
+      });
+    }
+  });
+}
+
 
   bool scrollCondition() {
     return !answersRM.state.hasReachedMax;

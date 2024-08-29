@@ -101,7 +101,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
         ),
         OnReactive(
           () => ExpandedButton(
-            isLoading: componentFormRM.state.isLoading,
+            isLoading: questionFormRM.state.isLoading,
             text: 'Posting',
             onTap: () async {
               await onSubmitCallBack(context);

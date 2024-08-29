@@ -1,7 +1,7 @@
 part of '_repositories.dart';
 
 abstract class AnswerRepository {
-  Future<Decide<Failure, Parsed<List<AnswerModel>>>> getAllAnswers(
+  Future<Decide<Failure, Parsed<Map<String,dynamic>>>> getAllAnswers(
     QueryAnswer query,
   );
   Future<Decide<Failure, Parsed<Map<String,dynamic>>>> postAnswer(

@@ -146,4 +146,19 @@ class QuestionState {
       questionsRM.notify();
     });
   }
+
+  Future<void> updateLikeANDComment(
+    int id, Map<String,dynamic> data,) async{
+      _allQuestions!.map(
+        (e) {
+          if (e.id == id) {
+            e..likeCount = data['like_count']
+            ..replyCount = data['reply_count'];
+          }
+          return e;
+        }
+      ).toList();
+
+      questionsRM.notify();
+  }
 }

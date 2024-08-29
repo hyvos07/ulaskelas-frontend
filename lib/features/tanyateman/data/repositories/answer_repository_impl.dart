@@ -8,7 +8,7 @@ class AnswerRepositoryImpl implements AnswerRepository {
   final AnswerRemoteDataSource _remoteDataSource;
 
   @override
-  Future<Decide<Failure, Parsed<List<AnswerModel>>>>
+  Future<Decide<Failure, Parsed<Map<String,dynamic>>>>
       getAllAnswers(QueryAnswer query) {
     return apiCall(_remoteDataSource.getAllAnswers(query));
   }

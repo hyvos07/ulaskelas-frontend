@@ -26,6 +26,8 @@ class QuestionFormState {
   File? get fileImage => _fileImage;
   ImagePicker? get imagePicker => _imagePicker;
 
+  bool isLoading = false;
+
   void clearForm() {
     _questionController.clear();
     _question = '';
@@ -129,6 +131,7 @@ class QuestionFormState {
 
   Future<bool> postNewQuestion() async {
     var isSucces = false;
+    isLoading = true;
 
     final model = {
       'attachment_file' : fileImage,
@@ -147,6 +150,8 @@ class QuestionFormState {
       clearForm();
       isSucces = true;
     });
+
+    isLoading = false;
     answerFormRM.notify();
 
     return isSucces;
