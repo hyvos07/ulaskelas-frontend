@@ -46,3 +46,4 @@ part 'search_question_course_view.dart';
 part 'card_course_radio.dart';
 part 'course_picker.dart';
 part 'skeleton_card_post.dart';
+part 'custom_search_field.dart';
