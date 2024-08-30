@@ -192,11 +192,18 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                             onImageTap: () => seeImage(isDetail: true),
                             imageTag:
                                 'post-image-preview?id=${widget.model.id}',
-                            onReplyTap: () => _pageController.animateToPage(
-                              1,
-                              duration: const Duration(milliseconds: 1000),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                            ),
+                            onReplyTap: () async {
+                              await _pageController.animateToPage(
+                                1,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.fastLinearToSlowEaseIn,
+                              );
+                              await scrollController.animateTo(
+                                scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.decelerate,
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -432,18 +439,17 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
   Widget _buildBottomMax(bool emptyList) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      child: Container(
-        height: MediaQuery.of(context).size.height  * 7 / 10,
-        child: Text(
-          emptyList ? 'Belum ada jawaban.' : 'Tidak ada jawaban lagi.',
-          style: FontTheme.poppins12w600black().copyWith(
-            color: BaseColors.gray2.withOpacity(0.7),
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 7 / 10,
+          child: Text(
+            emptyList ? 'Belum ada jawaban.' : 'Tidak ada jawaban lagi.',
+            style: FontTheme.poppins12w600black().copyWith(
+              color: BaseColors.gray2.withOpacity(0.7),
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
-        ),
-      )
-    );
+        ));
   }
 
   Future<void> onSubmitCallBack(BuildContext context) async {
@@ -490,23 +496,26 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   }
 
   Future<void> retrieveData() async {
-  final query = QueryAnswer(questionId: widget.model.id);
+    final query = QueryAnswer(questionId: widget.model.id);
 
-  await answersRM.setState((s) async {
-    final data = await s.retrieveAllAnswer(query);
+    await answersRM.setState((s) async {
+      final data = await s.retrieveAllAnswer(query);
 
-    if (data['like_count'] != widget.model.likeCount ||
-        data['reply_count'] != widget.model.replyCount) {
-      await questionsRM.setState((s) => s.updateLikeANDComment(
-          widget.model.id, data,),);
-      setState(() {
-        widget.model.likeCount = data['like_count'];
-        widget.model.replyCount = data['reply_count'];
-      });
-    }
-  });
-}
-
+      if (data['like_count'] != widget.model.likeCount ||
+          data['reply_count'] != widget.model.replyCount) {
+        await questionsRM.setState(
+          (s) => s.updateLikeANDComment(
+            widget.model.id,
+            data,
+          ),
+        );
+        setState(() {
+          widget.model.likeCount = data['like_count'];
+          widget.model.replyCount = data['reply_count'];
+        });
+      }
+    });
+  }
 
   bool scrollCondition() {
     return !answersRM.state.hasReachedMax;
