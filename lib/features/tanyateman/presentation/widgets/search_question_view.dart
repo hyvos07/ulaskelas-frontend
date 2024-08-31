@@ -60,7 +60,6 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
       onRefresh: retrieveData,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final searchQuery = searchQuestionRM.state.searchData?.text;
           return Stack(
             children: [
               SingleChildScrollView(
@@ -80,20 +79,28 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: Text(
-                                searchQuery != null
-                                    ? searchQuery.startsWith('#')
-                                        ? searchQuery
-                                        : 'Hasil Pencarian: $searchQuery'
-                                    : 'Hasil Pencarian',
-                                style: FontTheme.poppins14w700black().copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: BaseColors.gray1,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                              ),
+                            OnBuilder(
+                              listenTo: searchQuestionRM,
+                              builder: () {
+                                final searchQuery =
+                                    searchQuestionRM.state.searchData?.text;
+                                return Expanded(
+                                  child: Text(
+                                    searchQuery != null
+                                        ? searchQuery.startsWith('#')
+                                            ? searchQuery
+                                            : 'Hasil Pencarian: $searchQuery'
+                                        : 'Hasil Pencarian',
+                                    style:
+                                        FontTheme.poppins14w700black().copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: BaseColors.gray1,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                );
+                              },
                             ),
                             const WidthSpace(25),
                             OnReactive(_buildFilter),

@@ -22,7 +22,7 @@ class _SearchQuestionPageState
       }
     });
     searchCourseRM.state.controller.clear();
-    retrieveData(); // Sometimes they don't retrieve data at the first build
+    retrieveData();
     searchQuestionRM.state.searchData = SearchData();
     searchQuestionRM.state.searchQuestionFilter = 'semua';
   }

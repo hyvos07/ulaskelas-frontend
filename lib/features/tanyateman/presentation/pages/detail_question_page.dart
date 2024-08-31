@@ -495,23 +495,26 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   }
 
   Future<void> retrieveData() async {
-  final query = QueryAnswer(questionId: widget.model.id);
+    final query = QueryAnswer(questionId: widget.model.id);
 
-  await answersRM.setState((s) async {
-    final data = await s.retrieveAllAnswer(query);
+    await answersRM.setState((s) async {
+      final data = await s.retrieveAllAnswer(query);
 
-    if (data['like_count'] != widget.model.likeCount ||
-        data['reply_count'] != widget.model.replyCount) {
-      await questionsRM.setState((s) => s.updateLikeANDComment(
-          widget.model.id, data,),);
-      setState(() {
-        widget.model.likeCount = data['like_count'];
-        widget.model.replyCount = data['reply_count'];
-      });
-    }
-  });
-}
-
+      if (data['like_count'] != widget.model.likeCount ||
+          data['reply_count'] != widget.model.replyCount) {
+        await questionsRM.setState(
+          (s) => s.updateLikeANDComment(
+            widget.model.id,
+            data,
+          ),
+        );
+        setState(() {
+          widget.model.likeCount = data['like_count'];
+          widget.model.replyCount = data['reply_count'];
+        });
+      }
+    });
+  }
 
   bool scrollCondition() {
     return !answersRM.state.hasReachedMax;

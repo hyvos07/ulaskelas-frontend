@@ -219,6 +219,7 @@ class PostContent extends StatelessWidget {
                                           'Gagal memuat gambar!'
                                           '\nHarap refresh ulang.',
                                           style: FontTheme.poppins12w600black(),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ],
                                     ),
@@ -305,8 +306,9 @@ class PostContent extends StatelessWidget {
                                       const HeightSpace(10),
                                       Text(
                                         'Gagal memuat gambar!'
-                                        '\nKlik untuk mencoba lagi.',
+                                        '\nHarap refresh ulang.',
                                         style: FontTheme.poppins12w600black(),
+                                        textAlign: TextAlign.center,
                                       ),
                                     ],
                                   ),

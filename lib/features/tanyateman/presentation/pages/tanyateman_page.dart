@@ -8,11 +8,24 @@ class TanyaTemanPage extends StatefulWidget {
 }
 
 class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
+  final focusNode = FocusNode();
+
+  Timer? _debounce;
+
   @override
   void init() {
     searchQuestionRM.setState(
       (s) => s.searchData = SearchData(),
     );
+    searchQuestionRM.state.controller.clear();
+    questionsRM.state.allQuestionsFilter = 'semua';
+    questionsRM.state.historyQuestionsFilter = 'semua';
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 
   @override
@@ -76,64 +89,43 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
                     container: searchBarTTShowcase(context),
                     child: Row(
                       children: [
-                        if (searchQuestionRM.state.searchData?.text != null)
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () => {
-                                  searchQuestionRM.setState(
-                                    (s) => s.searchData = SearchData(),
-                                  ),
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_back_rounded,
-                                  size: 24,
-                                  color: BaseColors.gray2,
-                                ),
-                                splashRadius: 20,
-                                constraints: const BoxConstraints(),
-                                padding: const EdgeInsets.all(5),
-                              ),
-                              const SizedBox(width: 10),
-                            ],
-                          ),
+                        // if (searchQuestionRM.state.searchData?.text != null)
+                        //   Row(
+                        //     children: [
+                        //       IconButton(
+                        //         onPressed: () => {
+                        //           searchQuestionRM.setState(
+                        //             (s) => s.searchData = SearchData(),
+                        //           ),
+                        //         },
+                        //         icon: const Icon(
+                        //           Icons.arrow_back_rounded,
+                        //           size: 24,
+                        //           color: BaseColors.gray2,
+                        //         ),
+                        //         splashRadius: 20,
+                        //         constraints: const BoxConstraints(),
+                        //         padding: const EdgeInsets.all(5),
+                        //       ),
+                        //       const SizedBox(width: 12),
+                        //     ],
+                        //   ),
                         Expanded(
-                          child: GestureDetector(
-                            onTap: () => {
-                              nav.goToSearchQuestionPage(),
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: BaseColors.gray3,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.search,
-                                    size: 20,
-                                    color: BaseColors.gray3,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      searchQuestionRM.state.searchData?.text ??
-                                          'Cari Matkul atau Pertanyaan',
-                                      style: FontTheme.poppins12w500black()
-                                          .copyWith(
-                                        color: BaseColors.gray3,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                          child: OnReactive(
+                            () => CustomSearchField(
+                              controller: searchQuestionRM.state.controller,
+                              focusNode: focusNode,
+                              hintText: 'Cari Pertanyaan',
+                              onFieldSubmitted: (val) {
+                                searchQuestionRM.state.addToHistory(val ?? '');
+                              },
+                              onQueryChanged: onQueryChanged,
+                              onClear: () {
+                                // focusNode.unfocus();
+                                searchQuestionRM.state.controller.clear();
+                                onQueryChanged('');
+                                searchQuestionRM.notify();
+                              },
                             ),
                           ),
                         ),
@@ -152,10 +144,33 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
                   onWaiting: () => const CircleLoading(),
                   onError: (error, refreshError) => Text(error.toString()),
                   onData: (data) {
+                    final Widget decidePage;
                     if (searchQuestionRM.state.searchData?.text != null) {
-                      return _buildSearchResult();
+                      decidePage = _buildSearchResult();
+                    } else if (searchQuestionRM.state.searchData?.text ==
+                        null) {
+                      decidePage = _buildNormalResult();
+                    } else {
+                      decidePage = const SizedBox();
                     }
-                    return _buildNormalResult();
+                    return Stack(
+                      children: [
+                        decidePage,
+                        if (focusNode.hasFocus &&
+                            searchQuestionRM.state.controller.text.isEmpty)
+                          ClipRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                              child: Container(
+                                color: Colors.white.withOpacity(0.7),
+                              ),
+                            ),
+                          ),
+                        if (focusNode.hasFocus &&
+                            searchQuestionRM.state.controller.text.isEmpty)
+                          _buildHistory(),
+                      ],
+                    );
                   },
                 ),
               ),
@@ -179,7 +194,125 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
     return true;
   }
 
+  Future<void> onQueryChanged(String val) async {
+    if (val == searchQuestionRM.state.lastQuery) {
+      return;
+    } else if (val == '') {
+      searchQuestionRM.state.lastQuery = val;
+      searchQuestionRM.state.searchData = SearchData();
+      searchQuestionRM.notify();
+      return;
+    }
+
+    searchQuestionRM.state.lastQuery = val;
+    searchQuestionRM.notify();
+
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    await searchQuestionRM.setState((s) {
+      s.hasReachedMax = false;
+      return;
+    });
+    _debounce = Timer(const Duration(milliseconds: 1000), () async {
+      if (searchQuestionRM.state.controller.text.isEmpty) {
+        searchQuestionRM.state.searchData = SearchData();
+        searchQuestionRM.notify();
+        return;
+      }
+
+      searchQuestionRM.state.addToHistory(
+        searchQuestionRM.state.controller.text,
+      ); // Save to history after search
+      final query = QueryQuestion(
+        searchKeyword: searchQuestionRM.state.controller.text,
+      );
+      await searchQuestionRM.setState(
+        (s) => s.retrieveSearchedQuestion(query),
+      );
+      await searchQuestionRM.setState(
+        (s) => s.searchData = SearchData(
+          text: searchQuestionRM.state.controller.text,
+        ),
+      );
+    });
+
+    searchQuestionRM.notify();
+  }
+
+  Widget _buildHistory() {
+    return Container(
+      decoration: const BoxDecoration(
+        color: BaseColors.transparent,
+        backgroundBlendMode: BlendMode.overlay,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 26,
+          vertical: 10,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Riwayat Pencarian',
+                    style: FontTheme.poppins14w700black(),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      searchQuestionRM.setState((s) => s.clearHistory());
+                      focusNode.unfocus();
+                      searchQuestionRM.state.controller.clear();
+                      onQueryChanged('');
+                    },
+                    child: Text(
+                      'Hapus',
+                      style: FontTheme.poppins12w500black().copyWith(
+                        color: BaseColors.error,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const HeightSpace(10),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: searchQuestionRM.state.history.map((element) {
+                return InkWell(
+                  onTap: () {
+                    final controller = searchQuestionRM.state.controller;
+                    focusNode.requestFocus();
+                    controller
+                      ..text = element
+                      ..selection = TextSelection.fromPosition(
+                        TextPosition(
+                          offset: searchQuestionRM.state.controller.text.length,
+                        ),
+                      );
+                    focusNode.unfocus();
+                    onQueryChanged(element);
+                  },
+                  child: Tag(
+                    label: element,
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSearchResult() {
+    // Every build, reset the filter to 'semua'
+    searchQuestionRM.state.searchQuestionFilter = 'semua';
     return const SearchQuestionView();
   }
 

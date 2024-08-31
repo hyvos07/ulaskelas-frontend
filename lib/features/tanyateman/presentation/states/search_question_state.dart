@@ -6,8 +6,11 @@ class SearchQuestionState {
     _repo = QuestionRepositoryImpl(remoteDataSource);
     final likeRemoteDataSource = LikeActionRemoteDataSourceImpl();
     _likeRepo = LikeActionRepositoryImpl(likeRemoteDataSource);
+
+    controller = TextEditingController();
   }
 
+  late TextEditingController controller;
   late QuestionRepository _repo;
   late LikeActionRepository _likeRepo;
 
@@ -15,9 +18,31 @@ class SearchQuestionState {
   bool hasReachedMax = false;
   String searchQuestionFilter = 'semua';
   SearchData? searchData;
+  String? _lastQuery;
+  ListQueue<String>? _history;
 
   List<QuestionModel>? _searchedQuestions;
   List<QuestionModel> get searchedQuestions => _searchedQuestions ?? [];
+  ListQueue<String> get history => _history ?? ListQueue();
+  String get lastQuery => _lastQuery ?? '';
+  set lastQuery(String val) => _lastQuery = val;
+
+  /// Every submitted query will added to history
+  void addToHistory(String query) {
+    if (query.isEmpty) return;
+    _history ??= ListQueue<String>();
+    if (!history.contains(query)) {
+      _history?.addFirst(query);
+    }
+    if (history.length == 11) {
+      _history?.removeLast();
+    }
+  }
+
+  /// Clear search history from local state and local storage.
+  void clearHistory() {
+    _history?.clear();
+  }
 
   ///////////////////////
   /// Search Question ///
