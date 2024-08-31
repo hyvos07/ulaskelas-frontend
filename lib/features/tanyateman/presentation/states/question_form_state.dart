@@ -5,12 +5,11 @@ class QuestionFormState {
     final remoteDataSource = QuestionRemoteDataSourceImpl();
     _repo = QuestionRepositoryImpl(remoteDataSource);
     _questionController = TextEditingController();
-    formKey = GlobalKey<FormState>();
   }
 
   late QuestionRepository _repo; 
   late TextEditingController _questionController;
-  late GlobalKey formKey;
+  final formKey = GlobalKey<FormState>();
 
   String? _question;
   CourseModel? _course;
@@ -27,6 +26,7 @@ class QuestionFormState {
   ImagePicker? get imagePicker => _imagePicker;
 
   bool isLoading = false;
+  bool isCourseEmpty = false;
 
   void clearForm() {
     _questionController.clear();
@@ -73,6 +73,13 @@ class QuestionFormState {
     _isAnonym = newIsAnonym;
     if (kDebugMode) {
       print('Is Anonym: $_isAnonym');
+    }
+    questionFormRM.notify();
+  }
+  void setIsCourseEmpty(bool newIsCourseEmpty) {
+    isCourseEmpty = newIsCourseEmpty;
+    if (kDebugMode) {
+      print('Is Course Empty : $isCourseEmpty');
     }
     questionFormRM.notify();
   }

@@ -5,12 +5,11 @@ class AnswerFormState {
     final remoteDataSource = AnswerRemoteDataSourceImpl();
     _repo = AnswerRepositoryImpl(remoteDataSource);
     _answerController = TextEditingController();
-    formKey = GlobalKey<FormState>();
   }
 
   late AnswerRepository _repo; 
   late TextEditingController _answerController;
-  late GlobalKey formKey;
+  final formKey =  GlobalKey<FormState>();
 
   String? _answer;
   bool _isAnonym = false;

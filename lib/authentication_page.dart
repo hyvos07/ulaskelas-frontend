@@ -99,21 +99,6 @@ class AuthenticationPage extends StatelessWidget {
                 Expanded(
                   child: Stack(
                     children: [
-                      // Center(
-                      //   child: Transform.rotate(
-                      //     angle: - 0.4,
-                      //     child: Transform.translate(
-                      //       offset: Offset(- (size.width/15), - (size.height/12.5)),
-                      //       child: Transform.flip(
-                      //         flipX: true,
-                      //         child: Image.asset(
-                      //           'assets/ruby/ruby_wave_rotate.png',
-                      //           scale:8,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

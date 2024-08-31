@@ -92,12 +92,15 @@ A new version of this app available on the store, please update into the newer v
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: BaseColors.purpleHearth,
+      backgroundColor: BaseColors.white,
       body: Stack(
         children: [
           Center(
-            child: SvgPicture.asset(
-              'assets/icons/temankuliah.svg'
+            child: Transform.scale(
+              scale: 0.6,
+              child: SvgPicture.asset(
+                'assets/icons/temankuliah.svg'
+              ),
             ),
           ),
           Padding(
@@ -109,7 +112,7 @@ A new version of this app available on the store, please update into the newer v
                   RichText(
                     text: TextSpan(
                       text: 'Teman',
-                      style: FontTheme.poppins20w700white(),
+                      style: FontTheme.poppins20w700black(),
                       children: const <TextSpan>[
                         TextSpan(
                           text: 'Kuliah',
@@ -122,7 +125,7 @@ A new version of this app available on the store, please update into the newer v
                   ),
                   Text(
                     'by RISTEK Fasilkom UI',
-                    style: FontTheme.poppins14w500white(),
+                    style: FontTheme.poppins14w500black(),
                   ),
                 ],
               ),

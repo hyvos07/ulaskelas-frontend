@@ -165,12 +165,6 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    // const WidthSpace(20),
-                    // Icon(
-                    //   Icons.more_horiz,
-                    //   color: Colors.grey.shade900,
-                    // ),
-                    // const WidthSpace(20),
                   ],
                 ),
               ),
@@ -287,46 +281,49 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const HeightSpace(5),
-              const QuestionFormLabel(
-                text: 'Jawaban',
-                bottomPad: 10,
-              ),
-              QuestionTextField(
-                isAnswer: true,
-                controller: answerFormRM.state.answerController,
-                onChanged: (value) {
-                  if (value.trim().isEmpty) {
-                    answerFormRM.state.answerController.text = '';
-                  }
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'This field is required.';
-                  }
-                  answerFormRM.setState((s) => s.setAnswer(value));
-                  return null;
-                },
-              ),
-              const HeightSpace(20),
-              OnReactive(
-                () => SendAsAnonymSwitcher(
-                  isAnonym: answerFormRM.state.isAnonym,
-                  onChanged: answerFormRM.state.setIsAnonym,
+          child: Form(
+            key: answerFormRM.state.formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const HeightSpace(5),
+                const QuestionFormLabel(
+                  text: 'Jawaban',
+                  bottomPad: 10,
                 ),
-              ),
-              const HeightSpace(20),
-              OnReactive(
-                () => ImagePickerBox(
-                  onTapUpload: answerFormRM.state.pickImage,
-                  onTapSeeImage: seeImage,
-                  isImageSizeTooBig: answerFormRM.state.isImageSizeTooBig,
+                QuestionTextField(
+                  isAnswer: true,
+                  controller: answerFormRM.state.answerController,
+                  onChanged: (value) {
+                    if (value.trim().isEmpty) {
+                      answerFormRM.state.answerController.text = '';
+                    }
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '';
+                    }
+                    answerFormRM.setState((s) => s.setAnswer(value));
+                    return null;
+                  },
                 ),
-              )
-            ],
+                const HeightSpace(20),
+                OnReactive(
+                  () => SendAsAnonymSwitcher(
+                    isAnonym: answerFormRM.state.isAnonym,
+                    onChanged: answerFormRM.state.setIsAnonym,
+                  ),
+                ),
+                const HeightSpace(20),
+                OnReactive(
+                  () => ImagePickerBox(
+                    onTapUpload: answerFormRM.state.pickImage,
+                    onTapSeeImage: seeImage,
+                    isImageSizeTooBig: answerFormRM.state.isImageSizeTooBig,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
         const HeightSpace(40),
@@ -438,21 +435,19 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   Widget _buildBottomMax(bool emptyList) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
-      child: Container(
-        // height: MediaQuery.of(context).size.height  * 7 / 10,
-        child: Text(
-          emptyList ? 'Belum ada jawaban.' : 'Tidak ada jawaban lagi.',
-          style: FontTheme.poppins12w600black().copyWith(
-            color: BaseColors.gray2.withOpacity(0.7),
-          ),
-          textAlign: TextAlign.center,
+      child: Text(
+        emptyList ? 'Belum ada jawaban.' : 'Tidak ada jawaban lagi.',
+        style: FontTheme.poppins12w600black().copyWith(
+          color: BaseColors.gray2.withOpacity(0.7),
         ),
+        textAlign: TextAlign.center,
       )
     );
   }
 
   Future<void> onSubmitCallBack(BuildContext context) async {
-    if (answerFormRM.state.answerController.text != '') {
+    if (answerFormRM.state.formKey.currentState!.validate()
+        && answerFormRM.state.answerController.text != '') {
       final isSucces = await answerFormRM.state.postNewAnswer(widget.model.id);
       if (isSucces) {
         SuccessMessenger('Jawaban berhasil dibuat').show(ctx!);
@@ -460,7 +455,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
         ErrorMessenger('Jawaban gagal dibuat').show(ctx!);
       }
     } else {
-      WarningMessenger('Jawaban perlu diisi!').show(context);
+      ErrorMessenger('Jawaban perlu diisi!').show(context);
     }
   }
 

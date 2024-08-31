@@ -124,6 +124,7 @@ class _SearchCourseRadioPickerState
                 } else {
                   final selectedCourses = searchCourseRM.state.selectedCourses[0];
                   questionFormRM.state.setCourse(selectedCourses);
+                  questionFormRM.state.setIsCourseEmpty(false);
                 }
                 searchCourseRM.state.clearSelectedCourses();
                 nav.pop();

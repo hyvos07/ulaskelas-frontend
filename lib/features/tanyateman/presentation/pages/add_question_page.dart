@@ -13,6 +13,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   @override
   void init() {
     questionFormRM.setState((s) => s.clearForm());
+    print(questionFormRM.state.isCourseEmpty);
   }
 
   @override
@@ -54,7 +55,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'This field is required.';
+                      return '';
                     }
                     questionFormRM.setState((s) => s.setQuestion(value));
                     return null;
@@ -63,6 +64,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
                 const HeightSpace(15),
                 OnReactive(
                   () => CoursePicker(
+                    isCourseEmpty: questionFormRM.state.isCourseEmpty,
                     onTap: () {
                       nav.goToSearchCourseRadioPick();
                     },
@@ -128,7 +130,8 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   }
 
   Future<void> onSubmitCallBack(BuildContext context) async {
-    if (questionFormRM.state.questionController.text != ''
+    if (questionFormRM.state.formKey.currentState!.validate()
+        && questionFormRM.state.questionController.text != ''
         && questionFormRM.state.course != null) {
       final isSucces = await questionFormRM.state.postNewQuestion();
       if (isSucces) {
@@ -157,7 +160,19 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
         ErrorMessenger('Pertanyaan gagal dibuat').show(ctx!);
       }
     } else {
-      WarningMessenger('Pertanyaan dan matkul terkait perlu diisi!').show(context);
+      var warningString = '';
+      if (questionFormRM.state.questionController.text.isEmpty) {
+        warningString += 'Pertanyaan';
+      }
+      if (questionFormRM.state.course == null) {
+        if (warningString.isNotEmpty) {
+          warningString += ' dan';
+        }
+        warningString += 'Matkul Terkait';
+        questionFormRM.state.setIsCourseEmpty(true);
+      }
+      warningString += ' perlu diisi!';
+      ErrorMessenger(warningString).show(ctx!);
     }
   }
 

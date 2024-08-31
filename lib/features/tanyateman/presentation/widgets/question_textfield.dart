@@ -21,6 +21,8 @@ class QuestionTextField extends StatelessWidget {
       maxLines: 12,
       style: FontTheme.poppins12w400black(),
       decoration: InputDecoration(
+        isDense: true,
+        errorStyle: const TextStyle(height: 0),
         contentPadding: const EdgeInsets.all(16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
