@@ -1,6 +1,7 @@
 // Created by Muhamad Fauzi Ridwan on 22/11/21.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:ulaskelas/features/matkul/bookmarks/domain/entities/query_bookmark.dart';
@@ -117,18 +118,21 @@ class AuthenticationPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Center(
-                            child: Image.asset(
-                              'assets/images/logo.png',
-                              scale: 6,
+                            child: Transform.scale(
+                              scale: 0.5,
+                              child: SvgPicture.asset(
+                                'assets/icons/temankuliah.svg',
+                              ),
                             ),
                           ),
-                          const HeightSpace(10),
                           RichText(
                             text: TextSpan(
                               children: <InlineSpan>[
                                 TextSpan(
                                   text: 'Teman',
-                                  style: FontTheme.poppins24w700black(),
+                                  style: FontTheme.poppins24w700black().copyWith(
+                                    color: BaseColors.malibu
+                                  ),
                                 ),
                                 TextSpan(
                                   text: 'Kuliah',

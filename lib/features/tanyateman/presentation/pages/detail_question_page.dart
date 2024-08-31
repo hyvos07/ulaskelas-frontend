@@ -133,145 +133,150 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       child: RefreshIndicator(
         key: refreshIndicatorKey,
         onRefresh: retrieveData,
-        child: CustomScrollView(
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           controller: scrollController,
-          slivers: [
-            SliverAppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leadingWidth: MediaQuery.of(context).size.width,
-              leading: Row(
-                children: [
-                  IconButton(
-                    padding: const EdgeInsets.only(
-                      left: 7.5,
-                    ),
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Colors.grey.shade900,
-                    ),
-                    onPressed: onBackPressed,
-                  ),
-                  Expanded(
-                    child: Text(
-                      '#${widget.model.courseName}',
-                      style: FontTheme.poppins12w600black().copyWith(
-                        color: Colors.grey.shade600,
+          child: CustomScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            slivers: [
+              SliverAppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leadingWidth: MediaQuery.of(context).size.width,
+                leading: Row(
+                  children: [
+                    IconButton(
+                      padding: const EdgeInsets.only(
+                        left: 7.5,
                       ),
-                      overflow: TextOverflow.ellipsis,
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.grey.shade900,
+                      ),
+                      onPressed: onBackPressed,
                     ),
-                  ),
-                  // const WidthSpace(20),
-                  // Icon(
-                  //   Icons.more_horiz,
-                  //   color: Colors.grey.shade900,
-                  // ),
-                  // const WidthSpace(20),
-                ],
+                    Expanded(
+                      child: Text(
+                        '#${widget.model.courseName}',
+                        style: FontTheme.poppins12w600black().copyWith(
+                          color: Colors.grey.shade600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    // const WidthSpace(20),
+                    // Icon(
+                    //   Icons.more_horiz,
+                    //   color: Colors.grey.shade900,
+                    // ),
+                    // const WidthSpace(20),
+                  ],
+                ),
               ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: Column(
-                      children: [
-                        OnBuilder(
-                          listenTo: questionsRM,
-                          builder: () => PostContent(
-                            onLikeTap: () async {
-                              await questionsRM.state
-                                  .likeQuestion(widget.model);
-                              if (widget.fromSearch) {
-                                searchQuestionRM.notify();
-                              }
-                            },
-                            questionModel: widget.model,
-                            isDetail: true,
-                            onImageTap: () => seeImage(isDetail: true),
-                            imageTag:
-                                'post-image-preview?id=${widget.model.id}',
-                            onReplyTap: () => _pageController.animateToPage(
-                              1,
-                              duration: const Duration(milliseconds: 1000),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const HeightSpace(30),
-                  OnBuilder<AnswerState>.all(
-                    listenTo: answersRM,
-                    onWaiting: () => Column(
-                      children: List.generate(
-                        5,
-                        (index) => const Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 20,
-                          ),
-                          child: SkeletonCardPost(
-                            isReply: true,
-                          ),
-                        ),
-                      ),
-                    ),
-                    onIdle: () => Column(
-                      children: List.generate(
-                        5,
-                        (index) => const Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 20,
-                          ),
-                          child: SkeletonCardPost(
-                            isReply: true,
-                          ),
-                        ),
-                      ),
-                    ),
-                    onError: (dynamic error, refresh) => Text(error.toString()),
-                    onData: (data) {
-                      return Column(
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Column(
                         children: [
-                          Center(
-                            child: SmoothPageIndicator(
-                              controller: _pageController,
-                              count: 2,
-                              effect: ExpandingDotsEffect(
-                                dotHeight: 8,
-                                dotWidth: 8,
-                                activeDotColor: BaseColors.primary,
+                          OnBuilder(
+                            listenTo: questionsRM,
+                            builder: () => PostContent(
+                              onLikeTap: () async {
+                                await questionsRM.state
+                                    .likeQuestion(widget.model);
+                                if (widget.fromSearch) {
+                                  searchQuestionRM.notify();
+                                }
+                              },
+                              questionModel: widget.model,
+                              isDetail: true,
+                              onImageTap: () => seeImage(isDetail: true),
+                              imageTag:
+                                  'post-image-preview?id=${widget.model.id}',
+                              onReplyTap: () => _pageController.animateToPage(
+                                1,
+                                duration: const Duration(milliseconds: 1000),
+                                curve: Curves.fastLinearToSlowEaseIn,
                               ),
                             ),
                           ),
-                          const HeightSpace(10),
-                          ExpandablePageView.builder(
-                            controller: _pageController,
-                            animationDuration:
-                                const Duration(milliseconds: 800),
-                            animationCurve: Curves.fastLinearToSlowEaseIn,
-                            itemCount: 2,
-                            itemBuilder: (context, index) {
-                              if (index == 0) {
-                                return _buildShowComments(
-                                  answersRM.state.allAnswer,
-                                );
-                              }
-                              return _buildCommentForm();
-                            },
-                          ),
                         ],
-                      );
-                    },
-                  )
-                ],
+                      ),
+                    ),
+                    const HeightSpace(30),
+                    OnBuilder<AnswerState>.all(
+                      listenTo: answersRM,
+                      onWaiting: () => Column(
+                        children: List.generate(
+                          5,
+                          (index) => const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 20,
+                            ),
+                            child: SkeletonCardPost(
+                              isReply: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onIdle: () => Column(
+                        children: List.generate(
+                          5,
+                          (index) => const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 20,
+                            ),
+                            child: SkeletonCardPost(
+                              isReply: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onError: (dynamic error, refresh) => Text(error.toString()),
+                      onData: (data) {
+                        return Column(
+                          children: [
+                            Center(
+                              child: SmoothPageIndicator(
+                                controller: _pageController,
+                                count: 2,
+                                effect: ExpandingDotsEffect(
+                                  dotHeight: 8,
+                                  dotWidth: 8,
+                                  activeDotColor: BaseColors.primary,
+                                ),
+                              ),
+                            ),
+                            const HeightSpace(10),
+                            ExpandablePageView.builder(
+                              controller: _pageController,
+                              animationDuration:
+                                  const Duration(milliseconds: 800),
+                              animationCurve: Curves.fastLinearToSlowEaseIn,
+                              itemCount: 2,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return _buildShowComments(
+                                    answersRM.state.allAnswer,
+                                  );
+                                }
+                                return _buildCommentForm();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -434,7 +439,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Container(
-        height: MediaQuery.of(context).size.height  * 7 / 10,
+        // height: MediaQuery.of(context).size.height  * 7 / 10,
         child: Text(
           emptyList ? 'Belum ada jawaban.' : 'Tidak ada jawaban lagi.',
           style: FontTheme.poppins12w600black().copyWith(

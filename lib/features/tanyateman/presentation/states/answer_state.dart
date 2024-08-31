@@ -25,8 +25,9 @@ class AnswerState {
     print('retrieveAnswer, with query page: ${q.page}');
     final resp = await _repo.getAllAnswers(q);
     resp.fold((failure) => throw failure, (result) {
-      final lessThanLimit = result.data.length < 10;
-      hasReachedMax = result.data.isEmpty || lessThanLimit;
+      final lessThanLimit = result.data['answers'].length < 10;
+      hasReachedMax = result.data['answers'].isEmpty || lessThanLimit;
+      print('hasReachedMax: $hasReachedMax');
       _allAnswer = result.data['answers'];
       data['like_count'] = result.data['like_count'];
       data['reply_count'] = result.data['reply_count'];

@@ -48,10 +48,9 @@ class _HomePageState extends BaseStateful<HomePage> {
         padding: const EdgeInsets.only(left: 15),
         child: Transform.scale(
           scale: 1.15,
-          child: Image.asset(
-            ImageConst.newPrimaryLogo,
-            fit: BoxFit.fitWidth,
-          ),
+          child: SvgPicture.asset(
+            'assets/icons/temankuliahTxt.svg'
+          )
         ),
       ),
       centerTitle: false,

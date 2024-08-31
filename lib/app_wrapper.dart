@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:ulaskelas/core/_core.dart';
 import 'package:ulaskelas/core/bases/widgets/confirmation_modal_dialog.dart';
@@ -95,10 +96,8 @@ A new version of this app available on the store, please update into the newer v
       body: Stack(
         children: [
           Center(
-            child: Image.asset(
-              '${Constants.imagePath}/logo_splash.png',
-              width: 160,
-              height: 160,
+            child: SvgPicture.asset(
+              'assets/icons/temankuliah.svg'
             ),
           ),
           Padding(

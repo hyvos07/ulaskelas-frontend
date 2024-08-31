@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:ulaskelas/core/bases/states/_states.dart';
