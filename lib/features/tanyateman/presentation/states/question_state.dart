@@ -14,7 +14,9 @@ class QuestionState {
   int page = 1;
   bool hasReachedMax = false;
   String allQuestionsFilter = 'semua';
+  CourseModel? allQuestionsCourseFilter;
   String historyQuestionsFilter = 'semua';
+  CourseModel? historyQuestionsCourseFilter;
 
   List<QuestionModel>? _allQuestions;
   List<QuestionModel>? _historyQuestions;
@@ -28,7 +30,7 @@ class QuestionState {
     required QueryQuestion queryHistory,
   }) async {
     await Future.wait([
-      retrieveAllQuestion(queryAll),
+      retrieveAllQuestions(queryAll),
       retrieveHistoryQuestions(queryHistory),
     ]);
   }
@@ -37,7 +39,7 @@ class QuestionState {
   /// All Question ///
   ////////////////////
 
-  Future<void> retrieveAllQuestion(QueryQuestion q) async {
+  Future<void> retrieveAllQuestions(QueryQuestion q) async {
     page = 1;
     q.page = page;
     print('retrieveAllQuestion, with query page: ${q.page}');
@@ -54,7 +56,7 @@ class QuestionState {
     questionsRM.notify();
   }
 
-  Future<void> retrieveMoreAllQuestion(QueryQuestion q) async {
+  Future<void> retrieveMoreAllQuestions(QueryQuestion q) async {
     ++page;
     q.page = page;
     print('retrieveMoreData, with query page: ${q.page}');
@@ -91,7 +93,7 @@ class QuestionState {
     questionsRM.notify();
   }
 
-  Future<void> retrieveMoreHistoryQuestion(QueryQuestion q) async {
+  Future<void> retrieveMoreHistoryQuestions(QueryQuestion q) async {
     ++page;
     q.page = page;
     final resp = await _repo.getHistoryQuestions(q);
@@ -147,7 +149,7 @@ class QuestionState {
     });
   }
 
-  Future<void> updateLikeANDComment(
+  Future<void> updateLikeAndComment(
     int id, Map<String,dynamic> data,) async{
       _allQuestions!.map(
         (e) {

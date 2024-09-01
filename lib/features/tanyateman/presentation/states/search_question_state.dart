@@ -20,8 +20,8 @@ class SearchQuestionState {
   SearchData? searchData;
   String? _lastQuery;
   ListQueue<String>? _history;
-
   List<QuestionModel>? _searchedQuestions;
+
   List<QuestionModel> get searchedQuestions => _searchedQuestions ?? [];
   ListQueue<String> get history => _history ?? ListQueue();
   String get lastQuery => _lastQuery ?? '';

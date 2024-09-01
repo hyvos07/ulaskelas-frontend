@@ -359,9 +359,18 @@ class NavigationServiceState implements Navigation {
     );
   }
 
-  Future<void> goToSearchQuestionPage() {
+  /// `filterTarget` decide which one will be filtered.
+  ///
+  /// 0 = All Question
+  ///
+  /// 1 = History Question
+  ///
+  /// 2 = Search Page
+  Future<void> goToSearchQuestionPage({required int filterTarget}) {
     return nav.push<void>(
-      const SearchQuestionPage(),
+      SearchQuestionPage(
+        filterTarget: filterTarget,
+      ),
       RouteName.searchQuestion,
     );
   }

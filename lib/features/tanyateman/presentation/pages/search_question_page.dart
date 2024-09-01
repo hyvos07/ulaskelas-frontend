@@ -1,7 +1,12 @@
 part of '_pages.dart';
 
 class SearchQuestionPage extends StatefulWidget {
-  const SearchQuestionPage({super.key});
+  const SearchQuestionPage({
+    required this.filterTarget,
+    super.key,
+  });
+
+  final int filterTarget;
 
   @override
   _SearchQuestionPageState createState() => _SearchQuestionPageState();
@@ -23,8 +28,6 @@ class _SearchQuestionPageState
     });
     searchCourseRM.state.controller.clear();
     retrieveData();
-    searchQuestionRM.state.searchData = SearchData();
-    searchQuestionRM.state.searchQuestionFilter = 'semua';
   }
 
   @override
@@ -66,7 +69,7 @@ class _SearchQuestionPageState
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return BaseAppBar(
-      label: 'Cari Postingan',
+      label: 'Filter Berdasarkan Mata Kuliah',
       onBackPress: onBackPressed,
       elevation: 0.5,
     );
@@ -130,12 +133,13 @@ class _SearchQuestionPageState
                     scrollController: scrollController,
                     onScroll: onScroll,
                     onRefresh: retrieveData,
+                    filterTarget: widget.filterTarget,
                   );
                 }
               },
             ),
           ),
-          OnReactive(_buildButton),
+          // OnReactive(_buildButton),
         ],
       ),
     );
@@ -157,7 +161,6 @@ class _SearchQuestionPageState
     return true;
   }
 
-  /// Every Query changed do debouncing and rebuild.
   Future<void> onQueryChanged(String val) async {
     if (val == searchCourseRM.state.lastQuery) {
       return;
@@ -172,7 +175,6 @@ class _SearchQuestionPageState
     });
     _debounce = Timer(const Duration(milliseconds: 1000), () {
       final query = QuerySearchCourse(name: val);
-      // final query = QuerySearchCourse();
       searchCourseRM.state
           .searchMatkul(query)
           .then((value) => searchCourseRM.notify());
@@ -238,90 +240,5 @@ class _SearchQuestionPageState
         ],
       ),
     );
-  }
-
-  Widget _buildButton() {
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 14,
-        left: 24,
-        right: 24,
-        bottom: 24,
-      ),
-      decoration: const BoxDecoration(
-        color: BaseColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.05),
-            blurRadius: 4,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Center(
-              child: InkWell(
-                onTap: () {
-                  if (searchCourseRM.state.controller.text.isNotEmpty) {
-                    focusNode.unfocus();
-                    searchCourseRM.state.controller.clear();
-                    onQueryChanged('');
-                    searchCourseRM.notify();
-                  }
-                },
-                child: Text(
-                  'Reset',
-                  style: FontTheme.poppins14w700black().copyWith(
-                    color: searchCourseRM.state.controller.text.isNotEmpty
-                        ? BaseColors.danger
-                        : BaseColors.gray3,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const WidthSpace(14),
-          Expanded(
-            child: PrimaryButton(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              borderRadius: BorderRadius.circular(8),
-              backgroundColor: searchCourseRM.state.controller.text.isNotEmpty
-                  ? BaseColors.primary
-                  : BaseColors.gray3,
-              text: 'Cari',
-              onPressed: () {
-                if (searchCourseRM.state.controller.text.isNotEmpty) {
-                  onSubmittingSearch();
-                  nav.pop();
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> onSubmittingSearch() async {
-    searchCourseRM.state.addToHistory(
-      searchCourseRM.state.controller.text,
-    ); // Save to history after search
-    focusNode.unfocus();
-    final query = QueryQuestion(
-      searchKeyword: searchCourseRM.state.controller.text,
-    );
-    await searchQuestionRM.setState(
-      (s) => s.retrieveSearchedQuestion(query),
-    );
-    await searchQuestionRM.setState(
-      (s) => s.searchData = SearchData(
-        text: searchCourseRM.state.controller.text,
-      ),
-    );
-    searchCourseRM.state.controller.clear();
   }
 }

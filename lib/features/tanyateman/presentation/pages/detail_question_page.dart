@@ -498,7 +498,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       if (data['like_count'] != widget.model.likeCount ||
           data['reply_count'] != widget.model.replyCount) {
         await questionsRM.setState(
-          (s) => s.updateLikeANDComment(
+          (s) => s.updateLikeAndComment(
             widget.model.id,
             data,
           ),

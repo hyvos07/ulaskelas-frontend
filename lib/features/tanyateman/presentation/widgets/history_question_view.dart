@@ -15,14 +15,16 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
     'semua',
     'paling_banyak_disukai',
     'terverifikasi',
-    'menunggu_verifikasi'
+    'menunggu_verifikasi',
+    'by_matkul',
   ];
 
   List<String> filterOptionsText = [
     'Semua',
     'Paling banyak Disukai',
     'Terverifikasi',
-    'Menunggu Verifikasi'
+    'Menunggu Verifikasi',
+    'Mata Kuliah',
   ];
 
   @override
@@ -290,16 +292,23 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
           ),
         ),
         onChanged: (value) {
-          questionsRM.setState(
-            (s) => s.historyQuestionsFilter = value.toString(),
-          );
-          retrieveData();
+          if (value == 'by_matkul') {
+            nav.goToSearchQuestionPage(filterTarget: 1);
+          } else {
+            questionsRM.setState(
+              (s) => {
+                s.historyQuestionsCourseFilter = null,
+                s.historyQuestionsFilter = value.toString(),
+              },
+            );
+            retrieveData();
+          }
           if (kDebugMode) print('filter: $value');
         },
         dropdownStyleData: DropdownStyleData(
           width: 140,
           direction: DropdownDirection.left,
-          padding: const EdgeInsets.fromLTRB(14, 10, 14, 17),
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: BaseColors.white,
@@ -323,7 +332,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
       isVerified: selectedFilter == 'terverifikasi' ? true : null,
       isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
     );
-    await questionsRM.state.retrieveMoreHistoryQuestion(query).then((value) {
+    await questionsRM.state.retrieveMoreHistoryQuestions(query).then((value) {
       completer = Completer<void>();
       questionsRM.notify();
     }).onError((error, stackTrace) {
@@ -338,6 +347,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
       isMostPopular: selectedFilter == 'paling_banyak_disukai' ? true : null,
       isVerified: selectedFilter == 'terverifikasi' ? true : null,
       isWaitToVerify: selectedFilter == 'menunggu_verifikasi' ? true : null,
+      searchCourseId: questionsRM.state.historyQuestionsCourseFilter?.id,
     );
     await questionsRM.setState((s) => s.retrieveHistoryQuestions(query));
   }

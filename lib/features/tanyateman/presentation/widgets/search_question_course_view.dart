@@ -6,9 +6,11 @@ class SearchQuestionCourseView extends StatelessWidget {
     required this.scrollController,
     required this.onScroll,
     required this.onRefresh,
+    required this.filterTarget,
     super.key,
   });
 
+  final int filterTarget;
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
   final ScrollController scrollController;
   final VoidCallback onScroll;
@@ -102,7 +104,7 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
-          vertical: 20,
+          vertical: 16,
         ),
         decoration: BoxDecoration(
           color: BaseColors.white,
@@ -118,13 +120,38 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
   }
 
   Future<void> onSubmittingSearch(CourseModel model) async {
-    final query = QueryQuestion(searchCourseId: model.id);
-    await searchQuestionRM.setState((s) => s.retrieveSearchedQuestion(query));
-    await searchQuestionRM.setState(
-      (s) => s.searchData = SearchData(
-        text: '#${model.name}',
-        course: model,
-      ),
+    final query = QueryQuestion(
+      searchCourseId: model.id,
+      searchKeyword: searchQuestionRM.state.searchData?.text,
+      isHistory: filterTarget == 1 ? true : null,
     );
+
+    switch (filterTarget) {
+      case 0: // All Question
+        questionsRM.state.allQuestionsCourseFilter = model;
+        questionsRM.state.allQuestionsFilter = 'by_matkul';
+        await questionsRM.setState(
+          (s) => s.retrieveAllQuestions(query),
+        );;
+      case 1:
+        questionsRM.state.historyQuestionsCourseFilter = model;
+        questionsRM.state.historyQuestionsFilter = 'by_matkul';
+        await questionsRM.setState(
+          (s) => s.retrieveHistoryQuestions(query),
+        );;
+      case 2:
+        final text = searchQuestionRM.state.searchData?.text;
+        searchQuestionRM.state.searchData = SearchData(
+          text: text,
+          course: model,
+        );
+        searchQuestionRM.state.searchQuestionFilter = 'by_matkul';
+        await searchQuestionRM.setState(
+          (s) => s.retrieveSearchedQuestion(query),
+        );
+      default:
+        if (kDebugMode) print('invalid filter target');
+        return;
+    }
   }
 }

@@ -14,11 +14,13 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
   List<String> filterOptionsValue = [
     'semua',
     'paling_banyak_disukai',
+    'by_matkul',
   ];
 
   List<String> filterOptionsText = [
     'Semua',
     'Paling banyak Disukai',
+    'Mata Kuliah',
   ];
 
   @override
@@ -308,16 +310,23 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
           ),
         ),
         onChanged: (value) {
-          questionsRM.setState(
-            (s) => s.allQuestionsFilter = value.toString(),
-          );
-          retrieveData();
+          if (value == 'by_matkul') {
+            nav.goToSearchQuestionPage(filterTarget: 0);
+          } else {
+            questionsRM.setState(
+              (s) => {
+                s.allQuestionsCourseFilter = null,
+                s.allQuestionsFilter = value.toString(),
+              },
+            );
+            retrieveData();
+          }
           if (kDebugMode) print('filter: $value');
         },
         dropdownStyleData: DropdownStyleData(
           width: 140,
           direction: DropdownDirection.left,
-          padding: const EdgeInsets.fromLTRB(14, 10, 14, 17),
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: BaseColors.white,
@@ -340,7 +349,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
               ? true
               : null,
     );
-    await questionsRM.state.retrieveMoreAllQuestion(query).then((value) {
+    await questionsRM.state.retrieveMoreAllQuestions(query).then((value) {
       completer = Completer<void>();
       questionsRM.notify();
     }).onError((error, stackTrace) {
@@ -350,12 +359,13 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
 
   Future<void> retrieveData() async {
     await questionsRM.setState(
-      (s) => s.retrieveAllQuestion(
+      (s) => s.retrieveAllQuestions(
         QueryQuestion(
           isMostPopular:
               questionsRM.state.allQuestionsFilter == 'paling_banyak_disukai'
                   ? true
                   : null,
+          searchCourseId: questionsRM.state.allQuestionsCourseFilter?.id,
         ),
       ),
     );

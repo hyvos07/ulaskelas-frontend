@@ -14,11 +14,13 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
   List<String> filterOptionsValue = [
     'semua',
     'paling_banyak_disukai',
+    'by_matkul',
   ];
 
   List<String> filterOptionsText = [
     'Semua',
     'Paling banyak Disukai',
+    'Mata Kuliah',
   ];
 
   @override
@@ -28,7 +30,7 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
     scrollController.addListener(_onScroll);
     StateInitializer(
       rIndicator: refreshIndicatorKey!,
-      cacheKey: 'all-question',
+      cacheKey: 'search-question',
       state: false,
     ).initialize();
   }
@@ -345,16 +347,20 @@ class _SearchQuestionViewState extends BaseStateful<SearchQuestionView> {
           ),
         ),
         onChanged: (value) {
-          searchQuestionRM.setState(
-            (s) => s.searchQuestionFilter = value.toString(),
-          );
-          retrieveData();
+          if (value == 'by_matkul') {
+            nav.goToSearchQuestionPage(filterTarget: 2);
+          } else {
+            searchQuestionRM.setState(
+              (s) => s.searchQuestionFilter = value.toString(),
+            );
+            retrieveData();
+          }
           if (kDebugMode) print('filter: $value');
         },
         dropdownStyleData: DropdownStyleData(
           width: 140,
           direction: DropdownDirection.left,
-          padding: const EdgeInsets.fromLTRB(14, 10, 14, 17),
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: BaseColors.white,
