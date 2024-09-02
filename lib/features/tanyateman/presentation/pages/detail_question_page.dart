@@ -497,12 +497,21 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
       if (data['like_count'] != widget.model.likeCount ||
           data['reply_count'] != widget.model.replyCount) {
-        await questionsRM.setState(
-          (s) => s.updateLikeAndComment(
-            widget.model.id,
-            data,
-          ),
-        );
+        if (widget.fromSearch) {
+          await searchQuestionRM.setState(
+            (s) => s.updateLikeAndComment(
+              widget.model.id,
+              data,
+            ),
+          );
+        } else {
+          await questionsRM.setState(
+            (s) => s.updateLikeAndComment(
+              widget.model.id,
+              data,
+            ),
+          );
+        }
         setState(() {
           widget.model.likeCount = data['like_count'];
           widget.model.replyCount = data['reply_count'];

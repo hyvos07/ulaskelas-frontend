@@ -101,6 +101,21 @@ class SearchQuestionState {
       searchQuestionRM.notify();
     });
   }
+
+  Future<void> updateLikeAndComment(
+    int id, Map<String,dynamic> data,) async{
+      _searchedQuestions!.map(
+        (e) {
+          if (e.id == id) {
+            e..likeCount = data['like_count']
+            ..replyCount = data['reply_count'];
+          }
+          return e;
+        }
+      ).toList();
+
+      searchQuestionRM.notify();
+  }
 }
 
 class SearchData {
