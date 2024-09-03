@@ -497,6 +497,11 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
       if (data['like_count'] != widget.model.likeCount ||
           data['reply_count'] != widget.model.replyCount) {
+        
+        /* Prevent update from fetched question detail data if user hasn't
+        replied to this question, even if the like & reply was already 0 */
+        if(data['like_count'] == 0 && data['reply_count'] == 0) return;
+
         if (widget.fromSearch) {
           await searchQuestionRM.setState(
             (s) => s.updateLikeAndComment(
