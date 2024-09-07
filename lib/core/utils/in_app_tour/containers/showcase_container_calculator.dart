@@ -193,6 +193,7 @@ Widget autoFillGCShowcase(BuildContext ctx) {
                         onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           print('User skip!');
+                          backFromCalculator = false;
                           await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
@@ -361,6 +362,7 @@ Widget semesterCardGCShowcase(BuildContext ctx) {
               IconButton(
                 onPressed: () async {
                   ShowCaseWidget.of(ctx).dismiss();
+                  backFromCalculator = true;
                   await showcaseFilledSemester(previous: true);
                 },
                 splashColor: BaseColors.transparent,
@@ -426,6 +428,7 @@ Widget semesterCardGCShowcase(BuildContext ctx) {
                         onTap: () async {
                           ShowCaseWidget.of(ctx).dismiss();
                           print('User skip!');
+                          backFromCalculator = false;
                           await Pref.saveBool('doneAppTour', value: true);
                         },
                         child: Text(
