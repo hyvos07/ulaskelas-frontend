@@ -13,6 +13,7 @@ import 'package:ulaskelas/features/matkul/search/presentation/states/_states.dar
 import 'package:ulaskelas/features/matkul/search/presentation/widgets/skeleton_card_course.dart';
 
 import '../../../../../core/utils/in_app_tour/containers/_containers.dart';
+import '../../../../../core/utils/in_app_tour/widgets/_widgets.dart';
 
 part 'base_app_bar.dart';
 part 'card_course.dart';

@@ -73,43 +73,13 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
                     top: 10,
                     bottom: 3,
                   ),
-                  child: Showcase.withWidget(
-                    key: inAppTourKeys.searchBarTT,
-                    overlayColor: BaseColors.neutral100,
-                    overlayOpacity: 0.5,
+                  child: ShowcaseWrapper(
+                    showcaseKey: inAppTourKeys.searchBarTT,
                     targetPadding: const EdgeInsets.all(8),
                     targetBorderRadius: BorderRadius.circular(10),
-                    blurValue: 1,
-                    height: 0,
-                    width: MediaQuery.of(context).size.width,
-                    disposeOnTap: false,
-                    disableBarrierInteraction: true,
-                    disableMovingAnimation: true,
-                    onTargetClick: () {},
                     container: searchBarTTShowcase(context),
                     child: Row(
                       children: [
-                        // if (searchQuestionRM.state.searchData?.text != null)
-                        //   Row(
-                        //     children: [
-                        //       IconButton(
-                        //         onPressed: () => {
-                        //           searchQuestionRM.setState(
-                        //             (s) => s.searchData = SearchData(),
-                        //           ),
-                        //         },
-                        //         icon: const Icon(
-                        //           Icons.arrow_back_rounded,
-                        //           size: 24,
-                        //           color: BaseColors.gray2,
-                        //         ),
-                        //         splashRadius: 20,
-                        //         constraints: const BoxConstraints(),
-                        //         padding: const EdgeInsets.all(5),
-                        //       ),
-                        //       const SizedBox(width: 12),
-                        //     ],
-                        //   ),
                         Expanded(
                           child: OnReactive(
                             () => CustomSearchField(

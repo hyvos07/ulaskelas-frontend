@@ -21,6 +21,7 @@ import '../../../../core/bases/states/_states.dart';
 import '../../../../core/error/_error.dart';
 import '../../../../core/theme/_theme.dart';
 import '../../../../core/utils/in_app_tour/containers/_containers.dart';
+import '../../../../core/utils/in_app_tour/widgets/_widgets.dart';
 import '../../../matkul/search/data/models/_models.dart';
 import '../../../matkul/search/presentation/states/_states.dart';
 import '../../../matkul/search/presentation/widgets/_widgets.dart';

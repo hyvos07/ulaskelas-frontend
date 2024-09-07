@@ -43,20 +43,13 @@ class _NewRistekBotNavBarState extends State<NewRistekBotNavBar> {
           return Expanded(
             child: InkWell(
               onTap: () => widget.onTap(widget.items.indexOf(e)),
-              child: Showcase.withWidget(
-                key: _decideKey(e.text.toString()),
-                overlayColor: BaseColors.neutral100,
-                overlayOpacity: 0.5,
+              child: ShowcaseWrapper(
+                showcaseKey: _decideKey(e.text.toString()),
+                height: 600,
                 targetPadding: EdgeInsets.symmetric(
                   vertical: 10,
                   horizontal: e.text.toString() == 'Tanya Teman' ? 10 : 0,
                 ),
-                blurValue: 1,
-                height: 600,
-                width: MediaQuery.of(context).size.width,
-                disposeOnTap: false,
-                disableBarrierInteraction: true,
-                disableMovingAnimation: true,
                 onTargetClick: () {
                   ShowCaseWidget.of(context).dismiss();
                   widget.onTap(widget.items.indexOf(e));

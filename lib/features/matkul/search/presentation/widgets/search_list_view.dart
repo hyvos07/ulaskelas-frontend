@@ -36,19 +36,12 @@ class SearchListView extends StatelessWidget {
                 StateBuilder(
                   observe: () => filterRM,
                   builder: (context, snapshot) {
-                    return Showcase.withWidget(
-                      key: inAppTourKeys.filterSP,
-                      overlayColor: BaseColors.neutral100,
-                      overlayOpacity: 0.5,
+                    return ShowcaseWrapper(
+                      showcaseKey: inAppTourKeys.filterSP,
                       targetPadding: const EdgeInsets.all(5),
                       targetBorderRadius: BorderRadius.circular(10),
-                      blurValue: 1,
                       height: 200,
                       width: 310,
-                      disposeOnTap: false,
-                      disableBarrierInteraction: true,
-                      disableMovingAnimation: true,
-                      onTargetClick: () {},
                       container: filterSPShowcase(context),
                       child: FilterButton(
                         hasFilter: filterRM.state.hasFilter,
@@ -133,18 +126,9 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
                     }
                     final course = courses[i];
                     if (i == 2) {
-                      return Showcase.withWidget(
-                        key: inAppTourKeys.coursecardSP,
-                        overlayColor: BaseColors.neutral100,
-                        overlayOpacity: 0.5,
-                        targetPadding: const EdgeInsets.all(10),
+                      return ShowcaseWrapper(
+                        showcaseKey: inAppTourKeys.coursecardSP,
                         targetBorderRadius: BorderRadius.circular(10),
-                        blurValue: 1,
-                        height: 0,
-                        width: MediaQuery.of(context).size.width,
-                        disposeOnTap: false,
-                        disableBarrierInteraction: true,
-                        disableMovingAnimation: true,
                         onTargetClick: () {
                           ShowCaseWidget.of(context).dismiss();
                           nav.goToDetailMatkulPage(

@@ -69,20 +69,12 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                             width: sizeInfo.screenSize.width * .55,
                           ),
                           const HeightSpace(20),
-                          Showcase.withWidget(
-                            key: inAppTourKeys.emptySemesterGC,
+                          ShowcaseWrapper(
+                            showcaseKey: inAppTourKeys.emptySemesterGC,
                             tooltipPosition: TooltipPosition.top,
-                            overlayColor: BaseColors.neutral100,
-                            overlayOpacity: 0.5,
                             targetPadding:
                                 const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                            blurValue: 1,
-                            height: 0,
-                            width: MediaQuery.of(context).size.width,
-                            disposeOnTap: false,
-                            disableBarrierInteraction: true,
-                            disableMovingAnimation: true,
-                            onTargetClick: () {},
+                            targetBorderRadius: BorderRadius.circular(8),
                             container: emptyCalcGCShowcase(context),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -126,10 +118,8 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                         horizontal: 20,
                         vertical: 5,
                       ),
-                      child: Showcase.withWidget(
-                        key: inAppTourKeys.filledSemesterGC,
-                        overlayColor: BaseColors.neutral100,
-                        overlayOpacity: 0.5,
+                      child: ShowcaseWrapper(
+                        showcaseKey: inAppTourKeys.filledSemesterGC,
                         targetPadding: const EdgeInsets.fromLTRB(
                           12,
                           10,
@@ -137,13 +127,6 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                           185,
                         ),
                         targetBorderRadius: BorderRadius.circular(10),
-                        blurValue: 1,
-                        height: 0,
-                        width: MediaQuery.of(context).size.width,
-                        disposeOnTap: false,
-                        disableBarrierInteraction: true,
-                        disableMovingAnimation: true,
-                        onTargetClick: () {},
                         container: filledCalcGCShowcase(context),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,18 +160,10 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                           return Column(
                             children: [
                               if (index == 0)
-                                Showcase.withWidget(
-                                  key: inAppTourKeys.semesterCardGC,
-                                  overlayColor: BaseColors.neutral100,
-                                  overlayOpacity: 0.5,
+                                ShowcaseWrapper(
+                                  showcaseKey: inAppTourKeys.semesterCardGC,
                                   targetPadding: const EdgeInsets.all(12),
                                   targetBorderRadius: BorderRadius.circular(10),
-                                  blurValue: 1,
-                                  height: 0,
-                                  width: MediaQuery.of(context).size.width,
-                                  disposeOnTap: false,
-                                  disableBarrierInteraction: true,
-                                  disableMovingAnimation: true,
                                   onTargetClick: () async {
                                     ShowCaseWidget.of(context).dismiss();
                                     await nav.goToSemesterPage(
@@ -315,18 +290,10 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
           ),
           const HeightSpace(25),
           if (semesterRM.state.availableSemestersToFill.isNotEmpty)
-            Showcase.withWidget(
-              key: inAppTourKeys.autoFillGC,
-              overlayColor: BaseColors.neutral100,
-              overlayOpacity: 0.5,
+            ShowcaseWrapper(
+              showcaseKey: inAppTourKeys.autoFillGC,
               targetPadding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
               targetBorderRadius: BorderRadius.circular(10),
-              blurValue: 1,
-              height: 0,
-              width: MediaQuery.of(context).size.width,
-              disposeOnTap: false,
-              disableBarrierInteraction: true,
-              disableMovingAnimation: true,
               onTargetClick: () {
                 ShowCaseWidget.of(calculatorContext!).dismiss();
                 showMockAutoFillSemesterDialog(context);

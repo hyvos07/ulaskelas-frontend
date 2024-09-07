@@ -145,18 +145,10 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
                         return ShowCaseWidget(
                           builder: (context) {
                             semesterContext = context;
-                            return Showcase.withWidget(
-                              key: inAppTourKeys.courseCardGC,
-                              overlayColor: BaseColors.neutral100,
-                              overlayOpacity: 0.5,
+                            return ShowcaseWrapper(
+                              showcaseKey: inAppTourKeys.courseCardGC,
                               targetPadding: const EdgeInsets.all(12),
                               targetBorderRadius: BorderRadius.circular(10),
-                              blurValue: 1,
-                              height: 0,
-                              width: MediaQuery.of(context).size.width,
-                              disposeOnTap: false,
-                              disableBarrierInteraction: true,
-                              disableMovingAnimation: true,
                               onTargetClick: () async {
                                 ShowCaseWidget.of(context).dismiss();
                                 nav.pop();

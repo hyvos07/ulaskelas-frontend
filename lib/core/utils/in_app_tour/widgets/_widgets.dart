@@ -11,3 +11,4 @@ import '../../../theme/_theme.dart';
 
 part 'mock_autofill_dialog.dart';
 part 'animated_image.dart';
+part 'showcase_wrapper.dart';

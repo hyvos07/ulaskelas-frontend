@@ -16,6 +16,7 @@ import 'package:ulaskelas/features/matkul/search/presentation/widgets/_widgets.d
 import 'package:ulaskelas/services/_services.dart';
 
 import '../../../../../core/utils/in_app_tour/containers/_containers.dart';
+import '../../../../../core/utils/in_app_tour/widgets/_widgets.dart';
 
 part 'filter_page.dart';
 part 'search_course_page.dart';

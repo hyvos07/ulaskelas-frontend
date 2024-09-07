@@ -143,19 +143,10 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
                           : const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(24),
                       children: [
-                        Showcase.withWidget(
-                          key: inAppTourKeys.courseDetailDM,
-                          overlayColor: BaseColors.neutral100,
-                          overlayOpacity: 0.5,
+                        ShowcaseWrapper(
+                          showcaseKey: inAppTourKeys.courseDetailDM,
                           targetPadding: const EdgeInsets.all(14),
                           targetBorderRadius: BorderRadius.circular(10),
-                          blurValue: 1,
-                          height: 0,
-                          width: MediaQuery.of(context).size.width,
-                          disposeOnTap: false,
-                          disableBarrierInteraction: true,
-                          disableMovingAnimation: true,
-                          onTargetClick: () {},
                           container: detailCourseDMShowCase(
                             context,
                             scrollController,
@@ -176,19 +167,10 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
                           ),
                         ),
                         const HeightSpace(32),
-                        Showcase.withWidget(
-                          key: inAppTourKeys.reviewBySelfDM,
-                          overlayColor: BaseColors.neutral100,
-                          overlayOpacity: 0.5,
+                        ShowcaseWrapper(
+                          showcaseKey: inAppTourKeys.reviewBySelfDM,
                           targetPadding: const EdgeInsets.all(14),
                           targetBorderRadius: BorderRadius.circular(10),
-                          blurValue: 1,
-                          height: 0,
-                          width: MediaQuery.of(context).size.width,
-                          disposeOnTap: false,
-                          disableBarrierInteraction: true,
-                          disableMovingAnimation: true,
-                          onTargetClick: () {},
                           container: reviewByYouDMShowcase(
                             context,
                             scrollController,
@@ -263,19 +245,10 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Showcase.withWidget(
-          key: inAppTourKeys.reviewsDM,
-          overlayColor: BaseColors.neutral100,
-          overlayOpacity: 0.5,
+        ShowcaseWrapper(
+          showcaseKey: inAppTourKeys.reviewsDM,
           targetPadding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
           targetBorderRadius: BorderRadius.circular(10),
-          blurValue: 1,
-          height: 0,
-          width: MediaQuery.of(context).size.width,
-          disposeOnTap: false,
-          disableBarrierInteraction: true,
-          disableMovingAnimation: true,
-          onTargetClick: () {},
           container: reviewsDMShowcase(
             detailMatkulContext!,
             scrollController,

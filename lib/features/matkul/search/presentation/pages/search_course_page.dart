@@ -85,19 +85,9 @@ class _SearchCoursePageState
               ),
               child: Column(
                 children: [
-                  Showcase.withWidget(
-                    key: inAppTourKeys.searchBarSP,
-                    overlayColor: BaseColors.neutral100,
-                    overlayOpacity: 0.5,
-                    targetPadding: const EdgeInsets.all(10),
+                  ShowcaseWrapper(
+                    showcaseKey: inAppTourKeys.searchBarSP,
                     targetBorderRadius: BorderRadius.circular(10),
-                    blurValue: 1,
-                    height: 0,
-                    width: MediaQuery.of(context).size.width,
-                    disposeOnTap: false,
-                    disableBarrierInteraction: true,
-                    disableMovingAnimation: true,
-                    onTargetClick: () {},
                     container: searchBarSPShowcase(context),
                     child: OnReactive(
                       () => SearchField(

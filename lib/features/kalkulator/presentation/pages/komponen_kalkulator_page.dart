@@ -100,19 +100,10 @@ class _CalculatorComponentPageState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Showcase.withWidget(
-                          key: inAppTourKeys.finalScoreGC,
-                          overlayColor: BaseColors.neutral100,
-                          overlayOpacity: 0.5,
+                        ShowcaseWrapper(
+                          showcaseKey: inAppTourKeys.finalScoreGC,
                           targetPadding: const EdgeInsets.all(10),
                           targetBorderRadius: BorderRadius.circular(10),
-                          blurValue: 1,
-                          height: 0,
-                          width: MediaQuery.of(context).size.width,
-                          disposeOnTap: false,
-                          disableBarrierInteraction: true,
-                          disableMovingAnimation: true,
-                          onTargetClick: () {},
                           container: finalScoreGCShowcase(context),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,20 +284,11 @@ class _CalculatorComponentPageState
                                     const SizedBox(height: 1),
                           ),
                         const HeightSpace(5),
-                        Showcase.withWidget(
-                          key: inAppTourKeys.totalComponentGC,
-                          overlayColor: BaseColors.neutral100,
+                        ShowcaseWrapper(
+                          showcaseKey: inAppTourKeys.totalComponentGC,
                           tooltipPosition: TooltipPosition.top,
-                          overlayOpacity: 0.5,
                           targetPadding: const EdgeInsets.all(12),
                           targetBorderRadius: BorderRadius.circular(10),
-                          blurValue: 1,
-                          height: 0,
-                          width: MediaQuery.of(context).size.width,
-                          disposeOnTap: false,
-                          disableBarrierInteraction: true,
-                          disableMovingAnimation: true,
-                          onTargetClick: () {},
                           container: totalComponentGCShowcase(context),
                           child: CustomTableRow(
                             components: [

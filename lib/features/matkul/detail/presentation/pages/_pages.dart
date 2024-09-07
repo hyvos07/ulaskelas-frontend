@@ -20,6 +20,7 @@ import 'package:ulaskelas/features/matkul/search/presentation/widgets/_widgets.d
 import '../../../../../core/utils/in_app_tour/containers/_containers.dart';
 import '../../../../../core/utils/in_app_tour/showcase_flow.dart';
 import '../../../../../core/utils/in_app_tour/showcase_preview_data.dart';
+import '../../../../../core/utils/in_app_tour/widgets/_widgets.dart';
 import '../../../../../services/_services.dart';
 
 part 'detail_matkul_page.dart';

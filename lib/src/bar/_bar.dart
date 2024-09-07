@@ -8,6 +8,7 @@ import 'package:ulaskelas/core/theme/_theme.dart';
 
 import '../../core/utils/in_app_tour/containers/_containers.dart';
 import '../../core/utils/in_app_tour/showcase_flow.dart';
+import '../../core/utils/in_app_tour/widgets/_widgets.dart';
 
 part 'ristek_bottom_navigation_bar.dart';
 part 'ristek_bottom_navigation_item.dart';
