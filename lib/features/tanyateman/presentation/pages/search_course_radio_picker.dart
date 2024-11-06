@@ -189,9 +189,11 @@ class _SearchCourseRadioPickerState
     _debounce = Timer(const Duration(milliseconds: 1000), () {
       final query = QuerySearchCourse(name: val);
       // final query = QuerySearchCourse();
-      searchCourseRM.state
-          .searchMatkul(query)
-          .then((value) => searchCourseRM.notify());
+      searchCourseRM.state.searchMatkul(query, 1).then(
+            (value) => searchCourseRM.state.searchMatkul(query, 2).then(
+                  (value) => searchCourseRM.notify(),
+                ),
+          );
     });
   }
 

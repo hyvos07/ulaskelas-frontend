@@ -83,15 +83,16 @@ class SearchCourseState
 
   @override
   Future<void> retrieveData(QuerySearchCourse query) async {
-    await searchMatkul(query);
+    await searchMatkul(query, 1);
+    await searchMatkul(query, 2);
   }
 
   /// Advanced searching combine stateful & stateless search data.
   ///
   /// Prevent duplicates record.
-  Future<void> searchMatkul(QuerySearchCourse query) async {
-    page = 1;
-    query.page = 1;
+  Future<void> searchMatkul(QuerySearchCourse query, int curPage) async {
+    page = curPage;
+    query.page = curPage;
     // _hasReachedMax = false;
     // final now = DateTime.now();
     // final cachedDay = DateTime.parse(
@@ -114,7 +115,11 @@ class SearchCourseState
       _hasReachedMax = result.data.isEmpty || lessThanLimit;
       // _hasReachedMax = true;
       // Prevent duplicate record
-      _courses = result.data;
+      if (_courses != null) {
+        filterCourse(result.data);
+      } else {
+        _courses = result.data;
+      }
       // filterCourse(result.data);
     });
   }
