@@ -51,3 +51,6 @@ app.*.map.json
 /android/app/src/production/google-services.json
 google-services.json
 *_dummydata.dart
+
+# FVM Version Cache
+.fvm/
