@@ -3,7 +3,7 @@ description: Ulaskelas Ristek Universitas Indonesia Project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.0+1
+version: 1.2.0+7
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -20,26 +20,26 @@ dependencies:
   firebase_crashlytics: ^3.0.0
   firebase_core: ^2.0.0
   google_fonts: ^4.0.4
-  share: ^2.0.4
+  share_plus: ^9.0.0
   hive: ^2.2.3
   path_provider: ^2.0.8
   rxdart: ^0.27.1
   shared_preferences: ^2.0.11
   flutter_svg: ^2.0.7
   intl: ^0.18.0
-  webview_flutter: ^3.0.0
-  url_launcher: ^6.0.17
+  webview_flutter: ^4.8.0
+  url_launcher: ^6.3.1
   flutter_switch: ^0.3.2
   universal_html: ^2.0.8
   dio: ^5.0.0
   material_design_icons_flutter: ^7.0.7296
   flutter_vector_icons: ^2.0.0
-  package_info: ^2.0.2
+  package_info_plus: ^8.0.0
   shimmer: ^3.0.0
 #  envify: ^2.0.3
   envied: ^0.3.0+3
   html: ^0.15.4
-  mixpanel_flutter: ^2.2.0
+  mixpanel_flutter: ^2.4.0
   dropdown_button2: ^2.3.9
   dotted_border: ^2.1.0
   smooth_page_indicator: ^1.2.0+3
