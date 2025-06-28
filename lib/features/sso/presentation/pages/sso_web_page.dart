@@ -10,14 +10,29 @@ class SSOWebPage extends StatefulWidget {
 }
 
 class _SSOWebPageState extends BaseStateful<SSOWebPage> {
-  final Completer<WebViewController> controller =
-      Completer<WebViewController>();
+  late final WebViewController controller;
 
   bool successCallback = false;
 
   @override
   void init() {
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) async {
+            await WebViewCookieManager().clearCookies();
+            Logger().i('Page started loading: $url');
+          },
+          onPageFinished: _onPageFinish,
+          onProgress: _onProgress,
+          onNavigationRequest: _navigationDelegate,
+          onWebResourceError: (WebResourceError error) {
+            Logger().e('Web resource error: ${error.description}');
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(Endpoints.ssoMobile));
   }
 
   @override
@@ -36,21 +51,7 @@ class _SSOWebPageState extends BaseStateful<SSOWebPage> {
   Widget buildNarrowLayout(BuildContext context, SizingInformation sizeInfo) {
     return Stack(
       children: [
-        WebView(
-          initialUrl: Endpoints.ssoMobile,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (webViewController) async {
-            await CookieManager().clearCookies();
-            controller.complete(webViewController);
-          },
-          onProgress: _onProgress,
-          navigationDelegate: _navigationDelegate,
-          onPageStarted: (String url) {
-            Logger().i('Page started loading: $url');
-          },
-          onPageFinished: _onPageFinish,
-          gestureNavigationEnabled: true,
-        ),
+        WebViewWidget(controller: controller),
         OnReactive(
           () {
             if (progressWebView.state.progress < 1.0) {
