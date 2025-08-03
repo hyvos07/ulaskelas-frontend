@@ -83,16 +83,16 @@ class SearchCourseState
 
   @override
   Future<void> retrieveData(QuerySearchCourse query) async {
-    await searchMatkul(query, 1);
-    await searchMatkul(query, 2);
+    await searchMatkul(query);
+    await retrieveMoreData(query);
   }
 
   /// Advanced searching combine stateful & stateless search data.
   ///
   /// Prevent duplicates record.
-  Future<void> searchMatkul(QuerySearchCourse query, int curPage) async {
-    page = curPage;
-    query.page = curPage;
+  Future<void> searchMatkul(QuerySearchCourse query) async {
+    page = 1;
+    query.page = 1;
     // _hasReachedMax = false;
     // final now = DateTime.now();
     // final cachedDay = DateTime.parse(
@@ -114,12 +114,7 @@ class SearchCourseState
       final lessThanLimit = result.data.length < 10;
       _hasReachedMax = result.data.isEmpty || lessThanLimit;
       // _hasReachedMax = true;
-      // Prevent duplicate record
-      if (_courses != null) {
-        filterCourse(result.data);
-      } else {
-        _courses = result.data;
-      }
+      _courses = result.data;
       // filterCourse(result.data);
     });
   }
@@ -184,11 +179,11 @@ class SearchCourseState
   //////////////////////////////
   /// For Calculator Feature ///
   //////////////////////////////
-  
+
   final List<CourseModel> _selectedCourses = [];
-  
+
   List<CourseModel> get selectedCourses => _selectedCourses;
-  
+
   void addCourse(CourseModel course) {
     if (_selectedCourses.contains(course)) {
       return;
@@ -203,7 +198,7 @@ class SearchCourseState
       return;
     }
     _selectedCourses.removeWhere((element) => element.id == course.id);
-    
+
     searchCourseRM.notify();
   }
 
@@ -216,15 +211,19 @@ class SearchCourseState
       if (_selectedCourses[0].id == course.id) {
         _selectedCourses.clear();
       } else {
-        _selectedCourses..clear()..add(course);
+        _selectedCourses
+          ..clear()
+          ..add(course);
       }
     } else {
-      _selectedCourses..clear()..add(course);
+      _selectedCourses
+        ..clear()
+        ..add(course);
     }
     for (final i in _selectedCourses) {
       print(i.name);
     }
-    
+
     searchCourseRM.notify();
   }
 }

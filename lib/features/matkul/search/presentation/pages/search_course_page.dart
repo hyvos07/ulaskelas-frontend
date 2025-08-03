@@ -43,6 +43,8 @@ class _SearchCoursePageState
   @override
   void dispose() {
     _debounce?.cancel();
+    filterRM.setState((s) => s.reset());
+    focusNode.dispose();
     super.dispose();
   }
 
@@ -180,8 +182,8 @@ class _SearchCoursePageState
     _debounce = Timer(const Duration(milliseconds: 1000), () {
       final query = QuerySearchCourse(name: val);
       // final query = QuerySearchCourse();
-      searchCourseRM.state.searchMatkul(query, 1).then(
-            (value) => searchCourseRM.state.searchMatkul(query, 2).then(
+      searchCourseRM.state.searchMatkul(query).then(
+            (value) => searchCourseRM.state.retrieveMoreData(query).then(
                   (value) => searchCourseRM.notify(),
                 ),
           );

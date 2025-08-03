@@ -6,7 +6,8 @@ class SearchCourseRadioPicker extends StatefulWidget {
   });
 
   @override
-  _SearchCourseRadioPickerState createState() => _SearchCourseRadioPickerState();
+  _SearchCourseRadioPickerState createState() =>
+      _SearchCourseRadioPickerState();
 }
 
 class _SearchCourseRadioPickerState
@@ -25,7 +26,8 @@ class _SearchCourseRadioPickerState
     });
     if (questionFormRM.state.course != null) {
       searchCourseRM.state.selectedCourses.add(
-        questionFormRM.state.course!,);
+        questionFormRM.state.course!,
+      );
     }
   }
 
@@ -112,25 +114,25 @@ class _SearchCourseRadioPickerState
             },
           ),
         ),
-        OnReactive(() 
-          => ExpandedButton(
-              isOtherTheme: true,
-              text: searchCourseRM.state.selectedCourses.isEmpty
+        OnReactive(
+          () => ExpandedButton(
+            isOtherTheme: true,
+            text: searchCourseRM.state.selectedCourses.isEmpty
                 ? 'Kosongkan'
                 : 'Tambahkan',
-              onTap: () {
-                if (searchCourseRM.state.selectedCourses.isEmpty) {
-                  questionFormRM.state.clearCourse();
-                } else {
-                  final selectedCourses = searchCourseRM.state.selectedCourses[0];
-                  questionFormRM.state.setCourse(selectedCourses);
-                  questionFormRM.state.setIsCourseEmpty(false);
-                }
-                searchCourseRM.state.clearSelectedCourses();
-                nav.pop();
-            }, 
-          )
-        )
+            onTap: () {
+              if (searchCourseRM.state.selectedCourses.isEmpty) {
+                questionFormRM.state.clearCourse();
+              } else {
+                final selectedCourses = searchCourseRM.state.selectedCourses[0];
+                questionFormRM.state.setCourse(selectedCourses);
+                questionFormRM.state.setIsCourseEmpty(false);
+              }
+              searchCourseRM.state.clearSelectedCourses();
+              nav.pop();
+            },
+          ),
+        ),
       ],
     );
   }
@@ -150,6 +152,7 @@ class _SearchCourseRadioPickerState
     await searchCourseRM.setState((s) {
       s.controller.clear();
       s.selectedCourses.clear();
+      return null;
     });
     return true;
   }
@@ -189,8 +192,8 @@ class _SearchCourseRadioPickerState
     _debounce = Timer(const Duration(milliseconds: 1000), () {
       final query = QuerySearchCourse(name: val);
       // final query = QuerySearchCourse();
-      searchCourseRM.state.searchMatkul(query, 1).then(
-            (value) => searchCourseRM.state.searchMatkul(query, 2).then(
+      searchCourseRM.state.searchMatkul(query).then(
+            (value) => searchCourseRM.state.retrieveMoreData(query).then(
                   (value) => searchCourseRM.notify(),
                 ),
           );

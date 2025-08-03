@@ -115,4 +115,11 @@ class FilterState {
   void discardSemesterPrecondition(String val) {
     selectedSemester.remove(val);
   }
+
+  void reset() {
+    selectedType.clear();
+    selectedSks.clear();
+    selectedSemester.clear();
+    // filterRM.notify();
+  }
 }

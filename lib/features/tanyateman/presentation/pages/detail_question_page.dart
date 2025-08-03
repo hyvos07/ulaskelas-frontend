@@ -231,7 +231,9 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                           ),
                         ),
                       ),
-                      onError: (dynamic error, refresh) => Text(error.toString()),
+                      onError: (dynamic error, refresh) => Text(
+                        error.toString(),
+                      ),
                       onData: (data) {
                         return Column(
                           children: [
@@ -265,7 +267,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                           ],
                         );
                       },
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -321,7 +323,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                     onTapSeeImage: seeImage,
                     isImageSizeTooBig: answerFormRM.state.isImageSizeTooBig,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -345,90 +347,94 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
       padding: const EdgeInsets.only(
         bottom: 20,
       ),
-      child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
-          child: Row(
-            children: [
-              UserProfileBox(name: profileRM.state.profile.name ?? ''),
-              const WidthSpace(10),
-              AskQuestionBox(
-                onTap: () async {
-                  await _pageController.animateToPage(
-                    1, // Index of the second page
-                    duration: const Duration(milliseconds: 1000),
-                    curve: Curves.fastLinearToSlowEaseIn,
-                  );
-
-                  if (!_isBottom) {
-                    await scrollController.animateTo(
-                      scrollController.position.maxScrollExtent,
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.decelerate,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+            child: Row(
+              children: [
+                UserProfileBox(name: profileRM.state.profile.name ?? ''),
+                const WidthSpace(10),
+                AskQuestionBox(
+                  onTap: () async {
+                    await _pageController.animateToPage(
+                      1, // Index of the second page
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.fastLinearToSlowEaseIn,
                     );
-                  }
-                },
-                isInDetailPage: true,
-              ),
-            ],
-          ),
-        ),
-        const HeightSpace(10),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: data.length + 1,
-          separatorBuilder: (context, index) => const HeightSpace(16),
-          itemBuilder: (context, index) {
-            if (index == data.length) {
-              return !answersRM.state.hasReachedMax
-                  ? const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20,
-                      ),
-                      child: CircleLoading(
-                        size: 25,
-                      ),
-                    )
-                  : data.isEmpty
-                      ? _buildBottomMax(true)
-                      : _buildBottomMax(false);
-            }
-            final answer = data[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
-              child: OnBuilder(
-                listenTo: answersRM,
-                builder: () => CardPost(
-                  isReply: true,
-                  answerModel: answer,
-                  onLikeTap: () {
-                    answersRM.state.likeAnswer(answer);
-                  },
-                  onReplyTap: () => _pageController.animateToPage(
-                    1,
-                    duration: const Duration(milliseconds: 1000),
-                    curve: Curves.fastLinearToSlowEaseIn,
-                  ),
-                  imageTag: 'reply-image-preview?id=${answer.id}',
-                  onRefreshImage: answersRM.notify,
-                  onImageTap: () => seeImage(
-                      isReply: true,
-                      replyId: answer.id.toString(),
-                      replyUrlFile: answer.attachmentUrl),
-                  optionChoices: const ['Report'],
-                  onOptionChoosed: (value) {
-                    if (value == 'Report') {
-                      print('report reply!');
-                      // report reply here
+
+                    if (!_isBottom) {
+                      await scrollController.animateTo(
+                        scrollController.position.maxScrollExtent,
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.decelerate,
+                      );
                     }
                   },
+                  isInDetailPage: true,
                 ),
-              ),
-            );
-          },
-        )
-      ]),
+              ],
+            ),
+          ),
+          const HeightSpace(10),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: data.length + 1,
+            separatorBuilder: (context, index) => const HeightSpace(16),
+            itemBuilder: (context, index) {
+              if (index == data.length) {
+                return !answersRM.state.hasReachedMax
+                    ? const Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
+                        child: CircleLoading(
+                          size: 25,
+                        ),
+                      )
+                    : data.isEmpty
+                        ? _buildBottomMax(true)
+                        : _buildBottomMax(false);
+              }
+              final answer = data[index];
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                child: OnBuilder(
+                  listenTo: answersRM,
+                  builder: () => CardPost(
+                    isReply: true,
+                    answerModel: answer,
+                    onLikeTap: () {
+                      answersRM.state.likeAnswer(answer);
+                    },
+                    onReplyTap: () => _pageController.animateToPage(
+                      1,
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.fastLinearToSlowEaseIn,
+                    ),
+                    imageTag: 'reply-image-preview?id=${answer.id}',
+                    onRefreshImage: answersRM.notify,
+                    onImageTap: () => seeImage(
+                      isReply: true,
+                      replyId: answer.id.toString(),
+                      replyUrlFile: answer.attachmentUrl,
+                    ),
+                    optionChoices: const ['Report'],
+                    onOptionChoosed: (value) {
+                      if (value == 'Report') {
+                        print('report reply!');
+                        // report reply here
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -441,13 +447,13 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
           color: BaseColors.gray2.withOpacity(0.7),
         ),
         textAlign: TextAlign.center,
-      )
+      ),
     );
   }
 
   Future<void> onSubmitCallBack(BuildContext context) async {
-    if (answerFormRM.state.formKey.currentState!.validate()
-        && answerFormRM.state.answerController.text != '') {
+    if (answerFormRM.state.formKey.currentState!.validate() &&
+        answerFormRM.state.answerController.text != '') {
       final isSucces = await answerFormRM.state.postNewAnswer(widget.model.id);
       if (isSucces) {
         SuccessMessenger('Jawaban berhasil dibuat').show(ctx!);
@@ -497,10 +503,9 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
 
       if (data['like_count'] != widget.model.likeCount ||
           data['reply_count'] != widget.model.replyCount) {
-        
         /* Prevent update from fetched question detail data if user hasn't
         replied to this question, even if the like & reply was already 0 */
-        if(data['like_count'] == 0 && data['reply_count'] == 0) return;
+        if (data['like_count'] == 0 && data['reply_count'] == 0) return;
 
         if (widget.fromSearch) {
           await searchQuestionRM.setState(
@@ -522,6 +527,7 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
           widget.model.replyCount = data['reply_count'];
         });
       }
+      return null;
     });
   }
 
