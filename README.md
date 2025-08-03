@@ -1,5 +1,5 @@
 # 👨‍💻 Ulas Kelas
-[![Generic badge](https://img.shields.io/badge/Flutter-v3.10.5-blue)](https://flutter.dev/docs)
+[![Generic badge](https://img.shields.io/badge/Flutter-v3.19.6-blue)](https://flutter.dev/docs)
 [![Generic badge](https://img.shields.io/badge/Dart-v3.0.6-blue)](https://dart.dev/guides)
 [![test](https://github.com/RistekCSUI/ulaskelas-frontend/actions/workflows/config.yml/badge.svg)](https://github.com/RistekCSUI/ulaskelas-frontend/actions/workflows/config.yml)
 [![Deploy Web](https://github.com/RistekCSUI/ulaskelas-frontend/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/RistekCSUI/ulaskelas-frontend/actions/workflows/firebase-hosting-merge.yml)
