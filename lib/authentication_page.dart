@@ -8,7 +8,6 @@ import 'package:ulaskelas/features/matkul/bookmarks/domain/entities/query_bookma
 import 'package:ulaskelas/services/_services.dart';
 
 import 'core/bases/states/_states.dart';
-import 'core/constants/_constants.dart';
 import 'core/theme/_theme.dart';
 
 class AuthenticationPage extends StatelessWidget {

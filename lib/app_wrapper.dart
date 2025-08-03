@@ -99,7 +99,7 @@ A new version of this app available on the store, please update into the newer v
             child: Transform.scale(
               scale: 0.6,
               child: SvgPicture.asset(
-                'assets/icons/temankuliah.svg'
+                'assets/icons/temankuliah.svg',
               ),
             ),
           ),

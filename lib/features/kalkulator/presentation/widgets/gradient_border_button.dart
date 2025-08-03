@@ -55,8 +55,8 @@ class GradientBorderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final enabled = onPressed != null;
-    final theme = Theme.of(context);
+    // final enabled = onPressed != null;
+    // final theme = Theme.of(context);
 
     final borderRadiusFix = borderRadius ?? 6;
     final borderWidthFix = borderWidth ?? 1;

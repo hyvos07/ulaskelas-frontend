@@ -9,7 +9,6 @@ import 'package:ulaskelas/src/bar/_bar.dart';
 import 'core/bases/states/_states.dart';
 import 'core/utils/in_app_tour/showcase_flow.dart';
 import 'features/home/presentation/pages/_pages.dart';
-import 'features/leaderboard/presentation/pages/_pages.dart';
 import 'features/matkul/search/presentation/pages/_pages.dart';
 import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/tanyateman/presentation/pages/_pages.dart';

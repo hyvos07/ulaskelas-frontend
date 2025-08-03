@@ -1,7 +1,6 @@
 // Created by Muhamad Fauzi Ridwan on 07/11/21.
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
