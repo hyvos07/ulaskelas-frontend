@@ -10,17 +10,19 @@ Widget navbarMatkulShowcase(
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconButton(
-            onPressed: () {
+          InkWell(
+            onTap: () {
               ShowCaseWidget.of(ctx).dismiss();
               showInAppTourOpening(ctx, back: true);
             },
             splashColor: BaseColors.transparent,
-            constraints: const BoxConstraints(),
-            padding: const EdgeInsets.symmetric(horizontal: 7),
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              color: BaseColors.white,
+            highlightColor: BaseColors.transparent,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                color: BaseColors.white,
+              ),
             ),
           ),
           const WidthSpace(10),
@@ -33,7 +35,7 @@ Widget navbarMatkulShowcase(
                   color: BaseColors.malibu,
                 ),
               ),
-              const HeightSpace(15),
+              const HeightSpace(12),
               Text(
                 'Disini, kamu dapat melihat daftar mata\n'
                 'kuliah yang ada di seluruh Universitas\n'
@@ -123,21 +125,23 @@ Widget navbarTanyaTemanShowcase(
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   ShowCaseWidget.of(ctx).dismiss();
                   backFromTanyaTeman = false;
                   backToDetailPage();
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
-              const WidthSpace(7),
+              const WidthSpace(8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -147,7 +151,7 @@ Widget navbarTanyaTemanShowcase(
                       color: BaseColors.malibu,
                     ),
                   ),
-                  const HeightSpace(15),
+                  const HeightSpace(12),
                   Text(
                     'Disini adalah tempat berdiskusi\n'
                     'untuk kamu dan teman-teman\n'
@@ -243,18 +247,20 @@ Widget navbarCalcShowcase(
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   ShowCaseWidget.of(ctx).dismiss();
                   backFromCalculator = false;
                   await showcaseTanyaTeman(back: true);
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
               const WidthSpace(7),
@@ -363,18 +369,20 @@ Widget navbarProfileShowcase(
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   ShowCaseWidget.of(ctx).dismiss();
                   backToMatkulCalcPage();
                   // await showcaseComponentPage(back: true);
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
               const WidthSpace(10),

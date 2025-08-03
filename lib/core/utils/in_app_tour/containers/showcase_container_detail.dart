@@ -15,21 +15,23 @@ Widget detailCourseDMShowCase(
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   ShowCaseWidget.of(ctx).dismiss();
                   nav.pop();
                   await showcaseSearchPage();
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
-              const WidthSpace(20),
+              const WidthSpace(16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -147,8 +149,8 @@ Widget reviewByYouDMShowcase(
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   ShowCaseWidget.of(ctx).dismiss();
                   isScrollable(false);
                   await controller.animateTo(
@@ -160,14 +162,16 @@ Widget reviewByYouDMShowcase(
                   await showcaseCourseDetail(back: true);
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
-              const WidthSpace(20),
+              const WidthSpace(16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -287,8 +291,8 @@ Widget reviewsDMShowcase(
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   ShowCaseWidget.of(ctx).dismiss();
                   isScrollable(false);
                   await controller.animateTo(
@@ -300,14 +304,16 @@ Widget reviewsDMShowcase(
                   await showcaseReviewing();
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
-              const WidthSpace(20),
+              const WidthSpace(16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

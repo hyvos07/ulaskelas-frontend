@@ -10,18 +10,20 @@ Widget emptyCalcGCShowcase(BuildContext ctx) {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   ShowCaseWidget.of(ctx).dismiss();
                   navbarController(2);
                   await showcaseNavbarCalc();
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
               const WidthSpace(15),
@@ -125,18 +127,20 @@ Widget autoFillGCShowcase(BuildContext ctx) {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   ShowCaseWidget.of(ctx).dismiss();
                   backFromCalculator = true;
                   await showcaseEmptySemester(previous: true);
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
               const WidthSpace(10),
@@ -257,18 +261,20 @@ Widget filledCalcGCShowcase(BuildContext ctx) {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  onPressed: () async {
+                InkWell(
+                  onTap: () async {
                     ShowCaseWidget.of(ctx).dismiss();
                     navbarController(2);
                     await showcaseNavbarCalc();
                   },
                   splashColor: BaseColors.transparent,
-                  constraints: const BoxConstraints(),
-                  padding: const EdgeInsets.symmetric(horizontal: 7),
-                  icon: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: BaseColors.white,
+                  highlightColor: BaseColors.transparent,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Icon(
+                      Icons.arrow_back_rounded,
+                      color: BaseColors.white,
+                    ),
                   ),
                 ),
               ],
@@ -359,18 +365,20 @@ Widget semesterCardGCShowcase(BuildContext ctx) {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   ShowCaseWidget.of(ctx).dismiss();
                   backFromCalculator = true;
                   await showcaseFilledSemester(previous: true);
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
               const WidthSpace(15),

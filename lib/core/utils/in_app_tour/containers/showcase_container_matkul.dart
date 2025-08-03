@@ -13,18 +13,20 @@ Widget searchBarSPShowcase(BuildContext ctx) {
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconButton(
-            onPressed: () async {
+          InkWell(
+            onTap: () async {
               ShowCaseWidget.of(ctx).dismiss();
               navbarController(0);
               await showcaseNavbarMatkul();
             },
             splashColor: BaseColors.transparent,
-            constraints: const BoxConstraints(),
-            padding: const EdgeInsets.symmetric(horizontal: 7),
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              color: BaseColors.white,
+            highlightColor: BaseColors.transparent,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                color: BaseColors.white,
+              ),
             ),
           ),
           const WidthSpace(20),
@@ -116,16 +118,18 @@ Widget filterSPShowcase(BuildContext ctx) {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   ShowCaseWidget.of(ctx).previous();
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
               const WidthSpace(20),
@@ -224,19 +228,21 @@ Widget cardCourseSPShowcase(BuildContext ctx) {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   ShowCaseWidget.of(ctx).previous();
                 },
                 splashColor: BaseColors.transparent,
-                constraints: const BoxConstraints(),
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: BaseColors.white,
+                highlightColor: BaseColors.transparent,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: BaseColors.white,
+                  ),
                 ),
               ),
-              const WidthSpace(20),
+              const WidthSpace(16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

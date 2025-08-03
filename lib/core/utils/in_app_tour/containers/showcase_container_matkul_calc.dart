@@ -13,12 +13,12 @@ Widget finalScoreGCShowcase(BuildContext ctx) {
           ),
         ],
       ),
-      const HeightSpace(65),
+      const HeightSpace(10),
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconButton(
-            onPressed: () async {
+          InkWell(
+            onTap: () async {
               ShowCaseWidget.of(ctx).dismiss();
               nav.pop();
               await nav.goToSemesterPage(
@@ -28,14 +28,16 @@ Widget finalScoreGCShowcase(BuildContext ctx) {
               );
             },
             splashColor: BaseColors.transparent,
-            constraints: const BoxConstraints(),
-            padding: const EdgeInsets.symmetric(horizontal: 7),
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              color: BaseColors.white,
+            highlightColor: BaseColors.transparent,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                color: BaseColors.white,
+              ),
             ),
           ),
-          const WidthSpace(12),
+          const WidthSpace(10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -116,18 +118,20 @@ Widget totalComponentGCShowcase(BuildContext ctx) {
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconButton(
-            onPressed: () async {
+          InkWell(
+            onTap: () async {
               ShowCaseWidget.of(ctx).dismiss();
               backFromNavbarProfile = false;
               await showcaseComponentPage(previous: true);
             },
             splashColor: BaseColors.transparent,
-            constraints: const BoxConstraints(),
-            padding: const EdgeInsets.symmetric(horizontal: 7),
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              color: BaseColors.white,
+            highlightColor: BaseColors.transparent,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                color: BaseColors.white,
+              ),
             ),
           ),
           const WidthSpace(12),
