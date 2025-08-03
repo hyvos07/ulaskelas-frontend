@@ -80,10 +80,10 @@ class ReviewCourseState {
   }
 
   void filterReview(List<ReviewModel> reviews) {
-    _myReviews ??= reviews;
+    _reviews ??= reviews;
     for (final review in reviews) {
-      if (!(_myReviews?.contains(review) ?? true)) {
-        _myReviews?.add(review);
+      if (!(_reviews?.contains(review) ?? true)) {
+        _reviews?.add(review);
       }
     }
   }

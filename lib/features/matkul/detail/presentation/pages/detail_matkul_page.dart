@@ -37,7 +37,7 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
   void init() {
     scrollController = ScrollController();
     completer = Completer<void>();
-    scrollController.addListener(_onScroll);
+    // scrollController.addListener(_onScroll);
     StateInitializer(
       rIndicator: refreshIndicatorKey!,
       cacheKey: 'detail-course',
@@ -56,32 +56,26 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
     });
   }
 
-  void _onScroll() {
-    if (_isBottom && !completer!.isCompleted && scrollCondition()) {
-      onScroll();
-    }
-  }
+  // void _onScroll() {
+  //   if (_isBottom && !completer!.isCompleted && scrollCondition()) {
+  //     onScroll();
+  //   }
+  // }
 
   bool scrollCondition() {
     return !reviewCourseRM.state.hasReachedMax;
   }
 
-  void onScroll() {
-    /*
-    Solution Issue #35 : Detail Matkul Page tidak perlu melakukan onScroll 
-    ketika sudah mencapai bottom of the page, karena page ini tidak 
-    seharusnya melakukan retrieveMoreData (seperti yang ada di Main Page)
-    ketika sudah mencapai bottom. (CMIIW hehehe)
-    */
-    completer?.complete();
-    final query = QueryReview(courseCode: widget.courseCode);
-    reviewCourseRM.state.retrieveMoreData(query).then((value) {
-      completer = Completer<void>();
-      reviewCourseRM.notify();
-    }).onError((error, stackTrace) {
-      completer = Completer<void>();
-    });
-  }
+  // void onScroll() {
+  //   completer?.complete();
+  //   final query = QueryReview(courseCode: widget.courseCode);
+  //   reviewCourseRM.state.retrieveMoreData(query).then((value) {
+  //     completer = Completer<void>();
+  //     reviewCourseRM.notify();
+  //   }).onError((error, stackTrace) {
+  //     completer = Completer<void>();
+  //   });
+  // }
 
   bool get _isBottom {
     if (!scrollController.hasClients) {
