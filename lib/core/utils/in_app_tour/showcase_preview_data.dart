@@ -1,7 +1,5 @@
 // Dummy data for showcase preview (will be not used after showcase finished)
 
-import '../../../features/kalkulator/data/models/component_model.dart';
-
 final Map<String, dynamic> dummyReview = {
   'id': 270,
   'user': 1022,

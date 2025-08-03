@@ -47,14 +47,14 @@ class _HomePageState extends BaseStateful<HomePage> {
         width: MediaQuery.of(context).size.width / 2.75,
         padding: const EdgeInsets.only(left: 15),
         child: Transform.scale(
-          scale: 1.15,
-          child: SvgPicture.asset(
-            'assets/icons/temankuliahTxt.svg'
-          )
+          scale: 1.2,
+          child: SvgPicture.asset('assets/icons/temankuliahTxt.svg'),
         ),
       ),
       centerTitle: false,
       elevation: 0,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
     );
   }
 
@@ -89,7 +89,7 @@ class _HomePageState extends BaseStateful<HomePage> {
                 borderRadius: const BorderRadius.all(Radius.circular(6)),
                 border: Border.all(color: BaseColors.primary, width: 2),
               ),
-              margin: const EdgeInsets.all(20),
+              margin: const EdgeInsets.fromLTRB(20, 12, 20, 20),
               child: InkWell(
                 onTap: () => widget.onSeeAllCourse.call(),
                 child: Padding(
@@ -207,6 +207,7 @@ class _HomePageState extends BaseStateful<HomePage> {
                 );
               },
             ),
+            const HeightSpace(8),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,

@@ -1,5 +1,3 @@
-import 'package:ulaskelas/core/_core.dart';
-
 class QueryAnswer{
   QueryAnswer({
     this.page,
