@@ -32,6 +32,17 @@ class UlaskelasThemeImpl implements UlaskelasTheme {
           borderSide: const BorderSide(color: BaseColors.purpleHearth),
           borderRadius: BorderRadius.circular(4),
         ),
+        prefixIconColor: BaseColors.gray3,
+      ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return BaseColors.purpleHearth;
+          }
+          return BaseColors.transparent;
+        }),
+        checkColor: MaterialStateProperty.all(BaseColors.white),
+        side: const BorderSide(color: BaseColors.gray3),
       ),
       dividerColor: BaseColors.gray5,
       colorScheme: const ColorScheme(
