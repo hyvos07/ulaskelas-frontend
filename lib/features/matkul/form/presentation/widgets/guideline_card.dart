@@ -26,7 +26,7 @@ class GuidelineCard extends StatelessWidget {
                   children: <TextSpan>[
                     const TextSpan(
                       text: 'Sebelum menuliskan review, pastikan kamu sudah '
-                          'membaca aturan yang berlaku dalam UlasKelas ',
+                          'membaca aturan yang berlaku dalam TemanKuliah ',
                     ),
                     TextSpan(
                       text: 'di sini',

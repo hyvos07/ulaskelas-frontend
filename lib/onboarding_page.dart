@@ -25,7 +25,7 @@ class _OnboardingPageState extends BaseStateful<OnboardingPage> {
 
   List<String> titles = [
     'Selamat datang di TemanKuliah!',
-    'Dikusi dan Ulasan Kelas',
+    'Diskusi dan Ulasan Kelas',
     'Kalkulator Menghitung Nilai',
   ];
 
