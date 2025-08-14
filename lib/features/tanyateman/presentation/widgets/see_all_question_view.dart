@@ -143,7 +143,7 @@ class _SeeAllQuestionState extends BaseStateful<SeeAllQuestion> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 30),
                                   child: Text(
-                                    'Tidak ada apa-apa disini.',
+                                    'Belum ada pertanyaan yang diajukan.',
                                     style:
                                         FontTheme.poppins12w600black().copyWith(
                                       color: BaseColors.gray2.withOpacity(0.7),

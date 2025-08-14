@@ -129,7 +129,7 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 20),
                                   child: Text(
-                                    'Tidak ada apa-apa disini.',
+                                    'Belum ada pertanyaan yang diajukan.',
                                     style:
                                         FontTheme.poppins12w600black().copyWith(
                                       color: BaseColors.gray2.withOpacity(0.7),
