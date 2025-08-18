@@ -74,7 +74,6 @@ class _HomePageState extends BaseStateful<HomePage> {
               padding: const EdgeInsets.only(
                 left: 20,
                 right: 20,
-                bottom: 10,
               ),
               alignment: Alignment.centerLeft,
               child: OnReactive(
@@ -83,6 +82,12 @@ class _HomePageState extends BaseStateful<HomePage> {
                   style: FontTheme.poppins20w700black(),
                 ),
               ),
+            ),
+            AppTourCard(
+              onTap: () {
+                Pref.saveBool('doneAppTour', value: false);
+                showInAppTourOpening(context);
+              },
             ),
             Container(
               decoration: BoxDecoration(
