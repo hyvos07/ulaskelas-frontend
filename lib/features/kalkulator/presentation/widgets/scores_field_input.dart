@@ -40,6 +40,7 @@ class ScoresFieldInput extends StatelessWidget {
           color: BaseColors.transparent,
         ),
         collapsedTextColor: BaseColors.neutral100,
+        collapsedIconColor: BaseColors.neutral100,
         iconColor: BaseColors.neutral100,
         title: Text(
           'Nilai tiap Komponen',

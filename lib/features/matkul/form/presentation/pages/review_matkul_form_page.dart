@@ -178,10 +178,9 @@ class _ReviewMatkulFormPageState extends BaseStateful<ReviewMatkulFormPage> {
       context: context,
       builder: (BuildContext context) {
         //prevent Back button press
-        return WillPopScope(
-          onWillPop: () async {
-            return false;
-          },
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) {},
           child: alert,
         );
       },

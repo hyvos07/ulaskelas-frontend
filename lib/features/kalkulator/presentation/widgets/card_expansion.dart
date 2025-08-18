@@ -27,11 +27,13 @@ class _ExpansionCardState extends State<ExpansionCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      surfaceTintColor: BaseColors.white,
+      color: BaseColors.white,
       elevation: 4,
       margin: const EdgeInsets.only(bottom: 13, left: 16, right: 16, top: 2.5),
       child: ListTileTheme(
         dense: true,
-        horizontalTitleGap: 0.0,
+        horizontalTitleGap: 0,
         minLeadingWidth: 0,
         child: ExpansionTile(
           initiallyExpanded: widget.forShowcase,

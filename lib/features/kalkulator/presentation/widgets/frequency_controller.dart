@@ -25,6 +25,7 @@ class FrequencyController extends StatelessWidget {
         IconButton(
           icon: const Icon(
             Icons.remove,
+            color: BaseColors.gray2,
             size: 22,
           ),
           splashRadius: 15,
@@ -95,6 +96,7 @@ class FrequencyController extends StatelessWidget {
         IconButton(
           icon: const Icon(
             size: 22,
+            color: BaseColors.gray2,
             Icons.add,
           ),
           padding: const EdgeInsets.all(12),

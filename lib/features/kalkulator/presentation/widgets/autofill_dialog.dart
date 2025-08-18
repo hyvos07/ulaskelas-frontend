@@ -18,6 +18,7 @@ class _AutoFillSemesterDialogState extends State<AutoFillSemesterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      surfaceTintColor: BaseColors.alabaster,
       insetPadding: const EdgeInsets.symmetric(
         vertical: 50,
         horizontal: 30,

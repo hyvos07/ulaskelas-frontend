@@ -21,6 +21,7 @@ class _MockAutoFillDialogState extends State<MockAutoFillDialog> {
     return Stack(
       children: [
         AlertDialog(
+          surfaceTintColor: BaseColors.alabaster,
           insetPadding: const EdgeInsets.fromLTRB(30, 50, 30, 275),
           titlePadding: const EdgeInsets.symmetric(
             horizontal: 10,

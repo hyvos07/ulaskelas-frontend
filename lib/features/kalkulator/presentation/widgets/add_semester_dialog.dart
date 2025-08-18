@@ -57,6 +57,7 @@ class _AddSemesterDialogState extends State<AddSemesterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      surfaceTintColor: BaseColors.alabaster,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
         side: BorderSide(
@@ -148,7 +149,8 @@ class _AddSemesterDialogState extends State<AddSemesterDialog> {
                               children: <Widget>[
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         !semester.contains('sp')

@@ -3,9 +3,9 @@ part of '_widgets.dart';
 class TargetScoreDropdown extends StatelessWidget {
   const TargetScoreDropdown({
     required this.voidWhenHasntReacedhMax,
-    required this.nilaiHarapanList, 
+    required this.nilaiHarapanList,
     required this.hasReachedMax,
-    required this.maxPossibleScore, 
+    required this.maxPossibleScore,
     required this.canGiveRecom,
     this.target,
     this.voidWhenReachedMax,
@@ -52,76 +52,61 @@ class TargetScoreDropdown extends StatelessWidget {
           onTap: voidWhenHasntReacedhMax,
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
+              dropdownColor: BaseColors.white,
               borderRadius: BorderRadius.circular(10),
-              value: target
-                .toString(),
+              value: target.toString(),
               onChanged: voidWhenReachedMax,
-              selectedItemBuilder:
-                  (BuildContext context) {
-                return nilaiHarapanList
-                    .map<Widget>((String value) {
+              selectedItemBuilder: (BuildContext context) {
+                return nilaiHarapanList.map<Widget>((String value) {
                   return Center(
                     child: GradientText(
                       canGiveRecom && hasReachedMax
-                        ? _getFinalScoreAndGrade(
-                        double.parse(value),)
-                        : '-- -- -- --',
+                          ? _getFinalScoreAndGrade(
+                              double.parse(value),
+                            )
+                          : '-- -- -- --',
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: hasReachedMax && canGiveRecom
                             ? BaseColors.autoSystemColor
                             : [
-                                BaseColors.gray1
-                                    .withOpacity(0.3),
-                                BaseColors.gray1
-                                    .withOpacity(0.3)
+                                BaseColors.gray1.withOpacity(0.3),
+                                BaseColors.gray1.withOpacity(0.3)
                               ],
                       ),
-                      style: FontTheme
-                          .poppins14w500black(),
+                      style: FontTheme.poppins14w500black(),
                     ),
                   );
                 }).toList();
               },
-              items:
-                  nilaiHarapanList.map((String value) {
+              items: nilaiHarapanList.map((String value) {
                 return DropdownMenuItem<String>(
-                  enabled: 
-                    maxPossibleScore
-                      >= double.parse(value),
+                  enabled: maxPossibleScore >= double.parse(value),
                   value: value,
                   child: Center(
                     child: Container(
-                      padding:
-                          const EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 7.5,
                         vertical: 2.5,
                       ),
                       decoration: BoxDecoration(
-                        color: target
-                                    .toString() == value
-                            ? BaseColors.mineShaft
-                                .withOpacity(0.125)
+                        color: target.toString() == value
+                            ? BaseColors.mineShaft.withOpacity(0.125)
                             : Colors.transparent,
-                        borderRadius:
-                            BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                       // ignore: lines_longer_than_80_chars
                       child: Text(
                         _getFinalScoreAndGrade(
-                          double.parse(value),),
-                        style: FontTheme
-                                .poppins14w500black()
-                            .copyWith(
+                          double.parse(value),
+                        ),
+                        style: FontTheme.poppins14w500black().copyWith(
                           fontSize: 13.5,
-                          color: BaseColors.mineShaft
-                              .withOpacity(
-                                maxPossibleScore
-                                  >= double.parse(value)
-                                ? 0.85
-                                : 0.25
-                              ),
+                          color: BaseColors.mineShaft.withOpacity(
+                              maxPossibleScore >= double.parse(value)
+                                  ? 0.85
+                                  : 0.25),
                         ),
                       ),
                     ),
@@ -134,13 +119,11 @@ class TargetScoreDropdown extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: hasReachedMax && canGiveRecom
-                            ? BaseColors.autoSystemColor
-                            : [
-                                BaseColors.gray1
-                                    .withOpacity(0.3),
-                                BaseColors.gray1
-                                    .withOpacity(0.3)
-                              ],
+                        ? BaseColors.autoSystemColor
+                        : [
+                            BaseColors.gray1.withOpacity(0.3),
+                            BaseColors.gray1.withOpacity(0.3)
+                          ],
                   ).createShader(bounds);
                 },
                 child: const Icon(
