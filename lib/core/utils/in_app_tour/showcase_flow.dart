@@ -50,11 +50,11 @@ Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
       Animation<double> animation,
       Animation<double> secondaryAnimation,
     ) {
-      return WillPopScope(
-        onWillPop: () async {
+      return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
           print('Dialog is about to be popped!');
           // await Pref.saveBool('doneAppTour', value: true);
-          return true;
         },
         child: Stack(
           children: [
@@ -136,12 +136,7 @@ Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
                                   child: Center(
                                     child: InkWell(
                                       onTap: () async {
-                                        nav.pop();
-                                        print('Dialog is about to be popped!');
-                                        await Pref.saveBool(
-                                          'doneAppTour',
-                                          value: true,
-                                        );
+                                        await showSkipConfirmationDialog(ctx);
                                       },
                                       child: Text(
                                         'Lewati',
@@ -185,6 +180,84 @@ Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
       );
     },
     transitionDuration: const Duration(milliseconds: 400),
+  );
+}
+
+Future<void> showSkipConfirmationDialog(BuildContext ctx) async {
+  await showDialog(
+    context: ctx,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        surfaceTintColor: BaseColors.white,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+        contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/ruby/ruby_sad.png',
+              height: 135,
+            ),
+            Text(
+              'Yakin ingin melewati Tur TemanKuliah bersama Ruby?',
+              style: FontTheme.poppins14w600black().copyWith(fontSize: 15),
+              textAlign: TextAlign.center,
+            ),
+            const HeightSpace(24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PrimaryButton(
+                  height: 400,
+                  borderRadius: BorderRadius.circular(8),
+                  backgroundColor: BaseColors.purpleHearth2,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    child: Text(
+                      'Tidak, Lanjutkan Tur',
+                      style: FontTheme.poppins14w600black().copyWith(
+                        fontSize: 15,
+                        color: BaseColors.purpleHearth,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  onPressed: () => nav.pop(),
+                ),
+                const WidthSpace(12),
+                Expanded(
+                  child: PrimaryButton(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text(
+                        'Ya',
+                        style: FontTheme.poppins14w600black().copyWith(
+                          fontSize: 15,
+                          color: BaseColors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    onPressed: () async {
+                      nav
+                        ..pop()
+                        ..pop();
+                      await Pref.saveBool('doneAppTour', value: true);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    },
   );
 }
 
@@ -320,10 +393,9 @@ Future<void> showInAppTourClosing(BuildContext ctx) async {
       Animation<double> animation,
       Animation<double> secondaryAnimation,
     ) {
-      return WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
+      return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {},
         child: Stack(
           children: [
             Container(
