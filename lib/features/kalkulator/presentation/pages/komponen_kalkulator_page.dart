@@ -320,14 +320,18 @@ class _CalculatorComponentPageState
                             ],
                           ),
                         ),
-                        const HeightSpace(30),
+                        if (!componentRM.state.hasReachedMax) ...[
+                          const HeightSpace(30),
+                          _buildWarningComponent(),
+                        ],
+                        const HeightSpace(35),
                         SecondaryButton(
                           width: double.infinity,
                           text: 'Tambah Komponen',
                           backgroundColor: BaseColors.purpleHearth,
                           onPressed: goToComponentCreationPage,
                         ),
-                        const HeightSpace(70),
+                        const HeightSpace(40),
                         Center(
                           child: InkWell(
                             onTap: deleteCourse,
@@ -446,6 +450,40 @@ class _CalculatorComponentPageState
   Future<void> retrieveData() async {
     await componentRM.setState(
       (s) => s.retrieveData(QueryComponent(calculatorId: widget.calculatorId)),
+    );
+  }
+
+  Widget _buildWarningComponent() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: BaseColors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: BaseColors.neutral100.withOpacity(0.1),
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Image.asset(
+            'assets/ruby/ruby_sad.png',
+            height: 42,
+          ),
+          const WidthSpace(12),
+          Expanded(
+            child: Text(
+              'Total bobot belum 100%. '
+              'Lengkapi dulu agar Ruby bisa memberi rekomendasi.',
+              style: FontTheme.poppins14w600black().copyWith(fontSize: 10),
+              textAlign: TextAlign.left,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

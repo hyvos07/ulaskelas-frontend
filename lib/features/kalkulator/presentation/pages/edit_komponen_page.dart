@@ -73,8 +73,44 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
             child: ListView(
               padding: const EdgeInsets.all(24),
               children: [
+                Text.rich(
+                  TextSpan(
+                    text: 'Nama Komponen ',
+                    style: FontTheme.poppins12w400black().copyWith(
+                      fontSize: 13,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '*',
+                        style: FontTheme.poppins12w600black().copyWith(
+                          fontSize: 13,
+                          color: BaseColors.danger,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const HeightSpace(8),
                 _buildNameField(),
-                const HeightSpace(20),
+                const HeightSpace(24),
+                Text.rich(
+                  TextSpan(
+                    text: 'Bobot Nilai (%) ',
+                    style: FontTheme.poppins12w400black().copyWith(
+                      fontSize: 13,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '*',
+                        style: FontTheme.poppins12w600black().copyWith(
+                          fontSize: 13,
+                          color: BaseColors.danger,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const HeightSpace(8),
                 _buildWeightField(),
                 const HeightSpace(20),
                 _buildScoreField(),
@@ -213,8 +249,11 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
       'UAS',
       'Kuis',
       'Partisipasi',
-      'Refleksi'
+      'Refleksi',
     ];
+
+    final randomRecommendation =
+        recommendation[Random().nextInt(recommendation.length)];
 
     return Stack(
       alignment: Alignment.centerRight,
@@ -229,7 +268,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            hintText: 'Nama Komponen',
+            hintText: 'Contoh: $randomRecommendation',
           ),
           textInputAction: TextInputAction.newline,
           onChanged: (value) {
@@ -305,7 +344,15 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        hintText: 'Bobot (%)',
+        hintText: 'Contoh: 7,5',
+        suffixIcon: const Padding(
+          padding: EdgeInsets.only(right: 8),
+          child: Icon(
+            Icons.percent,
+            size: 20,
+            color: BaseColors.neutral80,
+          ),
+        ),
       ),
       onChanged: (value) {
         if (value.trim().isEmpty) {
@@ -334,10 +381,21 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Frekuensi',
-                style: FontTheme.poppins14w400black().copyWith(
-                  fontSize: 13,
+              Text.rich(
+                TextSpan(
+                  text: 'Frekuensi ',
+                  style: FontTheme.poppins12w400black().copyWith(
+                    fontSize: 13,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '*',
+                      style: FontTheme.poppins12w600black().copyWith(
+                        fontSize: 13,
+                        color: BaseColors.danger,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               FrequencyController(

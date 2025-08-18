@@ -59,8 +59,44 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
             child: ListView(
               padding: const EdgeInsets.all(24),
               children: [
+                Text.rich(
+                  TextSpan(
+                    text: 'Nama Komponen ',
+                    style: FontTheme.poppins12w400black().copyWith(
+                      fontSize: 13,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '*',
+                        style: FontTheme.poppins12w600black().copyWith(
+                          fontSize: 13,
+                          color: BaseColors.danger,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const HeightSpace(8),
                 _buildNameField(),
-                const HeightSpace(20),
+                const HeightSpace(24),
+                Text.rich(
+                  TextSpan(
+                    text: 'Bobot Nilai (%) ',
+                    style: FontTheme.poppins12w400black().copyWith(
+                      fontSize: 13,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '*',
+                        style: FontTheme.poppins12w600black().copyWith(
+                          fontSize: 13,
+                          color: BaseColors.danger,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const HeightSpace(8),
                 _buildWeightField(),
                 const HeightSpace(20),
                 _buildScoreField(),
@@ -157,8 +193,11 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
       'UAS',
       'Kuis',
       'Partisipasi',
-      'Refleksi'
+      'Refleksi',
     ];
+
+    final randomRecommendation =
+        recommendation[Random().nextInt(recommendation.length)];
 
     return Stack(
       alignment: Alignment.centerRight,
@@ -173,7 +212,7 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            hintText: 'Nama Komponen',
+            hintText: 'Contoh: $randomRecommendation',
           ),
           textInputAction: TextInputAction.newline,
           onChanged: (value) {
@@ -249,7 +288,15 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        hintText: 'Bobot (%)',
+        hintText: 'Contoh: 7,5',
+        suffixIcon: const Padding(
+          padding: EdgeInsets.only(right: 8),
+          child: Icon(
+            Icons.percent,
+            size: 20,
+            color: BaseColors.neutral80,
+          ),
+        ),
       ),
       onChanged: (value) {
         if (value.trim().isEmpty) {
@@ -271,17 +318,28 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
       children: [
         Padding(
           padding: const EdgeInsets.only(
-            left: 12,
+            left: 5,
             top: 5,
             bottom: 5,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Frekuensi',
-                style: FontTheme.poppins14w400black().copyWith(
-                  fontSize: 13,
+              Text.rich(
+                TextSpan(
+                  text: 'Frekuensi ',
+                  style: FontTheme.poppins12w400black().copyWith(
+                    fontSize: 13,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '*',
+                      style: FontTheme.poppins12w600black().copyWith(
+                        fontSize: 13,
+                        color: BaseColors.danger,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               FrequencyController(
