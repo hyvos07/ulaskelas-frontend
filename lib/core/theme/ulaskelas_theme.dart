@@ -44,7 +44,19 @@ class UlaskelasThemeImpl implements UlaskelasTheme {
         checkColor: MaterialStateProperty.all(BaseColors.white),
         side: const BorderSide(color: BaseColors.gray3),
       ),
+      dialogBackgroundColor: BaseColors.white,
       dividerColor: BaseColors.gray5,
+      appBarTheme: const AppBarTheme(
+        surfaceTintColor: BaseColors.alabaster,
+        backgroundColor: BaseColors.alabaster,
+        iconTheme: IconThemeData(color: BaseColors.mineShaft),
+      ),
+      dropdownMenuTheme: DropdownMenuThemeData(
+        menuStyle: MenuStyle(
+          surfaceTintColor: MaterialStateProperty.all(BaseColors.white),
+          backgroundColor: MaterialStateProperty.all(BaseColors.white),
+        ),
+      ),
       colorScheme: const ColorScheme(
         primary: BaseColors.purpleHearth,
         primaryContainer: BaseColors.malibu,

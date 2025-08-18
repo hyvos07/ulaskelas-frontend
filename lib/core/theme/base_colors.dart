@@ -79,11 +79,14 @@ class BaseColors {
   static const Color blue1 = Color(0xFF1A73E8);
   static const Color blue2 = Color(0xFF0A4C96);
 
+  // Purple Colors
+  static const Color purpleHearth2 = Color(0xFFC9CEFC);
+
   // Gradient Colors
-  
-  /// This gradient color set is used in some widgets 
+
+  /// This gradient color set is used in some widgets
   /// that require AI-like gradient color.
-  /// 
+  ///
   /// Use this LinearGradient declaration as an example:
   /// ```dart
   /// LinearGradient(
