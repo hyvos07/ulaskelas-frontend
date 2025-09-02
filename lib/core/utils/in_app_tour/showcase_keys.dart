@@ -27,9 +27,19 @@ class InAppTourKeys {
   final GlobalKey _filledSemesterGC = GlobalKey();
   final GlobalKey _semesterCardGC = GlobalKey();
   final GlobalKey _courseCardGC = GlobalKey();
-  final GlobalKey _finalScoreGC = GlobalKey();
-  final GlobalKey _totalComponentGC = GlobalKey();
 
+  // Course Calculator Page
+  final GlobalKey _totalComponentGC = GlobalKey();
+  final GlobalKey _addComponentGC = GlobalKey();
+  final GlobalKey _incompleteComponentGC = GlobalKey();
+  final GlobalKey _targetScoreGC = GlobalKey();
+  final GlobalKey _finalScoreGC = GlobalKey();
+
+  // Add Component Page
+  final GlobalKey _componentFieldGC = GlobalKey();
+  final GlobalKey _componentNameGC = GlobalKey();
+  final GlobalKey _componentWeightGC = GlobalKey();
+  final GlobalKey _componentScoreGC = GlobalKey();
 
   /////////////
   // Getters //
@@ -52,6 +62,13 @@ class InAppTourKeys {
   GlobalKey get filledSemesterGC => _filledSemesterGC;
   GlobalKey get semesterCardGC => _semesterCardGC;
   GlobalKey get courseCardGC => _courseCardGC;
-  GlobalKey get finalScoreGC => _finalScoreGC;
   GlobalKey get totalComponentGC => _totalComponentGC;
+  GlobalKey get addComponentGC => _addComponentGC;
+  GlobalKey get incompleteComponentGC => _incompleteComponentGC;
+  GlobalKey get targetScoreGC => _targetScoreGC;
+  GlobalKey get finalScoreGC => _finalScoreGC;
+  GlobalKey get componentFieldGC => _componentFieldGC;
+  GlobalKey get componentNameGC => _componentNameGC;
+  GlobalKey get componentWeightGC => _componentWeightGC;
+  GlobalKey get componentScoreGC => _componentScoreGC;
 }

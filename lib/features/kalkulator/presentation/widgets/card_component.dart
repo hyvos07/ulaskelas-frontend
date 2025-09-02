@@ -20,6 +20,15 @@ class CardCompononent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final stateRM;
+
+    if (Pref.getBool('doneAppTour') == false ||
+        Pref.getBool('doneAppTour') == null) {
+      stateRM = mockComponentRM.state;
+    } else {
+      stateRM = componentRM.state;
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
@@ -38,11 +47,11 @@ class CardCompononent extends StatelessWidget {
             style: FontTheme.poppins12w400black(),
             components: [
               CustomTableRowComponent(
-                flexRatio: 50, 
+                flexRatio: 50,
                 text: name,
               ),
               CustomTableRowComponent(
-                flexRatio: 30, 
+                flexRatio: 30,
                 text: score == -1.00 ? 'Kosong' : score!.toStringAsFixed(2),
                 textAlign: TextAlign.right,
                 isGradient: score == -1.00,
@@ -52,22 +61,20 @@ class CardCompononent extends StatelessWidget {
                 ],
               ),
               CustomTableRowComponent(
-                flexRatio: 28, 
+                flexRatio: 28,
                 text: '${weight.toStringAsFixed(0)}%',
                 textAlign: TextAlign.right,
               ),
               CustomTableRowComponent(
-                flexRatio: 28, 
+                flexRatio: 28,
                 isGradient: score == 0 || score == -1.00,
                 text: score == 0 || score == -1.00
-                  ? componentRM.state.hasReachedMax
-                    && componentRM.state.canGiveRecom
-                      ? hope!.toStringAsFixed(2)
-                      : ''
-                  : componentRM.state.hasReachedMax
-                    && componentRM.state.canGiveRecom
-                      ? score!.toStringAsFixed(2) 
-                      : '',
+                    ? stateRM.hasReachedMax && stateRM.canGiveRecom
+                        ? hope!.toStringAsFixed(2)
+                        : ''
+                    : stateRM.hasReachedMax && stateRM.canGiveRecom
+                        ? score!.toStringAsFixed(2)
+                        : '',
                 textAlign: TextAlign.right,
               ),
             ],

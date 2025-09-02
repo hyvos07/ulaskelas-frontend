@@ -108,27 +108,4 @@ class ComponentState {
   void setTarget(int newTarget) {
     target = newTarget;
   }
-
-  /// Add new components to first's matkul (for new user)
-  Future<void> addShowcaseComponent(int calculatorId) async {
-    for (final component in dummyScoreComponent['data']['score_component']) {
-      final result = <String, dynamic>{};
-
-      result['calculator_id'] = calculatorId;
-      result['name'] = component['name'];
-      result['weight'] = component['weight'];
-      result['frequency'] = 1;
-      result['scores'] = [component['score']];
-
-      final resp = await _repo.createComponent(result);
-
-      await resp.fold((failure) {
-        print('Failed to create component!');
-      }, (result) async {
-        final successSubmittedComponent = result.data;
-        print(successSubmittedComponent);
-      });
-    }
-    await retrieveData(QueryComponent(calculatorId: calculatorId));
-  }
 }

@@ -38,7 +38,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (Pref.getBool('doneAppTour') == false ||
-          Pref.getBool('doneAppTour') == null) {
+          Pref.getBool('doneAppTour') == null && !backFromNavbarProfile) {
         showcaseSemesterPage();
       }
     });
@@ -59,149 +59,162 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
 
   @override
   Widget buildNarrowLayout(BuildContext context, SizingInformation sizeInfo) {
-    return SafeArea(
-      child: RefreshIndicator(
-        onRefresh: retrieveData,
-        key: refreshIndicatorKey,
-        child: OnBuilder<CalculatorState>.all(
-          listenTo: calculatorRM,
-          onWaiting: WaitingView.new,
-          onIdle: WaitingView.new,
-          onError: (dynamic error, refresh) => Text(error.toString()),
-          onData: (data) {
-            final calculators = data.calculators;
-            if (calculators.isEmpty) {
-              return SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return ShowCaseWidget(
+      builder: (context) {
+        semesterContext = context;
+        return SafeArea(
+          child: RefreshIndicator(
+            onRefresh: retrieveData,
+            key: refreshIndicatorKey,
+            child: OnBuilder<CalculatorState>.all(
+              listenTo: calculatorRM,
+              onWaiting: WaitingView.new,
+              onIdle: WaitingView.new,
+              onError: (dynamic error, refresh) => Text(error.toString()),
+              onData: (data) {
+                final calculators = data.calculators;
+                if (calculators.isEmpty) {
+                  return SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        HeightSpace(sizeInfo.screenSize.height * .05),
+                        Image.asset(
+                          Ilustration.notfound,
+                          width: sizeInfo.screenSize.width * .6,
+                        ),
+                        const HeightSpace(20),
+                        Text(
+                          'Belum Ada Mata Kuliah yang Tersimpan',
+                          style: FontTheme.poppins14w700black().copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        const HeightSpace(10),
+                        Text(
+                          'Kamu belum menambahkan satupun mata kuliah. '
+                          '\nSilakan tambahkan terlebih dahulu.',
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                        const HeightSpace(50),
+                        _addButton(),
+                      ],
+                    ),
+                  );
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HeightSpace(sizeInfo.screenSize.height * .05),
-                    Image.asset(
-                      Ilustration.notfound,
-                      width: sizeInfo.screenSize.width * .6,
-                    ),
-                    const HeightSpace(20),
-                    Text(
-                      'Belum Ada Mata Kuliah yang Tersimpan',
-                      style: FontTheme.poppins14w700black().copyWith(
-                        color: Theme.of(context).colorScheme.primary,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        top: 27.5,
+                        bottom: 15,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            semesterName,
+                            style: FontTheme.poppins14w700black(),
+                          ),
+                          Text(
+                            calculatorRM.state.gpa,
+                            style: FontTheme.poppins14w700black(),
+                          ),
+                        ],
                       ),
                     ),
-                    const HeightSpace(10),
-                    Text(
-                      'Kamu belum menambahkan satupun mata kuliah. '
-                      '\nSilakan tambahkan terlebih dahulu.',
-                      style: Theme.of(context).textTheme.bodySmall,
-                      textAlign: TextAlign.center,
-                    ),
-                    const HeightSpace(50),
-                    _addButton(),
-                  ],
-                ),
-              );
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                    top: 27.5,
-                    bottom: 15,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        semesterName,
-                        style: FontTheme.poppins14w700black(),
-                      ),
-                      Text(
-                        calculatorRM.state.gpa,
-                        style: FontTheme.poppins14w700black(),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    shrinkWrap: true,
-                    itemCount: calculatorRM.state.calculators.length + 1,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      if (index == calculators.length) {
-                        return _addButton();
-                      }
-                      final calculator = calculators[index];
-                      if (index == 0) {
-                        return ShowCaseWidget(
-                          builder: (context) {
-                            semesterContext = context;
+                    Expanded(
+                      child: ListView.separated(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        shrinkWrap: true,
+                        itemCount: calculatorRM.state.calculators.length + 1,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const SizedBox(height: 16),
+                        itemBuilder: (context, index) {
+                          if (index == calculators.length) {
+                            return _addButton();
+                          }
+                          final calculator = calculators[index];
+                          if (index == 0 &&
+                              (Pref.getBool('doneAppTour') == false ||
+                                  Pref.getBool('doneAppTour') == null)) {
                             return ShowcaseWrapper(
                               showcaseKey: inAppTourKeys.courseCardGC,
                               targetPadding: const EdgeInsets.all(12),
                               targetBorderRadius: BorderRadius.circular(10),
                               onTargetClick: () async {
                                 ShowCaseWidget.of(context).dismiss();
-                                nav.pop();
-                                backToMatkulCalcPage =
-                                    () => nav.goToComponentCalculatorPage(
-                                          givenSemester: widget.givenSemester!,
-                                          courseId: calculator.courseId!,
-                                          calculatorId: calculator.id!,
-                                          courseName: calculator.courseName!,
-                                          totalScore: calculator.totalScore!,
-                                          totalPercentage:
-                                              calculator.totalPercentage!,
-                                        );
+                                backToMatkulCalcPage = () => nav.push(
+                                      MockCalculatorComponentPage(
+                                        givenSemester: widget.givenSemester!,
+                                        courseId: calculator.courseId!,
+                                        calculatorId: calculator.id!,
+                                        courseName: calculator.courseName!,
+                                        totalScore: calculator.totalScore!,
+                                        totalPercentage:
+                                            calculator.totalPercentage!,
+                                      ),
+                                    );
                                 backFromNavbarProfile = false;
                                 backToMatkulCalcPage();
                               },
-                              container: courseCardGCShowcase(context),
+                              container: courseCardGCShowcase(
+                                context,
+                                calculator,
+                                widget.givenSemester!,
+                              ),
                               child: CardCalculator(
                                 model: calculator,
                                 givenSemester: widget.givenSemester!,
-                                onTap: () => nav.goToComponentCalculatorPage(
-                                  givenSemester: widget.givenSemester!,
-                                  courseId: calculator.courseId!,
-                                  calculatorId: calculator.id!,
-                                  courseName: calculator.courseName!,
-                                  totalScore: calculator.totalScore!,
-                                  totalPercentage: calculator.totalPercentage!,
+                                onTap: () => nav.push<void>(
+                                  MockCalculatorComponentPage(
+                                    givenSemester: widget.givenSemester!,
+                                    courseId: calculator.courseId!,
+                                    calculatorId: calculator.id!,
+                                    courseName: calculator.courseName!,
+                                    totalScore: calculator.totalScore!,
+                                    totalPercentage:
+                                        calculator.totalPercentage!,
+                                  ),
+                                  RouteName.calculatorComponent,
                                 ),
                               ),
                             );
-                          },
-                        );
-                      }
-                      return CardCalculator(
-                        model: calculator,
-                        givenSemester: widget.givenSemester!,
-                        onTap: () => nav.goToComponentCalculatorPage(
-                          givenSemester: widget.givenSemester!,
-                          courseId: calculator.courseId!,
-                          calculatorId: calculator.id!,
-                          courseName: calculator.courseName!,
-                          totalScore: calculator.totalScore!,
-                          totalPercentage: calculator.totalPercentage!,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
+                          }
+                          return CardCalculator(
+                            model: calculator,
+                            givenSemester: widget.givenSemester!,
+                            onTap: () => nav.push<void>(
+                              MockCalculatorComponentPage(
+                                givenSemester: widget.givenSemester!,
+                                courseId: calculator.courseId!,
+                                calculatorId: calculator.id!,
+                                courseName: calculator.courseName!,
+                                totalScore: calculator.totalScore!,
+                                totalPercentage: calculator.totalPercentage!,
+                              ),
+                              RouteName.calculatorComponent,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 

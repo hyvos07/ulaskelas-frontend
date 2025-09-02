@@ -125,7 +125,9 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
                       return const CircleLoading(size: 25);
                     }
                     final course = courses[i];
-                    if (i == 2) {
+
+                    // NOTE: Target basdat - make auto find & scroll kapan2
+                    if (course.code == 'CSGE602070') {
                       return ShowcaseWrapper(
                         showcaseKey: inAppTourKeys.coursecardSP,
                         targetBorderRadius: BorderRadius.circular(10),
@@ -136,7 +138,7 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
                             course.code!,
                           );
                         },
-                        container: cardCourseSPShowcase(context),
+                        container: cardCourseSPShowcase(context, course),
                         child: CardCourse(
                           model: course,
                           onTap: () => nav.goToDetailMatkulPage(

@@ -83,10 +83,17 @@ class _HomePageState extends BaseStateful<HomePage> {
                 ),
               ),
             ),
-            AppTourCard(
-              onTap: () {
-                Pref.saveBool('doneAppTour', value: false);
-                showInAppTourOpening(context);
+            Builder(
+              builder: (context) {
+                if (!(Pref.getBool('doneAppTour') ?? false)) {
+                  return const SizedBox();
+                }
+                return AppTourCard(
+                  onTap: () {
+                    Pref.saveBool('doneAppTour', value: false);
+                    showInAppTourOpening(context);
+                  },
+                );
               },
             ),
             Container(

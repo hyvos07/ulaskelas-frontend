@@ -51,11 +51,7 @@ class SemesterState {
     // For Showcase Purpose (new user)
     if (Pref.getBool('doneAppTour') == false ||
         Pref.getBool('doneAppTour') == null) {
-      if (semesterRM.state.semesters.isEmpty) {
-        await showcaseEmptySemester();
-      } else {
-        await showcaseFilledSemester();
-      }
+      await showcaseEmptySemester();
     }
   }
 
@@ -134,11 +130,6 @@ class SemesterState {
       // For Showcase Purpose (new user)
       if (Pref.getBool('doneAppTour') == false ||
           Pref.getBool('doneAppTour') == null) {
-        final semester = _semesters!.where((e) => e.givenSemester == '1').first;
-        await calculatorRM.state.retrieveData(semester.givenSemester!);
-        final calculator = calculatorRM.state.calculators.first;
-        await componentRM.state.addShowcaseComponent(calculator.id!);
-
         await showcaseFilledSemester();
       }
     });

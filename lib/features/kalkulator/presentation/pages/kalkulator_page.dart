@@ -57,7 +57,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                 final semesters = data.semesters;
                 if (semesters.isEmpty) {
                   return Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                     child: SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       child: Column(
@@ -65,13 +65,13 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                         children: [
                           HeightSpace(sizeInfo.screenSize.height * .05),
                           Image.asset(
-                            Ilustration.notfound,
-                            width: sizeInfo.screenSize.width * .55,
+                            Ilustration.login,
+                            width: sizeInfo.screenSize.width * .50,
                           ),
                           const HeightSpace(20),
                           ShowcaseWrapper(
                             showcaseKey: inAppTourKeys.emptySemesterGC,
-                            tooltipPosition: TooltipPosition.top,
+                            tooltipPosition: TooltipPosition.bottom,
                             targetPadding:
                                 const EdgeInsets.fromLTRB(10, 10, 10, 0),
                             targetBorderRadius: BorderRadius.circular(8),
@@ -80,7 +80,7 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Belum Ada Nilai yang Tersimpan',
+                                  'Belum Ada Semester yang Tersimpan',
                                   style:
                                       FontTheme.poppins14w700black().copyWith(
                                     color:
@@ -89,8 +89,8 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                                 ),
                                 const HeightSpace(10),
                                 Text(
-                                  'Kamu belum memiliki nilai semester.\n'
-                                  'Silakan tambahkan terlebih dahulu.',
+                                  'Tambahkan komponen semester baru untuk '
+                                  'mulai menghitung nilai kamu!',
                                   style: Theme.of(context).textTheme.bodySmall,
                                   textAlign: TextAlign.center,
                                 ),
@@ -149,13 +149,31 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                         itemCount: semesterRM.state.semesters.length + 1,
                         itemBuilder: (context, index) {
                           if (index == semesters.length) {
-                            return _addSemesterButton(index + 1);
+                            return ShowcaseWrapper(
+                              showcaseKey: inAppTourKeys.emptySemesterGC,
+                              tooltipPosition: TooltipPosition.bottom,
+                              targetPadding:
+                                  const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                              targetBorderRadius: BorderRadius.circular(8),
+                              container: emptyCalcGCShowcase(context),
+                              child: _addSemesterButton(index + 1),
+                            );
                           }
+
                           targetSemester = {
                             'givenSemester': semesters[0].givenSemester,
                             'semesterGPA': semesters[0].semesterGPA,
                             'totalSKS': semesters[0].totalSKS,
                           }; // Saving this for back button function
+
+                          openSemesterPage = () {
+                            nav.goToSemesterPage(
+                              givenSemester: targetSemester['givenSemester'],
+                              semesterGPA: targetSemester['semesterGPA'],
+                              totalSKS: targetSemester['totalSKS'],
+                            );
+                          };
+
                           final semester = semesters[index];
                           return Column(
                             children: [
@@ -172,7 +190,10 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
                                       totalSKS: semester.totalSKS!,
                                     );
                                   },
-                                  container: semesterCardGCShowcase(context),
+                                  container: semesterCardGCShowcase(
+                                    context,
+                                    semester,
+                                  ),
                                   child: CardSemester(
                                     model: semester,
                                     onTap: () => {

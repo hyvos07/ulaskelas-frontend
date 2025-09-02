@@ -8,9 +8,9 @@ final Map<String, dynamic> dummyReview = {
   'updated_at': '2023-07-29T02:39:56.480157Z',
   'academic_year': '2021/2022',
   'semester': 2,
-  'content': 'Berguna banget soalnya di matkul ini belajar OOP '
-      'yang bakal terus kepake kedepannya! Harus banget ngerti '
-      'matkul yang satu ini sih...',
+  'content': 'Berguna banget soalnya di matkul ini belajar basic '
+      'dari database yang pastinya berguna untuk skill '
+      'SWE maupun data analyst sih',
   'hate_speech_status': 'APPROVED',
   'sentimen': 0,
   'is_anonym': true,
@@ -31,51 +31,5 @@ final Map<String, dynamic> dummyReview = {
   'tags': [],
   'likes_count': 0,
   'is_liked': false,
-  'rating_average': 5.0
-};
-
-final Map<String, dynamic> dummyScoreComponent = {
-  'data': {
-    'score_component': [
-      {
-        'id': 1983,
-        'calculator_id': 1433,
-        'name': 'Tugas Individu',
-        'weight': 20.0,
-        'score': 80.0
-      },
-      {
-        'id': 1984,
-        'calculator_id': 1433,
-        'name': 'UTS',
-        'weight': 30.0,
-        'score': 100.0
-      },
-      {
-        'id': 1985,
-        'calculator_id': 1433,
-        'name': 'UAS',
-        'weight': 40.0,
-        'score': 90.0
-      },
-      {
-        'id': 1986,
-        'calculator_id': 1433,
-        'name': 'Kuis',
-        'weight': 10.0,
-        'score': null,
-      }
-    ],
-    'calculator': {
-      'id': 1433,
-      'user': 'daniel.liman',
-      'course_id': 15,
-      'course_name': 'MPK Agama',
-      'total_score': 90.9,
-      'total_percentage': 100.0
-    },
-    'recommended_score': 0,
-    'max_possible_score': 90.9
-  },
-  'error': null
+  'rating_average': 5.0,
 };

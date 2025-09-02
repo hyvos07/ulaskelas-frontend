@@ -16,6 +16,7 @@ InAppTourKeys inAppTourKeys = InAppTourKeys();
 
 Function(int index) navbarController = (index) {};
 VoidCallback backToDetailPage = () {};
+VoidCallback openSemesterPage = () {};
 VoidCallback backToMatkulCalcPage = () {};
 
 Map<String, dynamic> targetSemester = {};
@@ -27,11 +28,15 @@ BuildContext? tanyaTemanContext;
 BuildContext? calculatorContext;
 BuildContext? semesterContext;
 BuildContext? matkulCalcContext;
+BuildContext? addComponentContext;
 
 bool backFromTanyaTeman = false;
 bool backFromCalculator = false;
 bool backFromNavbarProfile = false;
+bool backFromAddComponent = false;
 bool userHasUsedAutoFill = false;
+bool firstComponentFilled = false;
+bool secondComponentFilled = false;
 
 Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
   if (!back) {
@@ -44,7 +49,7 @@ Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
     context: ctx,
     barrierLabel: 'InAppTourOpening',
     barrierDismissible: true,
-    barrierColor: Colors.transparent,
+    barrierColor: BaseColors.transparent,
     pageBuilder: (
       BuildContext context,
       Animation<double> animation,
@@ -75,7 +80,7 @@ Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: Container(
-                color: Colors.black.withOpacity(0),
+                color: BaseColors.neutral100.withOpacity(0),
               ),
             ),
             Align(
@@ -136,7 +141,10 @@ Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
                                   child: Center(
                                     child: InkWell(
                                       onTap: () async {
-                                        await showSkipConfirmationDialog(ctx);
+                                        await showSkipConfirmationDialog(
+                                          ctx,
+                                          true,
+                                        );
                                       },
                                       child: Text(
                                         'Lewati',
@@ -183,82 +191,127 @@ Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
   );
 }
 
-Future<void> showSkipConfirmationDialog(BuildContext ctx) async {
-  await showDialog(
-    context: ctx,
-    barrierDismissible: false,
-    builder: (context) {
-      return AlertDialog(
-        surfaceTintColor: BaseColors.white,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
-        contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+Future<void> showSkipConfirmationDialog(
+  BuildContext ctx, [
+  bool isDialog = false,
+]) async {
+  final overlay = Overlay.of(ctx);
+  late OverlayEntry overlayEntry;
+
+  overlayEntry = OverlayEntry(
+    builder: (context) => Stack(
+      children: [
+        // Background dialog alike
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: BaseColors.neutral100.withOpacity(0.6),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/ruby/ruby_sad.png',
-              height: 135,
-            ),
-            Text(
-              'Yakin ingin melewati Tur TemanKuliah bersama Ruby?',
-              style: FontTheme.poppins14w600black().copyWith(fontSize: 15),
-              textAlign: TextAlign.center,
-            ),
-            const HeightSpace(24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                PrimaryButton(
-                  height: 400,
-                  borderRadius: BorderRadius.circular(8),
-                  backgroundColor: BaseColors.purpleHearth2,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                    child: Text(
-                      'Tidak, Lanjutkan Tur',
-                      style: FontTheme.poppins14w600black().copyWith(
-                        fontSize: 15,
-                        color: BaseColors.purpleHearth,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+        Center(
+          child: Material(
+            color: BaseColors.transparent,
+            child: Container(
+              width: MediaQuery.of(ctx).size.width - 32,
+              constraints: const BoxConstraints(
+                maxWidth: 400, // Max width for larger screens
+              ),
+              decoration: BoxDecoration(
+                color: BaseColors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: BaseColors.neutral100.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
                   ),
-                  onPressed: () => nav.pop(),
-                ),
-                const WidthSpace(12),
-                Expanded(
-                  child: PrimaryButton(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Text(
-                        'Ya',
-                        style: FontTheme.poppins14w600black().copyWith(
-                          fontSize: 15,
-                          color: BaseColors.white,
+                ],
+              ),
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/ruby/ruby_sad.png',
+                    height: 135,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Yakin ingin melewati Tur TemanKuliah bersama Ruby?',
+                    style:
+                        FontTheme.poppins14w600black().copyWith(fontSize: 15),
+                    textAlign: TextAlign.center,
+                  ),
+                  const HeightSpace(24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PrimaryButton(
+                        height: 40,
+                        borderRadius: BorderRadius.circular(8),
+                        backgroundColor: BaseColors.purpleHearth2,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 10,
+                          ),
+                          child: Text(
+                            'Tidak, Lanjutkan Tur',
+                            style: FontTheme.poppins14w600black().copyWith(
+                              fontSize: 15,
+                              color: BaseColors.purpleHearth,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
+                        onPressed: () => overlayEntry.remove(),
                       ),
-                    ),
-                    onPressed: () async {
-                      nav
-                        ..pop()
-                        ..pop();
-                      await Pref.saveBool('doneAppTour', value: true);
-                    },
+                      const WidthSpace(12),
+                      Expanded(
+                        child: PrimaryButton(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Text(
+                              'Ya, Lewati',
+                              style: FontTheme.poppins14w600black().copyWith(
+                                fontSize: 15,
+                                color: BaseColors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          onPressed: () async {
+                            overlayEntry.remove();
+
+                            if (isDialog) {
+                              nav.pop();
+                            } else {
+                              ShowCaseWidget.of(ctx).dismiss();
+                            }
+
+                            backFromCalculator = false;
+                            backFromNavbarProfile = false;
+                            backFromTanyaTeman = false;
+                            userHasUsedAutoFill = false;
+                            firstComponentFilled = false;
+                            secondComponentFilled = false;
+
+                            await Pref.saveBool('doneAppTour', value: true);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ],
+          ),
         ),
-      );
-    },
+      ],
+    ),
   );
+
+  overlay.insert(overlayEntry);
 }
 
 Future<void> showcaseNavbarMatkul() async {
@@ -323,7 +376,7 @@ Future<void> showcaseEmptySemester({
   bool previous = false,
 }) async {
   if (!(back || previous)) {
-    await Future.delayed(const Duration(milliseconds: 1200));
+    await Future.delayed(const Duration(milliseconds: 2000));
   }
 
   ShowCaseWidget.of(calculatorContext!).startShowCase([
@@ -337,7 +390,7 @@ Future<void> showcaseFilledSemester({
   bool previous = false,
 }) async {
   if (!(back || previous)) {
-    await Future.delayed(const Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 200));
   }
 
   ShowCaseWidget.of(calculatorContext!).startShowCase([
@@ -360,12 +413,59 @@ Future<void> showcaseComponentPage({
   bool back = false,
   bool previous = false,
 }) async {
+  firstComponentFilled = false;
+  secondComponentFilled = false;
   if (!previous) {
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(milliseconds: 100));
   }
   ShowCaseWidget.of(matkulCalcContext!).startShowCase([
-    if (!back) inAppTourKeys.finalScoreGC,
-    inAppTourKeys.totalComponentGC,
+    if (!back) inAppTourKeys.totalComponentGC,
+    inAppTourKeys.addComponentGC,
+  ]);
+}
+
+Future<void> showcaseAddComponentFields() async {
+  ShowCaseWidget.of(addComponentContext!)
+      .startShowCase([inAppTourKeys.componentFieldGC]);
+}
+
+Future<void> showcaseAddComponentName() async {
+  ShowCaseWidget.of(addComponentContext!)
+      .startShowCase([inAppTourKeys.componentNameGC]);
+}
+
+Future<void> showcaseAddComponentWeight() async {
+  await Future.delayed(const Duration(milliseconds: 300));
+  ShowCaseWidget.of(addComponentContext!)
+      .startShowCase([inAppTourKeys.componentWeightGC]);
+}
+
+Future<void> showcaseAddComponentScore() async {
+  await Future.delayed(const Duration(milliseconds: 300));
+  await componentFormRM.setState((s) {
+    s.nameController.text = firstComponentFilled ? 'UAS' : 'UTS';
+    s.weightController.text = '50.0';
+    return true;
+  });
+  ShowCaseWidget.of(addComponentContext!)
+      .startShowCase([inAppTourKeys.componentScoreGC]);
+}
+
+Future<void> showcaseIncompleteComponent() async {
+  ShowCaseWidget.of(matkulCalcContext!).startShowCase([
+    inAppTourKeys.incompleteComponentGC,
+  ]);
+}
+
+Future<void> showcaseTargetScoreComponent() async {
+  ShowCaseWidget.of(matkulCalcContext!).startShowCase([
+    inAppTourKeys.targetScoreGC,
+  ]);
+}
+
+Future<void> showcaseFinalScoreComponent() async {
+  ShowCaseWidget.of(matkulCalcContext!).startShowCase([
+    inAppTourKeys.finalScoreGC,
   ]);
 }
 
@@ -387,7 +487,7 @@ Future<void> showInAppTourClosing(BuildContext ctx) async {
     context: ctx,
     barrierLabel: 'InAppTourClosing',
     barrierDismissible: true,
-    barrierColor: Colors.transparent,
+    barrierColor: BaseColors.transparent,
     pageBuilder: (
       BuildContext context,
       Animation<double> animation,
@@ -415,7 +515,7 @@ Future<void> showInAppTourClosing(BuildContext ctx) async {
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: Container(
-                color: Colors.black.withOpacity(0),
+                color: BaseColors.neutral100.withOpacity(0),
               ),
             ),
             Align(

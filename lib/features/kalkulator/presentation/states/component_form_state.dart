@@ -102,8 +102,7 @@ class ComponentFormState {
   }
 
   void setScore(int index) {
-    _formData.score![index] =
-        double.tryParse(scoreControllers[index - 1].text);
+    _formData.score![index] = double.tryParse(scoreControllers[index - 1].text);
 
     if (kDebugMode) {
       print('Form Data: ${_formData.score}');
@@ -210,6 +209,17 @@ class ComponentFormState {
       valid++;
     }
     return sum != 0 && valid != 0 ? sum / valid : null;
+  }
+
+  /// Showcase only
+  Future<void> fakeLoading() async {
+    isLoading = true;
+    componentFormRM.notify();
+    await Future.delayed(
+      const Duration(milliseconds: 1500),
+    );
+    isLoading = false;
+    componentFormRM.notify();
   }
 }
 

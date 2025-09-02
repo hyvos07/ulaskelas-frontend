@@ -406,7 +406,9 @@ class _DetailMatkulPageState extends BaseStateful<DetailMatkulPage> {
           onWaiting: () => const CircleLoading(),
           onError: (dynamic error, refresh) => Text(error.toString()),
           onData: (data) {
-            if (data.myReviews.isEmpty) {
+            if (data.myReviews.isEmpty ||
+                Pref.getBool('doneAppTour') == false ||
+                Pref.getBool('doneAppTour') == null) {
               return Column(
                 children: [
                   Align(

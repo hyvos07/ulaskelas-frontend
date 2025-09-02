@@ -104,6 +104,10 @@ final answerFormRM = RM.inject(
   AnswerFormState.new,
 );
 
+final mockComponentRM = RM.inject(
+  MockComponentState.new,
+);
+
 /// Semua state harus diinject di global state
 class GlobalState {
   static List<Injectable> injectDataMocks() {
@@ -127,7 +131,8 @@ class GlobalState {
       Inject(SearchQuestionState.new),
       Inject(AnswerState.new),
       Inject(QuestionFormState.new),
-      Inject(AnswerFormState.new)
+      Inject(AnswerFormState.new),
+      Inject(MockComponentState.new),
     ];
   }
 
@@ -145,7 +150,8 @@ class GlobalState {
     Inject(SearchQuestionState.new),
     Inject(AnswerState.new),
     Inject(QuestionFormState.new),
-    Inject(AnswerFormState.new)
+    Inject(AnswerFormState.new),
+    Inject(MockComponentState.new),
   ];
 
   static ReactiveModel<ThemeState> theme() {

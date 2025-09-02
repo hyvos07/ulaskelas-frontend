@@ -29,6 +29,23 @@ class CalculatorState {
       hasReachedMax = result.data.isEmpty || lessThanLimit;
       _calculators = result.data;
       print(_calculators);
+
+      // For Showcase
+      if (Pref.getBool('doneAppTour') == false ||
+          Pref.getBool('doneAppTour') == null) {
+        _calculators?.insert(
+          0,
+          CalculatorModel(
+            givenSemester: givenSemester,
+            id: 999999,
+            user: profileRM.state.profile.username ?? 'john.doe',
+            courseId: 33,
+            courseName: 'Kalkulus 2',
+            totalScore: 0,
+            totalPercentage: 0,
+          ),
+        );
+      }
     });
     calculatorRM.notify();
   }
