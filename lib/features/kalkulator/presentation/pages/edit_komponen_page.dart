@@ -252,9 +252,6 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
       'Refleksi',
     ];
 
-    final randomRecommendation =
-        recommendation[Random().nextInt(recommendation.length)];
-
     return Stack(
       alignment: Alignment.centerRight,
       children: [
@@ -268,7 +265,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            hintText: 'Contoh: $randomRecommendation',
+            hintText: 'Contoh: UTS',
           ),
           textInputAction: TextInputAction.newline,
           onChanged: (value) {
