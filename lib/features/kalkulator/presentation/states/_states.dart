@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:ulaskelas/core/_core.dart';
 import 'package:ulaskelas/features/kalkulator/data/datasources/_datasources.dart';
@@ -11,7 +12,6 @@ import 'package:ulaskelas/features/kalkulator/domain/entities/query_component.da
 import 'package:ulaskelas/features/kalkulator/domain/repositories/_repositories.dart';
 
 import '../../../../core/utils/in_app_tour/showcase_flow.dart';
-import '../../../../core/utils/in_app_tour/showcase_preview_data.dart';
 import '../../../../core/utils/util.dart';
 import '../../../../services/_services.dart';
 import '../../../matkul/search/data/models/_models.dart';

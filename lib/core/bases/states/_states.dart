@@ -8,6 +8,7 @@ import 'package:ulaskelas/authentication_page.dart';
 import 'package:ulaskelas/core/_core.dart';
 import 'package:ulaskelas/core/environment/_environment.dart';
 import 'package:ulaskelas/core/theme/_theme.dart';
+import 'package:ulaskelas/core/utils/in_app_tour/pages/_pages.dart';
 import 'package:ulaskelas/features/home/presentation/pages/_pages.dart';
 import 'package:ulaskelas/features/home/presentation/states/_states.dart';
 import 'package:ulaskelas/features/kalkulator/presentation/pages/_pages.dart';
