@@ -10,7 +10,7 @@ Widget emptyCalcGCShowcase(BuildContext ctx) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const HeightSpace(20),
+            const HeightSpace(12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

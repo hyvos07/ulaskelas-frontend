@@ -48,40 +48,34 @@ class DeleteDialog extends StatelessWidget {
         bottom: 25,
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: ElevatedButton(
-            onPressed: () => nav.pop(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: BaseColors.accentColor,
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+        ElevatedButton(
+          onPressed: () => nav.pop(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: BaseColors.accentColor,
+            elevation: 1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                'Batal',
-                style: FontTheme.poppins14w600black().copyWith(
-                  color: BaseColors.neutral10,
-                ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              'Batal',
+              style: FontTheme.poppins14w600black().copyWith(
+                color: BaseColors.neutral10,
               ),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: TextButton(
-            onPressed: onConfirm ??
-                () {
-                  nav.pop();
-                },
-            child: Text(
-              'Hapus',
-              style: FontTheme.poppins14w600black().copyWith(
-                color: BaseColors.danger,
-              ),
+        TextButton(
+          onPressed: onConfirm ??
+              () {
+                nav.pop();
+              },
+          child: Text(
+            'Hapus',
+            style: FontTheme.poppins14w600black().copyWith(
+              color: BaseColors.danger,
             ),
           ),
         ),
