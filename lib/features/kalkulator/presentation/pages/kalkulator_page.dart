@@ -22,6 +22,12 @@ class _CalculatorPageState extends BaseStateful<CalculatorPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(const AssetImage(Ilustration.login), context);
+  }
+
+  @override
   ScaffoldAttribute buildAttribute() {
     return ScaffoldAttribute();
   }
