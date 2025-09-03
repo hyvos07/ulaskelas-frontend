@@ -194,7 +194,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
                             model: calculator,
                             givenSemester: widget.givenSemester!,
                             onTap: () => nav.push<void>(
-                              MockCalculatorComponentPage(
+                              CalculatorComponentPage(
                                 givenSemester: widget.givenSemester!,
                                 courseId: calculator.courseId!,
                                 calculatorId: calculator.id!,
