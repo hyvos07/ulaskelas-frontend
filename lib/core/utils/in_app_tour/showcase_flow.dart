@@ -72,7 +72,7 @@ Future<void> showInAppTourOpening(BuildContext ctx, {bool back = false}) async {
                     Color(0x00E4E4E4),
                     Color(0x7FE4E4E4),
                     Color(0xB25D5D5D),
-                    Color(0xE53A3A3A)
+                    Color(0xE53A3A3A),
                   ],
                 ),
               ),
@@ -211,7 +211,7 @@ Future<void> showSkipConfirmationDialog(
           child: Material(
             color: BaseColors.transparent,
             child: Container(
-              width: MediaQuery.of(ctx).size.width - 32,
+              width: MediaQuery.of(ctx).size.width - 48,
               constraints: const BoxConstraints(
                 maxWidth: 400, // Max width for larger screens
               ),
@@ -232,13 +232,12 @@ Future<void> showSkipConfirmationDialog(
                 children: [
                   Image.asset(
                     'assets/ruby/ruby_sad.png',
-                    height: 135,
+                    height: 130,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 10),
                   Text(
                     'Yakin ingin melewati Tur TemanKuliah bersama Ruby?',
-                    style:
-                        FontTheme.poppins14w600black().copyWith(fontSize: 15),
+                    style: FontTheme.poppins14w600black(),
                     textAlign: TextAlign.center,
                   ),
                   const HeightSpace(24),
@@ -256,8 +255,7 @@ Future<void> showSkipConfirmationDialog(
                           ),
                           child: Text(
                             'Tidak, Lanjutkan Tur',
-                            style: FontTheme.poppins14w600black().copyWith(
-                              fontSize: 15,
+                            style: FontTheme.poppins12w600black().copyWith(
                               color: BaseColors.purpleHearth,
                             ),
                             textAlign: TextAlign.center,
@@ -273,8 +271,7 @@ Future<void> showSkipConfirmationDialog(
                             padding: const EdgeInsets.symmetric(vertical: 4),
                             child: Text(
                               'Ya, Lewati',
-                              style: FontTheme.poppins14w600black().copyWith(
-                                fontSize: 15,
+                              style: FontTheme.poppins12w600black().copyWith(
                                 color: BaseColors.white,
                               ),
                               textAlign: TextAlign.center,
@@ -289,9 +286,10 @@ Future<void> showSkipConfirmationDialog(
                               ShowCaseWidget.of(ctx).dismiss();
                             }
 
+                            backFromTanyaTeman = false;
                             backFromCalculator = false;
                             backFromNavbarProfile = false;
-                            backFromTanyaTeman = false;
+                            backFromAddComponent = false;
                             userHasUsedAutoFill = false;
                             firstComponentFilled = false;
                             secondComponentFilled = false;
@@ -376,7 +374,7 @@ Future<void> showcaseEmptySemester({
   bool previous = false,
 }) async {
   if (!(back || previous)) {
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(milliseconds: 100));
   }
 
   ShowCaseWidget.of(calculatorContext!).startShowCase([
@@ -478,10 +476,13 @@ Future<void> showcaseNavbarProfile() async {
 Future<void> showInAppTourClosing(BuildContext ctx) async {
   await Future.delayed(const Duration(milliseconds: 700));
 
+  backFromTanyaTeman = false;
   backFromCalculator = false;
   backFromNavbarProfile = false;
-  backFromTanyaTeman = false;
+  backFromAddComponent = false;
   userHasUsedAutoFill = false;
+  firstComponentFilled = false;
+  secondComponentFilled = false;
 
   await showGeneralDialog(
     context: ctx,
@@ -507,7 +508,7 @@ Future<void> showInAppTourClosing(BuildContext ctx) async {
                     Color(0x00E4E4E4),
                     Color(0x7FE4E4E4),
                     Color(0xB25D5D5D),
-                    Color(0xE53A3A3A)
+                    Color(0xE53A3A3A),
                   ],
                 ),
               ),
