@@ -5,7 +5,7 @@ class Constants {
   static const String assetPath = 'assets/';
   static const String iconPath = 'assets/icons';
   static const String imagePath = 'assets/images';
-  static const String ulaskelas = 'Ulas Kelas';
+  static const String ulaskelas = 'Teman Kuliah';
   static const String ulasKelasPackageName = 'com.ristek.ulaskelas';
   static const String development = 'Development';
   static const String production = 'Production';
