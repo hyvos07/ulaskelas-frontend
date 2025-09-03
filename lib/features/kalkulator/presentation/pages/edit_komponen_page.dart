@@ -73,44 +73,8 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
             child: ListView(
               padding: const EdgeInsets.all(24),
               children: [
-                Text.rich(
-                  TextSpan(
-                    text: 'Nama Komponen ',
-                    style: FontTheme.poppins12w400black().copyWith(
-                      fontSize: 13,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: '*',
-                        style: FontTheme.poppins12w600black().copyWith(
-                          fontSize: 13,
-                          color: BaseColors.danger,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const HeightSpace(8),
                 _buildNameField(),
                 const HeightSpace(24),
-                Text.rich(
-                  TextSpan(
-                    text: 'Bobot Nilai (%) ',
-                    style: FontTheme.poppins12w400black().copyWith(
-                      fontSize: 13,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: '*',
-                        style: FontTheme.poppins12w600black().copyWith(
-                          fontSize: 13,
-                          color: BaseColors.danger,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const HeightSpace(8),
                 _buildWeightField(),
                 const HeightSpace(20),
                 _buildScoreField(),
@@ -242,127 +206,100 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
   }
 
   Widget _buildNameField() {
-    final recommendation = [
-      'Tugas Individu',
-      'Tugas Kelompok',
-      'UTS',
-      'UAS',
-      'Kuis',
-      'Partisipasi',
-      'Refleksi',
-    ];
-
-    return Stack(
-      alignment: Alignment.centerRight,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextFormField(
+        Text.rich(
+          TextSpan(
+            text: 'Nama Komponen ',
+            style: FontTheme.poppins12w400black().copyWith(
+              fontSize: 13,
+            ),
+            children: [
+              TextSpan(
+                text: '*',
+                style: FontTheme.poppins12w600black().copyWith(
+                  fontSize: 13,
+                  color: BaseColors.danger,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const HeightSpace(8),
+        DropDownField(
           controller: componentFormRM.state.nameController,
+          onValidate: () => componentFormRM.setState((s) => s.setName()),
+          value: '',
+          items: componentFormRM.state.recommendation,
+          setter: (dynamic newValue) {
+            componentFormRM.state.nameController.text = newValue;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWeightField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text.rich(
+          TextSpan(
+            text: 'Bobot Nilai (%) ',
+            style: FontTheme.poppins12w400black().copyWith(
+              fontSize: 13,
+            ),
+            children: [
+              TextSpan(
+                text: '*',
+                style: FontTheme.poppins12w600black().copyWith(
+                  fontSize: 13,
+                  color: BaseColors.danger,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const HeightSpace(8),
+        TextFormField(
+          controller: componentFormRM.state.weightController,
           minLines: 1,
           style: FontTheme.poppins12w400black(),
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp('[0-9]+[,.]{0,1}[0-9]*')),
+          ],
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(16),
             // constraints: const BoxConstraints(maxHeight: 12.5 * 20),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            hintText: 'Contoh: UTS',
+            hintText: 'Contoh: 7,5',
+            suffixIcon: const Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: Icon(
+                Icons.percent,
+                size: 20,
+                color: BaseColors.neutral80,
+              ),
+            ),
           ),
-          textInputAction: TextInputAction.newline,
           onChanged: (value) {
             if (value.trim().isEmpty) {
-              componentFormRM.state.nameController.text = '';
+              componentFormRM.state.weightController.clear();
             }
           },
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'This field is required.';
             }
-            componentFormRM.setState((s) => s.setName());
+            componentFormRM.setState((s) => s.setWeight());
             return null;
           },
         ),
-        Positioned(
-          right: 18,
-          top: 15,
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton2(
-              customButton: SvgPicture.asset(
-                SvgIcons.dropdown,
-                width: 20,
-                height: 20,
-              ),
-              items: List.generate(
-                7,
-                (index) => DropdownMenuItem(
-                  value: recommendation[index],
-                  child: Text(
-                    recommendation[index],
-                    style: FontTheme.poppins12w400black(),
-                  ),
-                ),
-              ),
-              onChanged: (value) {
-                componentFormRM.state.nameController.text = value.toString();
-                if (kDebugMode) {
-                  print('You Choosed $value!');
-                }
-              },
-              dropdownStyleData: DropdownStyleData(
-                width: 135,
-                direction: DropdownDirection.left,
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: BaseColors.white,
-                ),
-              ),
-              menuItemStyleData: const MenuItemStyleData(
-                height: 38,
-              ),
-            ),
-          ),
-        ),
       ],
-    );
-  }
-
-  TextFormField _buildWeightField() {
-    return TextFormField(
-      controller: componentFormRM.state.weightController,
-      minLines: 1,
-      style: FontTheme.poppins12w400black(),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp('[0-9]+[,.]{0,1}[0-9]*')),
-      ],
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(16),
-        // constraints: const BoxConstraints(maxHeight: 12.5 * 20),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        hintText: 'Contoh: 7,5',
-        suffixIcon: const Padding(
-          padding: EdgeInsets.only(right: 8),
-          child: Icon(
-            Icons.percent,
-            size: 20,
-            color: BaseColors.neutral80,
-          ),
-        ),
-      ),
-      onChanged: (value) {
-        if (value.trim().isEmpty) {
-          componentFormRM.state.weightController.clear();
-        }
-      },
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'This field is required.';
-        }
-        componentFormRM.setState((s) => s.setWeight());
-        return null;
-      },
     );
   }
 

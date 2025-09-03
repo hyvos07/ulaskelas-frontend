@@ -7,6 +7,7 @@ class ComponentFormState {
       remoteDataSource,
     );
     _frequency.text = '1';
+    getCachedRecommendation();
   }
 
   late ComponentRepository _repo;
@@ -21,6 +22,8 @@ class ComponentFormState {
   double _recommendedScore = 85;
   bool isLoading = false;
   bool justVisited = true;
+
+  final _recommendation = <String>[];
 
   /// Get details information of passed component
   Future<void> retrieveDetailedComponent(QueryComponent q) async {
@@ -40,6 +43,7 @@ class ComponentFormState {
       _recommendedScore = detail['recommended_score']?.toDouble() ?? 85;
       justVisited = true;
     });
+    await getCachedRecommendation();
   }
 
   /// Submitting form data
@@ -63,6 +67,10 @@ class ComponentFormState {
       final successSubmittedComponent = result.data;
       print(successSubmittedComponent);
     });
+
+    if (_formData.name != null && _formData.name!.isNotEmpty) {
+      await addNewCachedRecommendation(_formData.name!);
+    }
   }
 
   Future<void> submitEditForm(int id) async {
@@ -85,6 +93,10 @@ class ComponentFormState {
       final successEditedComponent = result.data;
       print(successEditedComponent);
     });
+
+    if (_formData.name != null && _formData.name!.isNotEmpty) {
+      await addNewCachedRecommendation(_formData.name!);
+    }
   }
 
   ComponentData get formData => _formData;
@@ -94,6 +106,7 @@ class ComponentFormState {
   List<TextEditingController> get scoreControllers => _scoreControllers;
   TextEditingController get weightController => _weightController;
   TextEditingController get frequency => _frequency;
+  List<String> get recommendation => _recommendation;
 
   set previousFrequency(String value) => _previousFrequency = value;
 
@@ -209,6 +222,51 @@ class ComponentFormState {
       valid++;
     }
     return sum != 0 && valid != 0 ? sum / valid : null;
+  }
+
+  final initRecommendation = [
+    'Tugas Individu',
+    'Tugas Kelompok',
+    'UTS',
+    'UAS',
+    'Kuis',
+    'Partisipasi',
+    'Refleksi',
+  ];
+
+  Future<void> getCachedRecommendation() async {
+    if (Pref.getString('cached_recommendation') == null) {
+      await Pref.saveString(
+        'cached_recommendation',
+        initRecommendation.join(','),
+      );
+    } else {
+      final cached = Pref.getString('cached_recommendation')!;
+      _recommendation
+        ..clear()
+        ..addAll(cached.split(','));
+    }
+  }
+
+  Future<void> addNewCachedRecommendation(String recommendation) async {
+    if (!_recommendation.contains(recommendation.toLowerCase())) {
+      _recommendation.insert(0, recommendation);
+
+      final customRecommendations = _recommendation
+          .where((item) => !initRecommendation.contains(item))
+          .take(5)
+          .toList();
+
+      _recommendation
+        ..clear()
+        ..addAll(customRecommendations)
+        ..addAll(initRecommendation);
+
+      await Pref.saveString(
+        'cached_recommendation',
+        _recommendation.join(','),
+      );
+    }
   }
 
   /// Showcase only

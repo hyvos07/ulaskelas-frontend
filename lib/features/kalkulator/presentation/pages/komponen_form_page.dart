@@ -36,9 +36,10 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
   @override
   void initState() {
     super.initState();
+    componentFormRM.state.getCachedRecommendation();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (Pref.getBool('doneAppTour') == false ||
-          Pref.getBool('doneAppTour') == null && !firstComponentFilled) {
+          Pref.getBool('doneAppTour') == null) {
         showcaseAddComponentFields();
       }
     });
@@ -223,16 +224,6 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
   }
 
   Widget _buildNameField() {
-    final recommendation = [
-      'Tugas Individu',
-      'Tugas Kelompok',
-      'UTS',
-      'UAS',
-      'Kuis',
-      'Partisipasi',
-      'Refleksi',
-    ];
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -254,78 +245,14 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
           ),
         ),
         const HeightSpace(8),
-        Stack(
-          alignment: Alignment.centerRight,
-          children: [
-            TextFormField(
-              controller: componentFormRM.state.nameController,
-              minLines: 1,
-              style: FontTheme.poppins12w400black(),
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(16),
-                // constraints: const BoxConstraints(maxHeight: 12.5 * 20),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                hintText: 'Contoh: UTS',
-              ),
-              textInputAction: TextInputAction.newline,
-              onChanged: (value) {
-                if (value.trim().isEmpty) {
-                  componentFormRM.state.nameController.text = '';
-                }
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'This field is required.';
-                }
-                componentFormRM.setState((s) => s.setName());
-                return null;
-              },
-            ),
-            Positioned(
-              right: 18,
-              top: 15,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  customButton: SvgPicture.asset(
-                    SvgIcons.dropdown,
-                    width: 20,
-                    height: 20,
-                  ),
-                  items: List.generate(
-                    7,
-                    (index) => DropdownMenuItem(
-                      value: recommendation[index],
-                      child: Text(
-                        recommendation[index],
-                        style: FontTheme.poppins12w400black(),
-                      ),
-                    ),
-                  ),
-                  onChanged: (value) {
-                    componentFormRM.state.nameController.text =
-                        value.toString();
-                    if (kDebugMode) {
-                      print('You Choosed $value!');
-                    }
-                  },
-                  dropdownStyleData: DropdownStyleData(
-                    width: 135,
-                    direction: DropdownDirection.left,
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: BaseColors.white,
-                    ),
-                  ),
-                  menuItemStyleData: const MenuItemStyleData(
-                    height: 38,
-                  ),
-                ),
-              ),
-            ),
-          ],
+        DropDownField(
+          controller: componentFormRM.state.nameController,
+          onValidate: () => componentFormRM.setState((s) => s.setName()),
+          value: '',
+          items: componentFormRM.state.recommendation,
+          setter: (dynamic newValue) {
+            componentFormRM.state.nameController.text = newValue;
+          },
         ),
       ],
     );
