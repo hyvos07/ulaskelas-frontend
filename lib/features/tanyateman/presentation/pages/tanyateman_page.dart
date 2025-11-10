@@ -25,6 +25,7 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
   @override
   void dispose() {
     _debounce?.cancel();
+    focusNode.dispose(); // penting: dispose focusNode
     super.dispose();
   }
 
@@ -58,93 +59,117 @@ class _TanyaTemanPageState extends BaseStateful<TanyaTemanPage> {
     return ShowCaseWidget(
       builder: (context) {
         tanyaTemanContext = context;
-        return SafeArea(
-          child: Column(
-            children: [
-              OnReactive(
-                () => Padding(
-                  padding: EdgeInsets.only(
-                    left: searchQuestionRM.state.searchData?.text != null
-                        ? 20
-                        : 24,
-                    right: searchQuestionRM.state.searchData?.text != null
-                        ? 22
-                        : 24,
-                    top: 10,
-                    bottom: 3,
-                  ),
-                  child: ShowcaseWrapper(
-                    showcaseKey: inAppTourKeys.searchBarTT,
-                    targetPadding: const EdgeInsets.all(8),
-                    targetBorderRadius: BorderRadius.circular(10),
-                    container: searchBarTTShowcase(context),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: OnReactive(
-                            () => CustomSearchField(
-                              controller: searchQuestionRM.state.controller,
-                              focusNode: focusNode,
-                              hintText: 'Cari Pertanyaan',
-                              onFieldSubmitted: (val) {
-                                searchQuestionRM.state.addToHistory(val ?? '');
-                              },
-                              onQueryChanged: onQueryChanged,
-                              onClear: () {
-                                // focusNode.unfocus();
-                                searchQuestionRM.state.controller.clear();
-                                onQueryChanged('');
-                                searchQuestionRM.notify();
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            if (focusNode.hasFocus) {
+              // // debug (bisa dihapus)
+              // // ignore: avoid_print
+              // print('Body tapped -> unfocus');
+              focusNode.unfocus();
+            }
+
+            if (searchQuestionRM.state.controller.text.isEmpty) {
+              searchQuestionRM.state.searchData = SearchData();
+              searchQuestionRM.state.lastQuery = '';
+              searchQuestionRM.state.controller.clear();
+              searchQuestionRM.notify();
+            }
+          },
+          child: SafeArea(
+            child: Column(
+              children: [
+                OnReactive(
+                  () => Padding(
+                    padding: EdgeInsets.only(
+                      left: searchQuestionRM.state.searchData?.text != null
+                          ? 20
+                          : 24,
+                      right: searchQuestionRM.state.searchData?.text != null
+                          ? 22
+                          : 24,
+                      top: 10,
+                      bottom: 3,
                     ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: OnBuilder<SearchQuestionState>.all(
-                  listenTo: searchQuestionRM,
-                  shouldRebuild: (t, k) {
-                    return searchQuestionRM.state.searchData?.text == null;
-                  },
-                  onIdle: () => const CircleLoading(),
-                  onWaiting: () => const CircleLoading(),
-                  onError: (error, refreshError) => Text(error.toString()),
-                  onData: (data) {
-                    final Widget decidePage;
-                    if (searchQuestionRM.state.searchData?.text != null) {
-                      decidePage = _buildSearchResult();
-                    } else if (searchQuestionRM.state.searchData?.text ==
-                        null) {
-                      decidePage = _buildNormalResult();
-                    } else {
-                      decidePage = const SizedBox();
-                    }
-                    return Stack(
-                      children: [
-                        decidePage,
-                        if (focusNode.hasFocus &&
-                            searchQuestionRM.state.controller.text.isEmpty)
-                          ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                              child: Container(
-                                color: Colors.white.withOpacity(0.7),
+                    child: ShowcaseWrapper(
+                      showcaseKey: inAppTourKeys.searchBarTT,
+                      targetPadding: const EdgeInsets.all(8),
+                      targetBorderRadius: BorderRadius.circular(10),
+                      container: searchBarTTShowcase(context),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: OnReactive(
+                              () => CustomSearchField(
+                                controller: searchQuestionRM.state.controller,
+                                focusNode: focusNode,
+                                hintText: 'Cari Pertanyaan',
+                                onFieldSubmitted: (val) {
+                                  searchQuestionRM.state
+                                      .addToHistory(val ?? '');
+                                },
+                                onQueryChanged: onQueryChanged,
+                                onClear: () {
+                                  // focusNode.unfocus();
+                                  searchQuestionRM.state.controller.clear();
+                                  onQueryChanged('');
+                                  searchQuestionRM.notify();
+                                },
                               ),
                             ),
                           ),
-                        if (focusNode.hasFocus &&
-                            searchQuestionRM.state.controller.text.isEmpty)
-                          _buildHistory(),
-                      ],
-                    );
-                  },
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: OnBuilder<SearchQuestionState>.all(
+                    listenTo: searchQuestionRM,
+                    shouldRebuild: (t, k) {
+                      return searchQuestionRM.state.searchData?.text == null;
+                    },
+                    onIdle: () => const CircleLoading(),
+                    onWaiting: () => const CircleLoading(),
+                    onError: (error, refreshError) => Text(error.toString()),
+                    onData: (data) {
+                      final Widget decidePage;
+                      if (searchQuestionRM.state.searchData?.text != null) {
+                        decidePage = _buildSearchResult();
+                      } else if (searchQuestionRM.state.searchData?.text ==
+                          null) {
+                        decidePage = _buildNormalResult();
+                      } else {
+                        decidePage = const SizedBox();
+                      }
+
+                      return Stack(
+                        children: [
+                          decidePage,
+
+                          // Blur overlay ketika fokus & text kosong
+                          if (focusNode.hasFocus &&
+                              searchQuestionRM.state.controller.text.isEmpty)
+                            ClipRect(
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                child: Container(
+                                  color: Colors.white.withOpacity(0.7),
+                                ),
+                              ),
+                            ),
+
+                          // History (di atas blur)
+                          if (focusNode.hasFocus &&
+                              searchQuestionRM.state.controller.text.isEmpty)
+                            _buildHistory(),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
