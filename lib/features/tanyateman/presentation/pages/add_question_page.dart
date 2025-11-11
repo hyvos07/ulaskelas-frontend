@@ -106,6 +106,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
             isLoading: questionFormRM.state.isLoading,
             text: 'Posting',
             onTap: () async {
+              if (questionFormRM.state.isLoading) return;
               await onSubmitCallBack(context);
             },
           ),
