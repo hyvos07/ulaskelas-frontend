@@ -160,6 +160,9 @@ class _HistoryQuestionState extends BaseStateful<HistoryQuestion> {
                                         data.historyQuestions[index];
                                     return CardPost(
                                       isInHistorySection: true,
+                                      onTap: () {
+                                        nav.goToDetailQuestionPage(question);
+                                      },
                                       onLikeTap: () {},
                                       questionModel: question,
                                       imageTag: 'post-image-preview'
