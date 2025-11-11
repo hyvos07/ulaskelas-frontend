@@ -163,8 +163,8 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
         }
       } on TimeoutException catch (_) {
         nav.pop();
-        ErrorMessenger(
-          'Timeout. Cek kembali apakah pertanyaan anda sudah terkirim',
+        WarningMessenger(
+          'Timeout. Cek riwayat untuk memastikan pertanyaan terkirim.',
         ).show(ctx!);
       } catch (e) {
         nav.pop();
