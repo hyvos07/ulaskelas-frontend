@@ -453,16 +453,42 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
   }
 
   Future<void> onSubmitCallBack(BuildContext context) async {
-    if (answerFormRM.state.formKey.currentState!.validate() &&
-        answerFormRM.state.answerController.text != '') {
-      final isSucces = await answerFormRM.state.postNewAnswer(widget.model.id);
-      if (isSucces) {
-        SuccessMessenger('Jawaban berhasil dibuat').show(ctx!);
+    try {
+      await answerFormRM.setState((s) => s.isLoading = true);
+
+      if (answerFormRM.state.formKey.currentState!.validate() &&
+          answerFormRM.state.answerController.text != '') {
+        try {
+          final isSucces =
+              await answerFormRM.state.postNewAnswer(widget.model.id);
+
+          if (isSucces) {
+            SuccessMessenger('Jawaban berhasil dibuat').show(ctx!);
+            await _pageController.animateToPage(
+              0,
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.fastLinearToSlowEaseIn,
+            );
+          } else {
+            ErrorMessenger('Jawaban gagal dibuat').show(ctx!);
+          }
+        } on TimeoutException catch (_) {
+          WarningMessenger(
+            'Timeout. Cek kembali apakah jawaban anda sudah terkirim',
+          ).show(ctx!);
+          await _pageController.animateToPage(
+            0,
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.fastLinearToSlowEaseIn,
+          );
+        } catch (e) {
+          ErrorMessenger('Jawaban gagal dibuat: $e').show(ctx!);
+        }
       } else {
-        ErrorMessenger('Jawaban gagal dibuat').show(ctx!);
+        ErrorMessenger('Jawaban perlu diisi!').show(context);
       }
-    } else {
-      ErrorMessenger('Jawaban perlu diisi!').show(context);
+    } finally {
+      await answerFormRM.setState((s) => s.isLoading = false);
     }
   }
 

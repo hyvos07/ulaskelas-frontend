@@ -7,9 +7,9 @@ class AnswerFormState {
     _answerController = TextEditingController();
   }
 
-  late AnswerRepository _repo; 
+  late AnswerRepository _repo;
   late TextEditingController _answerController;
-  final formKey =  GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   String? _answer;
   bool _isAnonym = false;
@@ -112,28 +112,26 @@ class AnswerFormState {
 
   Future<bool> postNewAnswer(int id) async {
     var isSucces = false;
-    isLoading = true;
 
     final model = {
-      'question_id' : id,
-      'attachment_file' : fileImage,
-      'answer_text' : answerController.text.trim(),
-      'is_anonym' : isAnonym == true
-        ? '1' : '0'
+      'question_id': id,
+      'attachment_file': fileImage,
+      'answer_text': answerController.text.trim(),
+      'is_anonym': isAnonym == true ? '1' : '0'
     };
 
     if (fileImage == null) model.remove('attachment_file');
 
     final resp = await _repo.postAnswer(model);
     await resp.fold((failure) {
+      if (failure is TimeoutFailure) {
+        throw TimeoutException('Request timed out');
+      }
       isSucces = false;
     }, (result) async {
       clearForm();
       isSucces = true;
     });
-
-    isLoading = false;
-    answerFormRM.notify();
 
     return isSucces;
   }
