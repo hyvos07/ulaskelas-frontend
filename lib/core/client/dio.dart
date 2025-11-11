@@ -207,8 +207,8 @@ Future<Response> postWithFileInIt(
     data: formData,
     options: Options(
       headers: getHeaders,
-      receiveTimeout: const Duration(milliseconds: 5000),
-      sendTimeout: const Duration(milliseconds: 6000),
+      receiveTimeout: const Duration(milliseconds: 7500),
+      sendTimeout: const Duration(milliseconds: 8500),
     ),
   );
 

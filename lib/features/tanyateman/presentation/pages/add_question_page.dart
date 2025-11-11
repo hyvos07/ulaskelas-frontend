@@ -130,33 +130,44 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
   }
 
   Future<void> onSubmitCallBack(BuildContext context) async {
-    if (questionFormRM.state.formKey.currentState!.validate()
-        && questionFormRM.state.questionController.text != ''
-        && questionFormRM.state.course != null) {
-      final isSucces = await questionFormRM.state.postNewQuestion();
-      if (isSucces) {
+    if (questionFormRM.state.formKey.currentState!.validate() &&
+        questionFormRM.state.questionController.text != '' &&
+        questionFormRM.state.course != null) {
+      try {
+        final isSucces = await questionFormRM.state.postNewQuestion();
         nav.pop();
-        final historyFilter = questionsRM.state.historyQuestionsFilter;
-        await questionsRM.setState(
-          (s) => s.retrieveData(
-            queryAll: QueryQuestion(
-              isMostPopular: questionsRM.state.allQuestionsFilter ==
-                      'paling_banyak_disukai'
-                  ? true
-                  : null,
+
+        if (isSucces) {
+          final historyFilter = questionsRM.state.historyQuestionsFilter;
+          await questionsRM.setState(
+            (s) => s.retrieveData(
+              queryAll: QueryQuestion(
+                isMostPopular: questionsRM.state.allQuestionsFilter ==
+                        'paling_banyak_disukai'
+                    ? true
+                    : null,
+              ),
+              queryHistory: QueryQuestion(
+                isHistory: true,
+                isMostPopular:
+                    historyFilter == 'paling_banyak_disukai' ? true : null,
+                isVerified: historyFilter == 'terverifikasi' ? true : null,
+                isWaitToVerify:
+                    historyFilter == 'menunggu_verifikasi' ? true : null,
+              ),
             ),
-            queryHistory: QueryQuestion(
-              isHistory: true,
-              isMostPopular:
-                  historyFilter == 'paling_banyak_disukai' ? true : null,
-              isVerified: historyFilter == 'terverifikasi' ? true : null,
-              isWaitToVerify:
-                  historyFilter == 'menunggu_verifikasi' ? true : null,
-            ),
-          ),
-        );
-        SuccessMessenger('Pertanyaan berhasil dibuat').show(ctx!);
-      } else {
+          );
+          SuccessMessenger('Pertanyaan berhasil dibuat').show(ctx!);
+        } else {
+          ErrorMessenger('Pertanyaan gagal dibuat').show(ctx!);
+        }
+      } on TimeoutException catch (_) {
+        nav.pop();
+        ErrorMessenger(
+          'Timeout. Cek kembali apakah pertanyaan anda sudah terkirim',
+        ).show(ctx!);
+      } catch (e) {
+        nav.pop();
         ErrorMessenger('Pertanyaan gagal dibuat').show(ctx!);
       }
     } else {

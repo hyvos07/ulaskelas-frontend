@@ -7,7 +7,7 @@ class QuestionFormState {
     _questionController = TextEditingController();
   }
 
-  late QuestionRepository _repo; 
+  late QuestionRepository _repo;
   late TextEditingController _questionController;
   final formKey = GlobalKey<FormState>();
 
@@ -61,6 +61,7 @@ class QuestionFormState {
     }
     questionFormRM.notify();
   }
+
   void clearCourse() {
     _course = null;
     if (kDebugMode) {
@@ -76,6 +77,7 @@ class QuestionFormState {
     }
     questionFormRM.notify();
   }
+
   void setIsCourseEmpty(bool newIsCourseEmpty) {
     isCourseEmpty = newIsCourseEmpty;
     if (kDebugMode) {
@@ -141,17 +143,19 @@ class QuestionFormState {
     isLoading = true;
 
     final model = {
-      'attachment_file' : fileImage,
-      'course_id' : course != null
-        ? '${course!.id}' : null,
-      'question_text' : questionController.text.trim(),
-      'is_anonym' : isAnonym == true
-        ? '1' : '0'
+      'attachment_file': fileImage,
+      'course_id': course != null ? '${course!.id}' : null,
+      'question_text': questionController.text.trim(),
+      'is_anonym': isAnonym == true ? '1' : '0'
     };
     if (questionFormRM.state.fileImage == null) model.remove('attachment_file');
 
     final resp = await _repo.postQuestion(model);
     await resp.fold((failure) {
+      if (failure is TimeoutFailure) {
+        throw TimeoutException('Request timed out');
+      }
+
       isSucces = false;
     }, (result) async {
       clearForm();

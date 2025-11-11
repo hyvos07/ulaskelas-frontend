@@ -7,6 +7,13 @@ Future<Decide<Failure, T>> apiCall<T>(Future<T> t) async {
     final futureCall = await t;
     return Right(futureCall);
   } on DioException catch (e) {
+    if (e.type == DioExceptionType.receiveTimeout ||
+        e.type == DioExceptionType.sendTimeout ||
+        e.type == DioExceptionType.connectionTimeout) {
+      Logger().e('Error: Dio Timeout Detected');
+      return Left(TimeoutFailure());
+    }
+
     Logger().f(e.error.runtimeType);
     Logger().f(e.error.toString());
     if (e.error is ArgumentError) {
@@ -15,9 +22,6 @@ Future<Decide<Failure, T>> apiCall<T>(Future<T> t) async {
     } else if (e.error is SocketException) {
       Logger().e('Error: No Internet Connection');
       return Left(NetworkFailure(message: 'No Internet Connection'));
-    } else if (e.error is TimeoutException) {
-      Logger().e('Error: Timeout');
-      return Left(TimeoutFailure());
     } else if (e.error is FormatException) {
       /// Case json not match || attribute name changed from BE
       Logger().e('Error: Format from front end error');
