@@ -266,7 +266,7 @@ class _CalculatorComponentPageState
                             CustomTableRowComponent(
                               flexRatio: 25,
                               text:
-                                  '${componentRM.state.totalWeight.toStringAsFixed(0)}%',
+                                  '${formatDouble(componentRM.state.totalWeight)}%',
                             ),
                             CustomTableRowComponent(
                               flexRatio: 30,
