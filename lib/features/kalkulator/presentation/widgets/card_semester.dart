@@ -46,6 +46,13 @@ class CardSemester extends StatelessWidget {
                 ),
                 const HeightSpace(2),
                 Text(
+                  '${model.totalSKS} SKS',
+                  style: FontTheme.poppins12w400black().copyWith(
+                    fontSize: 13,
+                  ),
+                ),
+                const HeightSpace(2),
+                Text(
                   model.semesterGPA?.toStringAsFixed(2) ?? '0.00',
                   style: FontTheme.poppins12w400black(),
                 ),
