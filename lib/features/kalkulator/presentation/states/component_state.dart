@@ -17,7 +17,7 @@ class ComponentState {
   bool componentChange = true;
 
   double totalScore = 0;
-  int totalWeight = 0;
+  double totalWeight = 0;
   double recommendedScore = 85;
   double maxPossibleScore = 100;
   int? target;
@@ -58,7 +58,7 @@ class ComponentState {
     /////////////////////////////////////////////////////
     totalWeight = _components!.fold(
       0,
-      (int num, e) => num + e.weight!.toInt(),
+      (double num, e) => num + e.weight!,
     );
     hasReachedMax = totalWeight >= 100;
     totalScore = _components!.fold(

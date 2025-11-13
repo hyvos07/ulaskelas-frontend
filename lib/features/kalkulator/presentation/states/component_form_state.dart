@@ -115,7 +115,9 @@ class ComponentFormState {
   }
 
   void setScore(int index) {
-    _formData.score![index] = double.tryParse(scoreControllers[index - 1].text);
+    final normalizedValue =
+        scoreControllers[index - 1].text.replaceAll(',', '.');
+    _formData.score![index] = double.tryParse(normalizedValue);
 
     if (kDebugMode) {
       print('Form Data: ${_formData.score}');
@@ -123,7 +125,8 @@ class ComponentFormState {
   }
 
   void setWeight() {
-    _formData.weight = double.parse(weightController.text);
+    final normalizedValue = weightController.text.replaceAll(',', '.');
+    _formData.weight = double.parse(normalizedValue);
   }
 
   /// Cleaning form when success submitting form
@@ -218,7 +221,8 @@ class ComponentFormState {
     final length = int.tryParse(_frequency.text) ?? 1;
 
     for (var i = 0; i < length; i++) {
-      sum += double.tryParse(_scoreControllers[i].text) ?? 0;
+      final normalizedValue = _scoreControllers[i].text.replaceAll(',', '.');
+      sum += double.tryParse(normalizedValue) ?? 0;
       valid++;
     }
     return sum != 0 && valid != 0 ? sum / valid : null;
