@@ -170,7 +170,6 @@ Future<Response> sendCustomRequest(
   );
 }
 
-
 Future<Response> postWithFileInIt(
   String url, {
   Map<String, String>? headers,
@@ -191,10 +190,13 @@ Future<Response> postWithFileInIt(
 
   if (model != null) {
     model.forEach((key, value) {
+      if (value == null) return;
+
       if (value is File) {
         formData.files.add(MapEntry(
           key,
-          MultipartFile.fromFileSync(value.path, filename: value.path.split('/').last),
+          MultipartFile.fromFileSync(value.path,
+              filename: value.path.split('/').last),
         ));
       } else {
         formData.fields.add(MapEntry(key, value.toString()));

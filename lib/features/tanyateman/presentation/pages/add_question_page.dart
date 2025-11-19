@@ -132,8 +132,7 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
 
   Future<void> onSubmitCallBack(BuildContext context) async {
     if (questionFormRM.state.formKey.currentState!.validate() &&
-        questionFormRM.state.questionController.text != '' &&
-        questionFormRM.state.course != null) {
+        questionFormRM.state.questionController.text != '') {
       try {
         final isSucces = await questionFormRM.state.postNewQuestion();
         nav.pop();
@@ -165,26 +164,17 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
       } on TimeoutException catch (_) {
         nav.pop();
         WarningMessenger(
-          'Timeout. Cek riwayat untuk memastikan pertanyaan terkirim.',
-        ).show(ctx!);
+                'Timeout. Cek riwayat untuk memastikan pertanyaan terkirim.',
+                duration: 3000)
+            .show(ctx!);
       } catch (e) {
         nav.pop();
         ErrorMessenger('Pertanyaan gagal dibuat').show(ctx!);
       }
+    } else if (questionFormRM.state.questionController.text.isEmpty) {
+      ErrorMessenger('Pertanyaan perlu diisi!').show(ctx!);
     } else {
-      var warningString = '';
-      if (questionFormRM.state.questionController.text.isEmpty) {
-        warningString += 'Pertanyaan';
-      }
-      if (questionFormRM.state.course == null) {
-        if (warningString.isNotEmpty) {
-          warningString += ' dan';
-        }
-        warningString += 'Matkul Terkait';
-        questionFormRM.state.setIsCourseEmpty(true);
-      }
-      warningString += ' perlu diisi!';
-      ErrorMessenger(warningString).show(ctx!);
+      ErrorMessenger('Terjadi kesalahan').show(ctx!);
     }
   }
 

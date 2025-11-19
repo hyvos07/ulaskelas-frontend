@@ -6,8 +6,8 @@ class QuestionModel {
   final String userProgram;
   final String userGeneration;
   final String questionText;
-  final int courseId;
-  final String courseName;
+  final int? courseId;
+  final String? courseName;
   final bool isAnonym;
   int likeCount;
   int replyCount;
@@ -34,14 +34,17 @@ class QuestionModel {
   });
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
+
+    final bool hasCourse = json['course'] != null;
+
     return QuestionModel(
       id: json['id'],
       userName: json['user']['name'],
       userProgram: json['user']['program'],
       userGeneration: json['user']['generation'],
       questionText: json['question_text'],
-      courseId: json['course']['id'],
-      courseName: json['course']['name'],
+      courseId: hasCourse ? json['course']['id'] : null,
+      courseName: hasCourse ? json['course']['name'] : null,
       isAnonym: json['is_anonym'] == 1,
       likeCount: json['like_count'],
       replyCount: json['reply_count'],
