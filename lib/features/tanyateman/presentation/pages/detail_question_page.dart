@@ -158,7 +158,9 @@ class _DetailQuestionPageState extends BaseStateful<DetailQuestionPage> {
                     ),
                     Expanded(
                       child: Text(
-                        '#${widget.model.courseName}',
+                        widget.model.courseId == null
+                            ? '#Umum'
+                            : '#${widget.model.courseName}',
                         style: FontTheme.poppins12w600black().copyWith(
                           color: Colors.grey.shade600,
                         ),
