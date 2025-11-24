@@ -70,6 +70,8 @@ class _AddQuestionPageState extends BaseStateful<AddQuestionPage> {
                     },
                   ),
                 ),
+                const HeightSpace(5),
+                const QuestionFormLabel( text: 'Jika dikosongkan akan masuk #Umum'),
                 const HeightSpace(20),
                 OnBuilder<QuestionFormState>.all(
                   listenTo: questionFormRM,

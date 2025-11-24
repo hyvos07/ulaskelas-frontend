@@ -35,7 +35,7 @@ class CoursePicker extends StatelessWidget {
                   flex: 11,
                   child: Text(
                     questionFormRM.state.course == null
-                        ? 'Matkul Terkait'
+                        ? 'Matkul Terkait (opsional)'
                         : questionFormRM.state.course!.name!,
                     style: FontTheme.poppins12w400black().copyWith(
                       color: Colors.grey.shade600,
