@@ -62,7 +62,7 @@ class CardCompononent extends StatelessWidget {
               ),
               CustomTableRowComponent(
                 flexRatio: 28,
-                text: '${weight.toStringAsFixed(0)}%',
+                text: '${formatDouble(weight)}%',
                 textAlign: TextAlign.right,
               ),
               CustomTableRowComponent(

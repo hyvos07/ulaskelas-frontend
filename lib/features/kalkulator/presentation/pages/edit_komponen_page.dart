@@ -295,6 +295,10 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
             if (value == null || value.isEmpty) {
               return 'This field is required.';
             }
+            final normalizedValue = value.replaceAll(',', '.');
+            if (double.tryParse(normalizedValue) == null) {
+              return 'Please enter a valid number.';
+            }
             componentFormRM.setState((s) => s.setWeight());
             return null;
           },
@@ -381,7 +385,9 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
                             }
                           },
                           validator: (value) {
-                            if ((double.tryParse(value!) ?? 0) > 200) {
+                            final normalizedValue = value?.replaceAll(',', '.');
+                            if ((double.tryParse(normalizedValue ?? '0') ?? 0) >
+                                200) {
                               return "Score can't be more than 200";
                             }
                             componentFormRM.setState((s) => s.setScore(1));
