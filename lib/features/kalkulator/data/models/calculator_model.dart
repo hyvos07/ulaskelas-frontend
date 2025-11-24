@@ -9,6 +9,7 @@ class CalculatorModel {
   double? totalScore;
   double? totalPercentage;
   String? shortName;
+  int? courseSKS;
 
   CalculatorModel({
     this.givenSemester,
@@ -19,6 +20,7 @@ class CalculatorModel {
     this.totalScore,
     this.totalPercentage,
     this.shortName,
+    this.courseSKS,
   });
 
   CalculatorModel.fromJson(Map<String, dynamic> json, String givenSemester) {
@@ -29,6 +31,7 @@ class CalculatorModel {
     courseName = json['course_name'];
     totalScore = json['total_score'];
     totalPercentage = json['total_percentage'];
+    courseSKS = json['course_sks'];
     if (courseName?.isNotEmpty ?? false) {
       shortName = courseName?.split(' ').fold<String>(
             '',
@@ -47,6 +50,7 @@ class CalculatorModel {
     data['course_name'] = courseName;
     data['total_score'] = totalScore;
     data['total_percentage'] = totalPercentage;
+    data['course_sks'] = courseSKS;
     return data;
   }
 }

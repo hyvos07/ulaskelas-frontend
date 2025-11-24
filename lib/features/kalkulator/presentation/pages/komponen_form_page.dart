@@ -8,6 +8,7 @@ class ComponentFormPage extends StatefulWidget {
     required this.courseName,
     required this.totalScore,
     required this.totalPercentage,
+    required this.courseSKS,
     super.key,
   });
 
@@ -17,6 +18,7 @@ class ComponentFormPage extends StatefulWidget {
   final String courseName;
   final double totalScore;
   final double totalPercentage;
+  final int courseSKS;
 
   @override
   _ComponentFormPageState createState() => _ComponentFormPageState();
@@ -207,6 +209,7 @@ class _ComponentFormPageState extends BaseStateful<ComponentFormPage> {
         courseId: widget.courseId,
         calculatorId: widget.calculatorId,
         courseName: widget.courseName,
+        courseSKS: widget.courseSKS,
         totalScore: _temporaryUpdateScore(
           averageScore < 0 ? 0 : averageScore,
           weight,

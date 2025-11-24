@@ -8,6 +8,7 @@ class CalculatorComponentPage extends StatefulWidget {
     required this.courseName,
     required this.totalScore,
     required this.totalPercentage,
+    required this.courseSKS,
     super.key,
   });
 
@@ -17,6 +18,7 @@ class CalculatorComponentPage extends StatefulWidget {
   final String courseName;
   final double totalScore;
   final double totalPercentage;
+  final int courseSKS;
 
   @override
   _CalculatorComponentPageState createState() =>
@@ -87,9 +89,21 @@ class _CalculatorComponentPageState
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 20),
-                          child: Text(
-                            widget.courseName,
-                            style: FontTheme.poppins20w700black(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.courseName,
+                                style: FontTheme.poppins20w700black(),
+                              ),
+                              const HeightSpace(4),
+                              Text(
+                                '${widget.courseSKS} SKS',
+                                style: FontTheme.poppins16w500black().copyWith(
+                                  color: BaseColors.gray2,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Row(
@@ -364,6 +378,7 @@ class _CalculatorComponentPageState
       courseName: widget.courseName,
       totalScore: widget.totalScore < 0 ? 0 : widget.totalScore,
       totalPercentage: widget.totalPercentage,
+      courseSKS: widget.courseSKS,
     );
   }
 
@@ -380,6 +395,7 @@ class _CalculatorComponentPageState
       componentName: component.name!,
       componentScore: component.score! < 0 ? 0 : component.score!,
       componentWeight: component.weight!,
+      courseSKS: widget.courseSKS,
     );
   }
 

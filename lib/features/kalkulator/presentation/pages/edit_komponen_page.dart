@@ -12,6 +12,7 @@ class EditComponentPage extends StatefulWidget {
     required this.componentName,
     required this.componentScore,
     required this.componentWeight,
+    required this.courseSKS,
     super.key,
   });
 
@@ -25,6 +26,7 @@ class EditComponentPage extends StatefulWidget {
   final String componentName;
   final double componentScore;
   final double componentWeight;
+  final int courseSKS;
 
   @override
   _EditComponentPageState createState() => _EditComponentPageState();
@@ -114,6 +116,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
                         courseId: widget.courseId,
                         calculatorId: widget.calculatorId,
                         courseName: widget.courseName,
+                        courseSKS: widget.courseSKS,
                         totalScore: widget.totalScore -
                             ((widget.componentScore < 0
                                     ? 0
@@ -190,6 +193,7 @@ class _EditComponentPageState extends BaseStateful<EditComponentPage> {
         courseId: widget.courseId,
         calculatorId: widget.calculatorId,
         courseName: widget.courseName,
+        courseSKS: widget.courseSKS,
         totalScore: _temporaryUpdateScore(
           averageScore < 0 ? 0 : averageScore,
           weight,

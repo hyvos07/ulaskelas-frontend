@@ -59,6 +59,14 @@ class CardCalculator extends StatelessWidget {
                       ),
                       const HeightSpace(4),
                       Text(
+                        '${model.courseSKS} SKS',
+                        style: FontTheme.poppins12w400black().copyWith(
+                          fontSize: 13,
+                          color: BaseColors.gray2,
+                        ),
+                      ),
+                      const HeightSpace(4),
+                      Text(
                         _getFinalScoreAndGrade(model.totalScore!),
                         style: FontTheme.poppins12w400black(),
                       ),

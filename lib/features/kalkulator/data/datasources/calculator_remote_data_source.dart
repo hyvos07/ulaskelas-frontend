@@ -19,14 +19,8 @@ class CalculatorRemoteDataSourceImpl extends CalculatorRemoteDataSource {
     String givenSemester,
   ) async {
     final list = <CalculatorModel>[];
-    final url = EndpointsRevamp.courses;
-    final resp = await sendCustomRequest(
-      url,
-      method: 'GET',
-      body: {
-        'given_semester': givenSemester,
-      },
-    );
+    final url = '${EndpointsRevamp.courses}?given_semester=$givenSemester';
+    final resp = await getIt(url);
     for (final data in resp.dataBodyIterable['courses_calculator']) {
       list.add(CalculatorModel.fromJson(data, givenSemester));
     }
@@ -55,8 +49,7 @@ class CalculatorRemoteDataSourceImpl extends CalculatorRemoteDataSource {
       final dataResponse = <String, List<dynamic>>{
         'success': resp.responseData['inserted_course_ids'],
         'nonexist': resp.responseData['nonexistent_course_ids'],
-        'duplicate':
-            resp.responseData['duplicated_course_semester_ids'],
+        'duplicate': resp.responseData['duplicated_course_semester_ids'],
       };
       return resp.parse(dataResponse);
     }

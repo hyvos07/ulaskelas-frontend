@@ -233,6 +233,7 @@ class NavigationServiceState implements Navigation {
     required String courseName,
     required double totalScore,
     required double totalPercentage,
+    required int courseSKS,
   }) {
     MixpanelService.track(
       'calculator_view_course',
@@ -252,6 +253,7 @@ class NavigationServiceState implements Navigation {
         courseName: courseName,
         totalScore: totalScore,
         totalPercentage: totalPercentage,
+        courseSKS: courseSKS,
       ),
       RouteName.calculatorComponent,
     );
@@ -264,6 +266,7 @@ class NavigationServiceState implements Navigation {
     required String courseName,
     required double totalScore,
     required double totalPercentage,
+    required int courseSKS,
   }) {
     return nav.push<void>(
       ComponentFormPage(
@@ -273,6 +276,7 @@ class NavigationServiceState implements Navigation {
         courseName: courseName,
         totalScore: totalScore,
         totalPercentage: totalPercentage,
+        courseSKS: courseSKS,
       ),
       RouteName.componentFormPage,
     );
@@ -285,6 +289,7 @@ class NavigationServiceState implements Navigation {
     required String courseName,
     required double totalScore,
     required double totalPercentage,
+    required int courseSKS,
   }) {
     return nav.pushReplacement<void, void>(
       CalculatorComponentPage(
@@ -294,6 +299,7 @@ class NavigationServiceState implements Navigation {
         courseName: courseName,
         totalScore: totalScore,
         totalPercentage: totalPercentage,
+        courseSKS: courseSKS,
       ),
       RouteName.calculatorComponent,
     );
@@ -310,6 +316,7 @@ class NavigationServiceState implements Navigation {
     required String componentName,
     required double componentScore,
     required double componentWeight,
+    required int courseSKS,
   }) {
     return nav.push<void>(
       EditComponentPage(
@@ -323,6 +330,7 @@ class NavigationServiceState implements Navigation {
         componentName: componentName,
         componentScore: componentScore,
         componentWeight: componentWeight,
+        courseSKS: courseSKS,
       ),
       RouteName.editComponent,
     );

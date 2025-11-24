@@ -162,6 +162,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
                                         totalScore: calculator.totalScore!,
                                         totalPercentage:
                                             calculator.totalPercentage!,
+                                        courseSKS: calculator.courseSKS!,
                                       ),
                                     );
                                 backFromNavbarProfile = false;
@@ -184,6 +185,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
                                     totalScore: calculator.totalScore!,
                                     totalPercentage:
                                         calculator.totalPercentage!,
+                                    courseSKS: calculator.courseSKS!,
                                   ),
                                   RouteName.calculatorComponent,
                                 ),
@@ -201,6 +203,7 @@ class _SemesterPageState extends BaseStateful<SemesterPage> {
                                 courseName: calculator.courseName!,
                                 totalScore: calculator.totalScore!,
                                 totalPercentage: calculator.totalPercentage!,
+                                courseSKS: calculator.courseSKS!,
                               ),
                               RouteName.calculatorComponent,
                             ),

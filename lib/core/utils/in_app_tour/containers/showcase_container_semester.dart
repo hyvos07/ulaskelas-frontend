@@ -121,6 +121,7 @@ Widget courseCardGCShowcase(
                                   courseName: calculator.courseName!,
                                   totalScore: calculator.totalScore!,
                                   totalPercentage: calculator.totalPercentage!,
+                                  courseSKS: calculator.courseSKS!,
                                 ),
                                 RouteName.calculatorComponent,
                               );
