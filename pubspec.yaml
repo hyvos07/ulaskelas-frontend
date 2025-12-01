@@ -1,7 +1,7 @@
 name: ulaskelas
 description: Ulaskelas Ristek Universitas Indonesia Project.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.2.1+9
 
@@ -36,7 +36,7 @@ dependencies:
   flutter_vector_icons: ^2.0.0
   package_info_plus: ^8.0.0
   shimmer: ^3.0.0
-#  envify: ^2.0.3
+  #  envify: ^2.0.3
   envied: ^0.3.0+3
   html: ^0.15.4
   mixpanel_flutter: ^2.4.0
@@ -48,6 +48,7 @@ dependencies:
   image_cropper: ^5.0.1
   image_picker: ^1.0.7
   showcaseview: ^3.0.0
+  carousel_slider: ^5.1.1
 
 dev_dependencies:
   flutter_test:
@@ -62,20 +63,18 @@ dev_dependencies:
   build_runner: ^2.4.6
 
   # See envify.
-#  envify_generator: ^2.0.2
+  #  envify_generator: ^2.0.2
   envied_generator: ^0.3.0+3
   flutter_launcher_icons: ^0.13.1
 
 flutter_icons:
   android: true
   ios: true
-  image_path: 'assets/images/new_logo.png'
-  adaptive_icon_background: '#FFFFFF'
-  adaptive_icon_foreground: 'assets/images/new_logo_foreground.png'
-  
+  image_path: "assets/images/new_logo.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/new_logo_foreground.png"
 
 flutter:
-
   uses-material-design: true
 
   assets:
@@ -84,3 +83,4 @@ flutter:
     - assets/icons/
     - assets/ruby/
     - assets/onboarding/
+    - assets/ads/
