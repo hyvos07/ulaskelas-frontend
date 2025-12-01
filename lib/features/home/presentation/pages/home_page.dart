@@ -96,6 +96,31 @@ class _HomePageState extends BaseStateful<HomePage> {
                 );
               },
             ),
+            AdsCarousel(
+              items: List.generate(
+                5,
+                (index) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: AspectRatio(
+                    aspectRatio: 312 / 124,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/ads/ads_background.png'),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 11.5),
+                        child:
+                            BikunTrackerAd(), // Nanti bisa diganti logika if(index==0)...
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(6)),
