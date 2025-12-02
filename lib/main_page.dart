@@ -1,6 +1,7 @@
 // Created by Muhamad Fauzi Ridwan on 24/08/21.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:ulaskelas/features/kalkulator/presentation/pages/_pages.dart';
@@ -51,6 +52,10 @@ class _MainPageState extends BaseStateful<MainPage> {
         showInAppTourOpening(navbarContext!);
       }
     });
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
   }
 
   @override
