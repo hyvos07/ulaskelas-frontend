@@ -27,26 +27,26 @@ class SearchListViewRadioPicker extends StatelessWidget {
               onIdle: () => ListView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 10,
+                  vertical: 4,
                 ),
                 children: List.generate(
-                  8,
+                  20,
                   (index) => const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
-                    child: SkeletonCardCourse(),
+                    child: SkeletonCourseSearch(),
                   ),
                 ),
               ),
               onWaiting: () => ListView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 10,
+                  vertical: 4,
                 ),
                 children: List.generate(
-                  8,
+                  20,
                   (index) => const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
-                    child: SkeletonCardCourse(),
+                    child: SkeletonCourseSearch(),
                   ),
                 ),
               ),
@@ -67,7 +67,7 @@ class SearchListViewRadioPicker extends StatelessWidget {
 Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata kunci lain.''',
                   );
                 }
-                                
+
                 return ListView.separated(
                   controller: scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -84,8 +84,8 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
                     }
                     final course = courses[i];
                     return GestureDetector(
-                      onTap: () => searchCourseRM.state
-                            .addCourseRadioType(course),
+                      onTap: () =>
+                          searchCourseRM.state.addCourseRadioType(course),
                       child: CardCourseRadio(
                         model: course,
                       ),

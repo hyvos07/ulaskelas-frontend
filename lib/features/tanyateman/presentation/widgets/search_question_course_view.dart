@@ -29,26 +29,26 @@ class SearchQuestionCourseView extends StatelessWidget {
               onIdle: () => ListView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
-                  vertical: 10,
+                  vertical: 4,
                 ),
                 children: List.generate(
-                  8,
+                  20,
                   (index) => const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
-                    child: SkeletonCardCourse(),
+                    child: SkeletonCourseSearch(),
                   ),
                 ),
               ),
               onWaiting: () => ListView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
-                  vertical: 10,
+                  vertical: 4,
                 ),
                 children: List.generate(
-                  8,
+                  20,
                   (index) => const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
-                    child: SkeletonCardCourse(),
+                    child: SkeletonCourseSearch(),
                   ),
                 ),
               ),
@@ -132,13 +132,15 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
         questionsRM.state.allQuestionsFilter = 'by_matkul';
         await questionsRM.setState(
           (s) => s.retrieveAllQuestions(query),
-        );;
+        );
+        ;
       case 1:
         questionsRM.state.historyQuestionsCourseFilter = model;
         questionsRM.state.historyQuestionsFilter = 'by_matkul';
         await questionsRM.setState(
           (s) => s.retrieveHistoryQuestions(query),
-        );;
+        );
+        ;
       case 2:
         final text = searchQuestionRM.state.searchData?.text;
         searchQuestionRM.state.searchData = SearchData(

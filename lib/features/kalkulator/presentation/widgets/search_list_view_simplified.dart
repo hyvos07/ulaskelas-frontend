@@ -27,26 +27,26 @@ class SearchListViewSimplified extends StatelessWidget {
               onIdle: () => ListView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 10,
+                  vertical: 4,
                 ),
                 children: List.generate(
-                  8,
+                  20,
                   (index) => const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
-                    child: SkeletonCardCourse(),
+                    child: SkeletonCourseSearch(),
                   ),
                 ),
               ),
               onWaiting: () => ListView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 10,
+                  vertical: 4,
                 ),
                 children: List.generate(
-                  8,
+                  20,
                   (index) => const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
-                    child: SkeletonCardCourse(),
+                    child: SkeletonCourseSearch(),
                   ),
                 ),
               ),
@@ -84,8 +84,8 @@ Mata kuliah yang kamu cari tidak ada di aplikasi. Silakan coba lagi dengan kata 
                     final course = courses[i];
                     return CardCourseSimplified(
                       model: course,
-                      isChecked: searchCourseRM.state.selectedCourses
-                          .contains(course),
+                      isChecked:
+                          searchCourseRM.state.selectedCourses.contains(course),
                       // onTap: () {
                       //   nav.pop();
                       //   calculatorRM.setState(
